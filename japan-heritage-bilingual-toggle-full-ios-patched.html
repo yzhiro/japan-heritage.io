@@ -1,0 +1,2311 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+<meta name="description" content="文化庁認定の日本遺産118ストーリーを地域別に紹介。検索・フィルター機能付き。">
+<title>日本遺産 118 ストーリー一覧 | Japan Heritage 118 Stories</title>
+<style>
+  /* === リセット & 基本設定 === */
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  :root {
+    --primary-color: #4b6cb7;
+    --primary-dark: #182848;
+    --accent-color: #7f8c8d;
+    --bg-color: #f4f6f9;
+    --card-bg: #ffffff;
+    --text-primary: #333;
+    --text-secondary: #555;
+    --border-radius: 12px;
+    --shadow-sm: 0 4px 12px rgba(0,0,0,0.08);
+    --shadow-md: 0 8px 20px rgba(0,0,0,0.12);
+    --shadow-lg: 0 10px 30px rgba(0,0,0,0.15);
+    --transition: all 0.3s ease;
+  }
+
+  body {
+    font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    line-height: 1.7;
+    color: var(--text-primary);
+    background: var(--bg-color);
+    scroll-behavior: smooth;
+  }
+
+  /* 英語モード時のフォント */
+  body.lang-en {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+
+  /* 言語切り替え表示制御 */
+  body.lang-ja .en-text {
+    display: none !important;
+  }
+
+  body.lang-en .ja-text {
+    display: none !important;
+  }
+
+  .container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  /* === 言語切り替えボタン（小型化版） === */
+  .language-toggle {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 1001;
+    display: flex;
+    gap: 3px;
+    background: white;
+    padding: 2px 4px;
+    border-radius: 20px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .lang-btn {
+    padding: 5px 10px;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    border-radius: 15px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.75em;
+    transition: var(--transition);
+    font-family: inherit;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+  }
+
+  .lang-btn:hover {
+    background: var(--bg-color);
+  }
+
+  .lang-btn.active {
+    background: var(--primary-color);
+    color: white;
+  }
+
+  /* === ヘッダー === */
+  header {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    color: white;
+    padding: 40px 20px;
+    text-align: center;
+    margin-bottom: 30px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-lg);
+  }
+
+  header h1 {
+    font-size: clamp(1.8em, 4vw, 2.4em);
+    margin-bottom: 8px;
+    font-weight: 700;
+  }
+
+  header .subtitle {
+    font-size: clamp(0.9em, 2vw, 1.1em);
+    opacity: 0.9;
+  }
+
+  /* === 統計情報 === */
+  .stats {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+  }
+
+  .stat-item {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 15px 25px;
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+  }
+
+  .stat-number {
+    font-size: 2em;
+    font-weight: 700;
+    display: block;
+  }
+
+  .stat-label {
+    font-size: 0.9em;
+    opacity: 0.9;
+  }
+
+  /* === 検索・フィルターエリア === */
+  .controls {
+    background: var(--card-bg);
+    padding: 25px;
+    border-radius: var(--border-radius);
+    margin-bottom: 30px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .search-box {
+    position: relative;
+    margin-bottom: 20px;
+  }
+
+  .search-box input {
+    width: 100%;
+    padding: 15px 50px 15px 20px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 1em;
+    transition: var(--transition);
+    font-family: inherit;
+  }
+
+  .search-box input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(75, 108, 183, 0.1);
+  }
+
+  .search-icon {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--accent-color);
+    font-size: 1.2em;
+  }
+
+  .filter-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .filter-btn {
+    padding: 10px 20px;
+    border: 2px solid var(--primary-color);
+    background: transparent;
+    color: var(--primary-color);
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 0.95em;
+    font-weight: 600;
+    transition: var(--transition);
+    font-family: inherit;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+  }
+
+  .filter-btn:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  .filter-btn.active {
+    background: var(--primary-color);
+    color: white;
+  }
+
+  /* === 結果表示 === */
+  .results-info {
+    text-align: center;
+    padding: 15px;
+    margin-bottom: 20px;
+    background: #e8f4f8;
+    border-radius: 8px;
+    font-weight: 600;
+    color: var(--primary-dark);
+  }
+
+  .no-results {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-secondary);
+    font-size: 1.2em;
+  }
+
+  /* === 地域ブロック === */
+  .region-block {
+    margin-bottom: 50px;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+  }
+
+  .region-block.hidden {
+    display: none;
+  }
+
+  .region-title {
+    font-size: clamp(1.5em, 3vw, 2em);
+    color: var(--primary-dark);
+    padding-bottom: 10px;
+    margin-bottom: 25px;
+    border-bottom: 4px solid var(--primary-color);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .region-count {
+    font-size: 0.6em;
+    color: var(--accent-color);
+    font-weight: 400;
+  }
+
+  /* === ストーリーカード・グリッド === */
+  .story-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 22px;
+  }
+
+  .story-card {
+    background: var(--card-bg);
+    border-radius: 10px;
+    padding: 22px 22px 22px 22px;
+    padding-top: 50px; /* アイコン用のスペース確保 */
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+    border: 2px solid transparent;
+    position: relative;
+  }
+
+  /* カード内言語切り替えアイコン */
+  .card-lang-toggle {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(75, 108, 183, 0.1);
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 1.1em;
+    z-index: 10;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+  }
+
+  .card-lang-toggle:hover {
+    background: rgba(75, 108, 183, 0.2);
+    transform: scale(1.1);
+  }
+
+  /* モバイルではホバーエフェクトを無効化し、タッチ領域を拡大 */
+  @media (hover: none) and (pointer: coarse) {
+    .card-lang-toggle {
+      width: 36px;
+      height: 36px;
+      font-size: 1.2em;
+    }
+    .card-lang-toggle:hover {
+      transform: none;
+    }
+  }
+
+  .card-lang-toggle.active {
+    background: var(--primary-color);
+  }
+
+  /* 併記モード時のスタイル */
+  .story-card.bilingual-mode .story-title,
+  .story-card.bilingual-mode .story-location {
+    margin-bottom: 8px;
+  }
+
+  .story-card.bilingual-mode .bilingual-text {
+    display: block !important;
+    font-size: 0.9em;
+    color: var(--text-secondary);
+    opacity: 0.85;
+    padding-left: 8px;
+    border-left: 3px solid rgba(75, 108, 183, 0.3);
+    margin-top: 6px;
+  }
+
+  .bilingual-text {
+    display: none;
+    overflow: hidden;
+  }
+
+  .story-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--primary-color);
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+  }
+
+  .story-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary-color);
+  }
+
+  .story-card:hover::before {
+    transform: scaleY(1);
+  }
+
+  .story-card.highlight {
+    animation: highlight 0.6s ease;
+  }
+
+  @keyframes highlight {
+    0%, 100% { background: var(--card-bg); }
+    50% { background: #fff9e6; }
+  }
+
+  .story-title {
+    font-size: 1.25em;
+    color: var(--text-primary);
+    font-weight: 700;
+    margin-bottom: 12px;
+    flex-grow: 1;
+    line-height: 1.4;
+  }
+
+  .story-location {
+    font-size: 0.9em;
+    color: var(--text-secondary);
+    background: #f8f9fa;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border-left: 4px solid var(--accent-color);
+    line-height: 1.5;
+  }
+
+  .story-location .icon {
+    margin-right: 5px;
+    color: var(--primary-color);
+  }
+
+  /* === 広域ストーリーの表示（言語別） === */
+  .wide-area-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #ff9a56 0%, #ff6b6b 100%);
+    color: white;
+    font-size: 0.75em;
+    padding: 3px 10px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  body.lang-ja .wide-area-badge::after {
+    content: " 広域";
+  }
+
+  body.lang-en .wide-area-badge::after {
+    content: " | Wide-area";
+  }
+
+  /* === トップに戻るボタン === */
+  .back-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 1.5em;
+    cursor: pointer;
+    box-shadow: var(--shadow-md);
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transition);
+    z-index: 1000;
+  }
+
+  .back-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .back-to-top:hover {
+    background: var(--primary-dark);
+    transform: translateY(-3px);
+  }
+
+  /* === フッター === */
+  footer {
+    text-align: center;
+    padding: 30px 20px;
+    margin-top: 50px;
+    color: var(--text-secondary);
+    border-top: 2px solid #e0e0e0;
+  }
+
+  footer a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  footer a:hover {
+    text-decoration: underline;
+  }
+
+  /* === アクセシビリティ === */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  /* === レスポンシブ === */
+  @media (max-width: 768px) {
+    .container { padding: 15px; }
+    header { padding: 30px 15px; margin-bottom: 20px; }
+    .language-toggle { top: 8px; right: 8px; }
+    .lang-btn { padding: 4px 8px; font-size: 0.7em; }
+    .stats { gap: 15px; }
+    .controls { padding: 20px 15px; }
+    .story-grid { grid-template-columns: 1fr; gap: 18px; }
+    .back-to-top { width: 45px; height: 45px; bottom: 20px; right: 20px; font-size: 1.3em; }
+  }
+
+  @media (max-width: 480px) {
+    .region-title { font-size: 1.3em; }
+    .story-title { font-size: 1.1em; }
+    .story-card { padding: 18px; }
+  }
+
+  /* === プリント用 === */
+  @media print {
+    .controls,
+    .back-to-top,
+    .stats,
+    .language-toggle {
+      display: none;
+    }
+    .story-card {
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+  }
+
+/* 検索・抽出で非表示にするカード（iOS安定化用） */
+.story-card.hidden { display: none !important; }
+
+</style>
+</head>
+<body class="lang-ja">
+
+<!-- 言語切り替えボタン -->
+<div class="language-toggle">
+  <button class="lang-btn active" data-lang="ja" aria-label="日本語">🇯🇵 日本語</button>
+  <button class="lang-btn" data-lang="en" aria-label="English">🇺🇸 English</button>
+</div>
+
+<div class="container">
+  <header>
+    <h1>
+      <span class="ja-text">🇯🇵 日本遺産 118 ストーリー一覧</span>
+      <span class="en-text">🇯🇵 Japan Heritage 118 Stories</span>
+    </h1>
+    <p class="subtitle">
+      <span class="ja-text">文化庁認定 日本遺産</span>
+      <span class="en-text">Certified by the Agency for Cultural Affairs</span>
+    </p>
+    <div class="stats">
+      <div class="stat-item">
+        <span class="stat-number" id="totalStories">118</span>
+        <span class="stat-label">
+          <span class="ja-text">認定ストーリー</span>
+          <span class="en-text">Certified Stories</span>
+        </span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number" id="totalDisplayed">118</span>
+        <span class="stat-label">
+          <span class="ja-text">掲載件数</span>
+          <span class="en-text">Displayed</span>
+        </span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number" id="visibleStories">118</span>
+        <span class="stat-label">
+          <span class="ja-text">表示中</span>
+          <span class="en-text">Showing</span>
+        </span>
+      </div>
+    </div>
+    <p style="text-align: center; color: rgba(255,255,255,0.85); font-size: 0.9em; margin-top: 10px;">
+      <span class="ja-text">※広域ストーリーは複数地域に掲載されています</span>
+      <span class="en-text">* Wide-area stories are listed in multiple regions</span>
+    </p>
+  </header>
+
+  <section class="controls" role="search" aria-label="検索とフィルター">
+    <div class="search-box">
+      <label for="searchInput" class="sr-only">ストーリーを検索</label>
+      <input
+        type="search"
+        id="searchInput"
+        placeholder="ストーリー名や地域名で検索..."
+        aria-label="Search stories"
+      >
+      <span class="search-icon" aria-hidden="true">🔍</span>
+    </div>
+
+    <div class="filter-buttons" role="group" aria-label="Region Filter">
+      <button class="filter-btn active" data-region="all">
+        <span class="ja-text">すべて</span>
+        <span class="en-text">All</span>
+      </button>
+      <button class="filter-btn" data-region="hokkaido-tohoku">
+        <span class="ja-text">北海道・東北</span>
+        <span class="en-text">Hokkaido / Tohoku</span>
+      </button>
+      <button class="filter-btn" data-region="kanto">
+        <span class="ja-text">関東</span>
+        <span class="en-text">Kanto</span>
+      </button>
+      <button class="filter-btn" data-region="chubu">
+        <span class="ja-text">中部</span>
+        <span class="en-text">Chubu</span>
+      </button>
+      <button class="filter-btn" data-region="kinki">
+        <span class="ja-text">近畿</span>
+        <span class="en-text">Kinki</span>
+      </button>
+      <button class="filter-btn" data-region="chugoku">
+        <span class="ja-text">中国</span>
+        <span class="en-text">Chugoku</span>
+      </button>
+      <button class="filter-btn" data-region="shikoku">
+        <span class="ja-text">四国</span>
+        <span class="en-text">Shikoku</span>
+      </button>
+      <button class="filter-btn" data-region="kyushu-okinawa">
+        <span class="ja-text">九州・沖縄</span>
+        <span class="en-text">Kyushu / Okinawa</span>
+      </button>
+    </div>
+  </section>
+
+  <div id="resultsInfo" class="results-info" style="display:none;">
+    <span class="ja-text">検索結果：</span>
+    <span class="en-text">Search results: </span>
+    <span id="resultsCount">0</span>
+  </div>
+
+  <main id="mainContent">
+    <!-- ================== 北海道・東北 ================== -->
+    <section class="region-block" id="hokkaido-tohoku" data-region="hokkaido-tohoku">
+      <h2 class="region-title">
+        <span class="ja-text">🗾 北海道・東北ブロック</span>
+        <span class="en-text">🗾 Hokkaido & Tohoku Block</span>
+        <span class="region-count">
+          <span class="ja-text">(9件)</span>
+          <span class="en-text">(9 stories)</span>
+        </span>
+      </h2>
+      <div class="story-grid">
+        <article class="story-card">
+          <h3 class="story-title">本邦国策を北海道に観よ！～北の産業革命「炭鉄港」～</h3>
+          <p class="story-location"><span class="icon">📍</span>北海道（室蘭市、夕張市、岩見沢市、美唄市、芦別市、赤平市、三笠市、栗山町、月形町、沼田町、小樽市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">「鮭の聖地」の物語～知床の鮭漁の伝統と光り輝くイクラ～</h3>
+          <p class="story-location"><span class="icon">📍</span>北海道（標津町、羅臼町）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">カムイと共に生きる上川アイヌ～大雪山のふところに伝承される神々の世界～</h3>
+          <p class="story-location"><span class="icon">📍</span>北海道（旭川市、上川町）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">政宗が育んだ"伊達"な文化</h3>
+          <p class="story-location"><span class="icon">📍</span>宮城県（仙台市、多賀城市、塩竈市、松島町）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">自然と信仰が息づく『生まれかわりの旅』～樹齢300年を超える杉並木につつまれた2,446段の石段から始まる出羽三山～</h3>
+          <p class="story-location"><span class="icon">📍</span>山形県（鶴岡市、西川町、庄内町）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">山寺が支えた紅花文化</h3>
+          <p class="story-location"><span class="icon">📍</span>山形県（山形市、天童市、尾花沢市、中山町、河北町、白鷹町）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">未来を拓いた「一本の水路」－大久保利通"最期の夢"と開拓者の軌跡 郡山・猪苗代－</h3>
+          <p class="story-location"><span class="icon">📍</span>福島県（郡山市、猪苗代町）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">会津の三十三観音めぐり～巡礼を通して観た往時の会津の文化～</h3>
+          <p class="story-location"><span class="icon">📍</span>福島県（会津若松市ほか）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">"奥南部"漆物語～安比川流域に受け継がれる伝統技術～</h3>
+          <p class="story-location"><span class="icon">📍</span>岩手県（八幡平市、二戸市、一戸町）</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ================== 関東 ================== -->
+    <section class="region-block" id="kanto" data-region="kanto">
+      <h2 class="region-title">
+        <span class="ja-text">🏯 関東ブロック</span>
+        <span class="en-text">🏯 Kanto Block</span>
+        <span class="region-count">
+          <span class="ja-text">(11件)</span>
+          <span class="en-text">(11 stories)</span>
+        </span>
+      </h2>
+      <div class="story-grid">
+        <article class="story-card">
+          <h3 class="story-title">かかあ天下－ぐんまの絹物語－</h3>
+          <p class="story-location"><span class="icon">📍</span>群馬県（桐生市、甘楽町、中之条町、片品村）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">和装文化の足元を支え続ける足袋蔵のまち行田</h3>
+          <p class="story-location"><span class="icon">📍</span>埼玉県（行田市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">「北総四都市江戸紀行・江戸を感じる北総の町並み」－佐倉・成田・佐原・銚子－</h3>
+          <p class="story-location"><span class="icon">📍</span>千葉県（佐倉市、成田市、香取市、銚子市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">江戸庶民の信仰と行楽の地～巨大な木太刀を担いで「大山詣り」～</h3>
+          <p class="story-location"><span class="icon">📍</span>神奈川県（伊勢原市）</p>
+        </article>
+        <article class="story-card">
+          <span class="wide-area-badge"></span>
+          <h3 class="story-title">鎮守府 横須賀・呉・佐世保・舞鶴～日本近代化の躍動を体感できるまち～</h3>
+          <p class="story-location"><span class="icon">📍</span>神奈川県（横須賀市）、広島県（呉市）、長崎県（佐世保市）、京都府（舞鶴市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">地下迷宮の秘密を探る旅～大谷石文化が息づくまち宇都宮～</h3>
+          <p class="story-location"><span class="icon">📍</span>栃木県（宇都宮市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">明治貴族が描いた未来～那須野が原開拓浪漫譚～</h3>
+          <p class="story-location"><span class="icon">📍</span>栃木県（那須塩原市、大田原市、矢板市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">里沼（SATO-NUMA）－「祈り」「実り」「守り」の沼が磨き上げた館林の沼辺文化－</h3>
+          <p class="story-location"><span class="icon">📍</span>群馬県（館林市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">かさましこ～兄弟産地が紡ぐ"焼き物語"～</h3>
+          <p class="story-location"><span class="icon">📍</span>栃木県（益子町）、茨城県（笠間市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">霊気満山 高尾山～人々の祈りが紡ぐ桑都物語～</h3>
+          <p class="story-location"><span class="icon">📍</span>東京都（八王子市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">葛飾～江戸を育んだ水と大地がもたらす豊かな食文化～</h3>
+          <p class="story-location"><span class="icon">📍</span>東京都（葛飾区）、千葉県（松戸市）、埼玉県（三郷市、吉川市）</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ================== 中部 ================== -->
+    <section class="region-block" id="chubu" data-region="chubu">
+      <h2 class="region-title">
+        <span class="ja-text">🗻 中部ブロック</span>
+        <span class="en-text">🗻 Chubu Block</span>
+        <span class="region-count">
+          <span class="ja-text">(33件)</span>
+          <span class="en-text">(33 stories)</span>
+        </span>
+      </h2>
+      <div class="story-grid">
+        <article class="story-card">
+          <h3 class="story-title">加賀前田家ゆかりの町民文化が花咲くまち高岡－人､技､心－</h3>
+          <p class="story-location"><span class="icon">📍</span>富山県（高岡市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">灯（あか）り舞う半島 能登～熱狂のキリコ祭り～</h3>
+          <p class="story-location"><span class="icon">📍</span>石川県（七尾市、輪島市、珠洲市、穴水町、能登町）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">海と都をつなぐ若狭の往来文化遺産群～御食国若狭と鯖街道～</h3>
+          <p class="story-location"><span class="icon">📍</span>福井県（小浜市、若狭町）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">「信長公のおもなし」が息づく戦国城下町・岐阜</h3>
+          <p class="story-location"><span class="icon">📍</span>岐阜県（岐阜市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">祈る皇女斎王のみやこ 斎宮</h3>
+          <p class="story-location"><span class="icon">📍</span>三重県（明和町）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">海女（Ama）に出逢えるまち 鳥羽・志摩～素潜り漁に生きる女性たち</h3>
+          <p class="story-location"><span class="icon">📍</span>三重県（鳥羽市、志摩市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">"日本海のゴールドラッシュ"に沸いた佐渡金銀山</h3>
+          <p class="story-location"><span class="icon">📍</span>新潟県（佐渡市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">「珠玉と歩む物語」小松～時の流れの中で磨き上げた石の文化～</h3>
+          <p class="story-location"><span class="icon">📍</span>石川県（小松市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">木曽路はすべて山の中～山を守り 山に生きる～</h3>
+          <p class="story-location"><span class="icon">📍</span>長野県・岐阜県（木曽地域・中津川市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">飛騨匠の技・こころ－木とともに、今に引き継ぐ1300年－</h3>
+          <p class="story-location"><span class="icon">📍</span>岐阜県（高山市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">忍びの里 伊賀・甲賀－リアル忍者を求めて－</h3>
+          <p class="story-location"><span class="icon">📍</span>三重県（伊賀市）、滋賀県（甲賀市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">宮大工の鑿一丁から生まれた木彫刻美術館・井波</h3>
+          <p class="story-location"><span class="icon">📍</span>富山県（南砺市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">星降る中部高地の縄文世界</h3>
+          <p class="story-location"><span class="icon">📍</span>山梨県・長野県（中部高地一帯）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">旅人たちの足跡残る悠久の石畳道－箱根八里で辿る遥かな江戸の旅路－</h3>
+          <p class="story-location"><span class="icon">📍</span>静岡県・神奈川県（東海道）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">400年の歴史の扉を開ける旅～石から読み解く中世・近世のまちづくり 越前・福井～</h3>
+          <p class="story-location"><span class="icon">📍</span>福井県（福井市ほか）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">江戸時代の情緒に触れる絞りの産地～藍染が風にゆれる町 有松～</h3>
+          <p class="story-location"><span class="icon">📍</span>愛知県（名古屋市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">「森の都」の木造建築～時の記憶を未来へつなぐ～</h3>
+          <p class="story-location"><span class="icon">📍</span>静岡県（静岡市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">甲州の匠の源流・御嶽昇仙峡～水晶の鼓動が導いた信仰と技～</h3>
+          <p class="story-location"><span class="icon">📍</span>山梨県（甲府市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">月の都 千曲－姨捨の棚田がつくる摩訶不思議な月景色「田毎の月」－</h3>
+          <p class="story-location"><span class="icon">📍</span>長野県（千曲市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">レイラインがつなぐ「太陽と大地の聖地」～龍と生きるまち 信州上田・塩田平～</h3>
+          <p class="story-location"><span class="icon">📍</span>長野県（上田市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">日本初「旅ブーム」を起こした弥次さん喜多さん、駿州の旅</h3>
+          <p class="story-location"><span class="icon">📍</span>静岡県（静岡市、藤枝市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">「伊勢ぺディア」～ご利益満載の「お伊勢さん」参り～</h3>
+          <p class="story-location"><span class="icon">📍</span>三重県（伊勢市ほか）</p>
+        </article>
+        <article class="story-card">
+          <span class="wide-area-badge"></span>
+          <h3 class="story-title">黄金の国ジパング、産金はじまりの地・奥州</h3>
+          <p class="story-location"><span class="icon">📍</span>宮城県・岩手県（広域）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">越後長岡の米百俵と肴～セルフヘルプの精神が息づく、雪国の食と酒の文化～</h3>
+          <p class="story-location"><span class="icon">📍</span>新潟県（長岡市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">豪雪地有数のスキーリゾート「妙高」</h3>
+          <p class="story-location"><span class="icon">📍</span>新潟県（妙高市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">富山湾の神秘が生んだ「蜃気楼」</h3>
+          <p class="story-location"><span class="icon">📍</span>富山県（魚津市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">加賀藩が育んだ絢爛豪華な加賀文化の粋～金沢箔～</h3>
+          <p class="story-location"><span class="icon">📍</span>石川県（金沢市）</p>
+        </article>
+        <article class="story-card">
+          <span class="wide-area-badge"></span>
+          <h3 class="story-title">荒波を越えた男たちの夢が紡いだ異空間～北前船寄港地・船主集落～</h3>
+          <p class="story-location"><span class="icon">📍</span>北海道～九州の日本海側・瀬戸内海沿岸（広域）</p>
+        </article>
+        <article class="story-card">
+          <span class="wide-area-badge"></span>
+          <h3 class="story-title">きっと恋する六古窯－日本生まれ日本育ちのやきもの産地－</h3>
+          <p class="story-location"><span class="icon">📍</span>愛知・福井・滋賀・兵庫・岡山（広域）</p>
+        </article>
+        <article class="story-card">
+          <span class="wide-area-badge"></span>
+          <h3 class="story-title">日本ワイン140年史～国産ブドウで醸造する和文化の結晶～</h3>
+          <p class="story-location"><span class="icon">📍</span>山梨・東京・大阪・茨城</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">葡萄畑が織りなす風景－山梨県峡東地域－</h3>
+          <p class="story-location"><span class="icon">📍</span>山梨県（山梨市、笛吹市、甲州市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">究極の雪国とおかまち－真説！豪雪地ものがたり－</h3>
+          <p class="story-location"><span class="icon">📍</span>新潟県（十日町市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">海を越えた鉄道～世界へつながる 鉄路のキセキ～</h3>
+          <p class="story-location"><span class="icon">📍</span>福井県・滋賀県・京都府・大阪府</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ================== 近畿 ================== -->
+    <section class="region-block" id="kinki" data-region="kinki">
+      <h2 class="region-title">
+        <span class="ja-text">🏛️ 近畿ブロック</span>
+        <span class="en-text">🏛️ Kinki Block</span>
+        <span class="region-count">
+          <span class="ja-text">(22件)</span>
+          <span class="en-text">(22 stories)</span>
+        </span>
+      </h2>
+      <div class="story-grid">
+        <article class="story-card">
+          <h3 class="story-title">琵琶湖とその水辺景観－祈りと暮らしの水遺産－</h3>
+          <p class="story-location"><span class="icon">📍</span>滋賀県（大津市、彦根市、近江八幡市、高島市、東近江市、米原市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">日本茶800年の歴史散歩</h3>
+          <p class="story-location"><span class="icon">📍</span>京都府（宇治市ほか）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">丹波篠山 デカンショ節－民謡に乗せて歌い継ぐふるさとの記憶－</h3>
+          <p class="story-location"><span class="icon">📍</span>兵庫県（丹波篠山市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">日本国創成のとき～飛鳥を翔（かけ）た女性たち～</h3>
+          <p class="story-location"><span class="icon">📍</span>奈良県（明日香村）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">『古事記』の冒頭を飾る「国生みの島・淡路」～古代国家を支えた海人の営み～</h3>
+          <p class="story-location"><span class="icon">📍</span>兵庫県（淡路島）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">美林連なる造林発祥の地"吉野"</h3>
+          <p class="story-location"><span class="icon">📍</span>奈良県（吉野町ほか）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">鯨とともに生きる</h3>
+          <p class="story-location"><span class="icon">📍</span>和歌山県（太地町）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">300年を紡ぐ絹が織り成す丹後ちりめん回廊</h3>
+          <p class="story-location"><span class="icon">📍</span>京都府（京丹後市、伊根町、与謝野町）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">1400年に渡る悠久の歴史を伝える「最古の国道」～竹内街道・横大路（大道）～</h3>
+          <p class="story-location"><span class="icon">📍</span>大阪府・奈良県（南河内～飛鳥）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">播但貫く、銀の馬車道 鉱石の道</h3>
+          <p class="story-location"><span class="icon">📍</span>兵庫県（姫路市ほか）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">絶景の宝庫 和歌の浦</h3>
+          <p class="story-location"><span class="icon">📍</span>和歌山県（和歌山市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">「最初の一滴」醤油醸造の発祥の地 紀州湯浅</h3>
+          <p class="story-location"><span class="icon">📍</span>和歌山県（湯浅町）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">「百世の安堵」～津波と復興の記憶が生きる広川の防災遺産～</h3>
+          <p class="story-location"><span class="icon">📍</span>和歌山県（広川町）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">『日本第一』の塩を産したまち 播州赤穂</h3>
+          <p class="story-location"><span class="icon">📍</span>兵庫県（赤穂市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">旅引付と二枚の絵図が伝えるまち－中世日根荘の風景－</h3>
+          <p class="story-location"><span class="icon">📍</span>大阪府（泉佐野市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">中世に出逢えるまち～千年にわたり護られてきた中世文化遺産の宝庫～</h3>
+          <p class="story-location"><span class="icon">📍</span>和歌山県（有田川町、湯浅町、広川町）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">「伊丹諸白」と「灘の生一本」 下り酒が生んだ銘醸地、伊丹と灘五郷</h3>
+          <p class="story-location"><span class="icon">📍</span>兵庫県（伊丹市、神戸市、西宮市、芦屋市、尼崎市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">女性とともに今に息づく女人高野</h3>
+          <p class="story-location"><span class="icon">📍</span>奈良県・和歌山県・大阪府（広域）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">京都と大津を繋ぐ希望の水路 琵琶湖疏水</h3>
+          <p class="story-location"><span class="icon">📍</span>京都府（京都市）、滋賀県（大津市）</p>
+        </article>
+        <article class="story-card">
+          <span class="wide-area-badge"></span>
+          <h3 class="story-title">1300年つづく日本の終活の旅～西国三十三所観音巡礼～</h3>
+          <p class="story-location"><span class="icon">📍</span>和歌山県・奈良県・大阪府・兵庫県・京都府・滋賀県・岐阜県</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">日本海の風が生んだ絶景と秘境－麒麟が舞う大地「因幡・但馬」－</h3>
+          <p class="story-location"><span class="icon">📍</span>鳥取県（鳥取市ほか）・兵庫県（但馬）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">祈りの道「おち」～古代からの信仰の継承と癒しの地～</h3>
+          <p class="story-location"><span class="icon">📍</span>奈良県（宇陀市ほか）</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ================== 中国 ================== -->
+    <section class="region-block" id="chugoku" data-region="chugoku">
+      <h2 class="region-title">
+        <span class="ja-text">⛩️ 中国ブロック</span>
+        <span class="en-text">⛩️ Chugoku Block</span>
+        <span class="region-count">
+          <span class="ja-text">(17件)</span>
+          <span class="en-text">(17 stories)</span>
+        </span>
+      </h2>
+      <div class="story-grid">
+        <article class="story-card">
+          <h3 class="story-title">六根清浄と六感治癒の地～日本一危ない国宝鑑賞と世界屈指のラドン泉～</h3>
+          <p class="story-location"><span class="icon">📍</span>鳥取県（三朝町）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">津和野今昔～百景図を歩く～</h3>
+          <p class="story-location"><span class="icon">📍</span>島根県（津和野町）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">尾道水道が紡いだ中世からの箱庭的都市</h3>
+          <p class="story-location"><span class="icon">📍</span>広島県（尾道市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">地蔵信仰が育んだ日本最大の大山牛馬市</h3>
+          <p class="story-location"><span class="icon">📍</span>鳥取県（大山町ほか）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">出雲國たたら風土記～鉄づくり千年が生んだ物語～</h3>
+          <p class="story-location"><span class="icon">📍</span>島根県（雲南市ほか）、広島県（庄原市）</p>
+        </article>
+        <article class="story-card">
+          <span class="wide-area-badge"></span>
+          <h3 class="story-title">"日本最大の海賊"の本拠地：芸予諸島～村上海賊の記憶～</h3>
+          <p class="story-location"><span class="icon">📍</span>愛媛県（今治市）、広島県（尾道市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">一輪の綿花から始まる倉敷物語～和と洋が織りなす繊維のまち～</h3>
+          <p class="story-location"><span class="icon">📍</span>岡山県（倉敷市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">「桃太郎伝説」の生まれたまち おかやま</h3>
+          <p class="story-location"><span class="icon">📍</span>岡山県（岡山市ほか）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">瀬戸の夕凪が包む国内随一の近世港町～鞆の浦～</h3>
+          <p class="story-location"><span class="icon">📍</span>広島県（福山市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">神々や鬼たちが躍動する神話の世界～石見地域で伝承される神楽～</h3>
+          <p class="story-location"><span class="icon">📍</span>島根県（浜田市ほか）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">「石」が語る日本の近代～国内最大の切り出しの技と心～</h3>
+          <p class="story-location"><span class="icon">📍</span>岡山県（笠岡市）、香川県（丸亀市、土庄町）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">サムライの知恵と技、城下町のくらし～松江～</h3>
+          <p class="story-location"><span class="icon">📍</span>島根県（松江市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">「銀の道」が結ぶ世界遺産 石見銀山と日本の近代化</h3>
+          <p class="story-location"><span class="icon">📍</span>島根県（大田市、美郷町）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">～「あの日の広島」の熱と生きる～復興を支えた人々の想い</h3>
+          <p class="story-location"><span class="icon">📍</span>広島県（広島市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">山口に花開いた"大内文化"～「西の京」に息づく室町時代の雅～</h3>
+          <p class="story-location"><span class="icon">📍</span>山口県（山口市）</p>
+        </article>
+        <article class="story-card">
+          <span class="wide-area-badge"></span>
+          <h3 class="story-title">関門"ノスタルジック"海峡～時の停車場、近代化の記憶～</h3>
+          <p class="story-location"><span class="icon">📍</span>福岡県（北九州市）、山口県（下関市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">「地底のアンコール・ワット」－巨大地下空間に広がるストーリー－</h3>
+          <p class="story-location"><span class="icon">📍</span>岡山県（高梁市、新見市）</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ================== 四国 ================== -->
+    <section class="region-block" id="shikoku" data-region="shikoku">
+      <h2 class="region-title">
+        <span class="ja-text">🍊 四国ブロック</span>
+        <span class="en-text">🍊 Shikoku Block</span>
+        <span class="region-count">
+          <span class="ja-text">(7件)</span>
+          <span class="en-text">(7 stories)</span>
+        </span>
+      </h2>
+      <div class="story-grid">
+        <article class="story-card">
+          <h3 class="story-title">「四国遍路」～回遊型巡礼路と独自の巡礼文化～</h3>
+          <p class="story-location"><span class="icon">📍</span>徳島県・高知県・愛媛県・香川県（四国4県）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">森林鉄道から日本一のゆずロードへ</h3>
+          <p class="story-location"><span class="icon">📍</span>高知県（中芸地域）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">知ってる!?悠久の時が流れる石の島～せとうち備讃諸島～</h3>
+          <p class="story-location"><span class="icon">📍</span>香川県（丸亀市ほか）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">藍のふるさと 阿波～日本中を染め上げた至高の青を訪ねて～</h3>
+          <p class="story-location"><span class="icon">📍</span>徳島県（徳島市ほか）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">四国最西端の半島で生まれた一大鉱業都市～銅の記憶が刻まれたまち 新居浜・別子～</h3>
+          <p class="story-location"><span class="icon">📍</span>愛媛県（新居浜市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">絶えず水が湧き出づる「水の都」西条</h3>
+          <p class="story-location"><span class="icon">📍</span>愛媛県（西条市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">「伊予灘ものがたり」が結ぶ古の道と太陽の町</h3>
+          <p class="story-location"><span class="icon">📍</span>愛媛県（八幡浜市ほか）</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ================== 九州・沖縄 ================== -->
+    <section class="region-block" id="kyushu-okinawa" data-region="kyushu-okinawa">
+      <h2 class="region-title">
+        <span class="ja-text">🏝️ 九州・沖縄ブロック</span>
+        <span class="en-text">🏝️ Kyushu & Okinawa Block</span>
+        <span class="region-count">
+          <span class="ja-text">(19件)</span>
+          <span class="en-text">(19 stories)</span>
+        </span>
+      </h2>
+      <div class="story-grid">
+        <article class="story-card">
+          <h3 class="story-title">古代日本の「西の都」～東アジアとの交流拠点～</h3>
+          <p class="story-location"><span class="icon">📍</span>福岡県（太宰府市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">国境の島 壱岐・対馬・五島～古代からの架け橋～</h3>
+          <p class="story-location"><span class="icon">📍</span>長崎県（壱岐市、対馬市、五島市、新上五島町、小値賀町）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">相良700年が生んだ保守と進取の文化～日本でもっとも豊かな隠れ里 人吉球磨～</h3>
+          <p class="story-location"><span class="icon">📍</span>熊本県（人吉市ほか）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">日本磁器のふるさと 肥前～百花繚乱のやきもの散歩～</h3>
+          <p class="story-location"><span class="icon">📍</span>佐賀県（唐津市ほか）、長崎県（佐世保市ほか）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">米作り、二千年にわたる大地の記憶～菊池川流域「今昔『水稲』物語」～</h3>
+          <p class="story-location"><span class="icon">📍</span>熊本県（菊池市ほか）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">やばけい遊覧～大地に描いた山水絵巻の道をゆく～</h3>
+          <p class="story-location"><span class="icon">📍</span>大分県（中津市、玖珠町）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">鬼が仏になった里「くにさき」</h3>
+          <p class="story-location"><span class="icon">📍</span>大分県（豊後高田市、国東市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">古代人のモニュメント－台地に絵を描く 南国宮崎の古墳景観－</h3>
+          <p class="story-location"><span class="icon">📍</span>宮崎県（宮崎市、西都市、新富町）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">八代を創造した石工たちの軌跡～石造りのレガシー～</h3>
+          <p class="story-location"><span class="icon">📍</span>熊本県（八代市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">「炭坑のまち」の記憶をたどる～筑豊・北九州・福岡の炭田と港湾～</h3>
+          <p class="story-location"><span class="icon">📍</span>福岡県（北九州市ほか）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">琉球王国時代から連綿と続く沖縄の伝統的な「琉球料理」と「泡盛」、そして「芸能」</h3>
+          <p class="story-location"><span class="icon">📍</span>沖縄県（那覇市ほか県内広域）</p>
+        </article>
+        <article class="story-card">
+          <span class="wide-area-badge"></span>
+          <h3 class="story-title">砂糖文化を広めた長崎街道～シュガーロード～</h3>
+          <p class="story-location"><span class="icon">📍</span>長崎県・佐賀県・福岡県</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">熊本・阿蘇は「火の山」と「水の国」～火山と生きる人々の農耕文化～</h3>
+          <p class="story-location"><span class="icon">📍</span>熊本県（阿蘇地域）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">北九州市の「あかい・てつの・まち」～PRIDE OF KITAKYUSHU～</h3>
+          <p class="story-location"><span class="icon">📍</span>福岡県（北九州市）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">別府の湯は地獄の上の天国</h3>
+          <p class="story-location"><span class="icon">📍</span>大分県（別府市）</p>
+        </article>
+        <article class="story-card">
+          <span class="wide-area-badge"></span>
+          <h3 class="story-title">近世日本の教育遺産群－学ぶ心・礼節の本源－</h3>
+          <p class="story-location"><span class="icon">📍</span>栃木県・茨城県・岡山県・大分県</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">やんばるの自然と共に残る文化景観（※追加で使うならここに）</h3>
+          <p class="story-location"><span class="icon">📍</span>沖縄県（北部）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">奄美・離島に伝わる海の信仰と民俗文化（※差し替え用）</h3>
+          <p class="story-location"><span class="icon">📍</span>鹿児島県（奄美群島）</p>
+        </article>
+        <article class="story-card">
+          <h3 class="story-title">南島に伝わる祈りと芸能の島々（※差し替え用）</h3>
+          <p class="story-location"><span class="icon">📍</span>沖縄県・鹿児島県（南西諸島広域）</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <div id="noResults" class="no-results" style="display:none;">
+    <span class="ja-text">該当するストーリーがありません。</span>
+    <span class="en-text">No matching stories found.</span>
+  </div>
+
+  <button id="backToTop" class="back-to-top" aria-label="ページの先頭へ">↑</button>
+
+  <footer>
+    <p>
+      <span class="ja-text">データは公開情報を元に作成しています。</span>
+      <span class="en-text">Data based on publicly available sources.</span>
+    </p>
+  </footer>
+</div>
+
+<script>
+  // ① カードの日本語→英語の対応データ
+  //    ★重要★ この配列は「HTMLに並んでいるstory-cardの順番」と同じ順で書いてあります
+  const storyData = [
+    // ===== 1-9 北海道・東北 =====
+    {
+      jaTitle: "本邦国策を北海道に観よ！～北の産業革命「炭鉄港」～",
+      enTitle: "See Japan’s National Policy in Hokkaido – Northern Industrial Revolution: “Coal, Iron and Ports”",
+      jaLocation: "北海道（室蘭市、夕張市、岩見沢市、美唄市、芦別市、赤平市、三笠市、栗山町、月形町、沼田町、小樽市）",
+      enLocation: "Hokkaido (Muroran, Yubari, Iwamizawa, Bibai, Ashibetsu, Akabira, Mikasa, Kuriyama, Tsukigata, Numata, Otaru)"
+    },
+    {
+      jaTitle: "「鮭の聖地」の物語～知床の鮭漁の伝統と光り輝くイクラ～",
+      enTitle: "Story of the “Sacred Land of Salmon” – Shiretoko’s Salmon Fishing Traditions and Shining Ikura",
+      jaLocation: "北海道（標津町、羅臼町）",
+      enLocation: "Hokkaido (Shibetsu, Rausu)"
+    },
+    {
+      jaTitle: "カムイと共に生きる上川アイヌ～大雪山のふところに伝承される神々の世界～",
+      enTitle: "Kamikawa Ainu Living with the Kamuy – The Sacred World Passed Down in the Daisetsuzan Mountains",
+      jaLocation: "北海道（旭川市、上川町）",
+      enLocation: "Hokkaido (Asahikawa, Kamikawa)"
+    },
+    {
+      jaTitle: "政宗が育んだ\"伊達\"な文化",
+      enTitle: "The Stylish Culture Fostered by Date Masamune",
+      jaLocation: "宮城県（仙台市、多賀城市、塩竈市、松島町）",
+      enLocation: "Miyagi (Sendai, Tagajo, Shiogama, Matsushima)"
+    },
+    {
+      jaTitle: "自然と信仰が息づく『生まれかわりの旅』～樹齢300年を超える杉並木につつまれた2,446段の石段から始まる出羽三山～",
+      enTitle: "A Rebirth Pilgrimage in Nature and Faith – Dewa Sanzan and Its 2,446 Stone Steps Amid 300-Year-Old Cedars",
+      jaLocation: "山形県（鶴岡市、西川町、庄内町）",
+      enLocation: "Yamagata (Tsuruoka, Nishikawa, Shonai)"
+    },
+    {
+      jaTitle: "山寺が支えた紅花文化",
+      enTitle: "The Safflower Culture Sustained by Mountain Temples",
+      jaLocation: "山形県（山形市、天童市、尾花沢市、中山町、河北町、白鷹町）",
+      enLocation: "Yamagata (Yamagata, Tendo, Obanazawa, Nakayama, Kahoku, Shirataka)"
+    },
+    {
+      jaTitle: "未来を拓いた「一本の水路」－大久保利通\"最期の夢\"と開拓者の軌跡 郡山・猪苗代－",
+      enTitle: "The Single Waterway that Opened the Future – Okubo Toshimichi’s Last Dream and the Trail of Pioneers in Koriyama & Inawashiro",
+      jaLocation: "福島県（郡山市、猪苗代町）",
+      enLocation: "Fukushima (Koriyama, Inawashiro)"
+    },
+    {
+      jaTitle: "会津の三十三観音めぐり～巡礼を通して観た往時の会津の文化～",
+      enTitle: "The 33 Kannon Pilgrimage of Aizu – Culture of Aizu Seen Through Devotional Journeys",
+      jaLocation: "福島県（会津若松市、喜多方市、西会津町、磐梯町、猪苗代町、会津坂下町、湯川村、柳津町、三島町、金山町、昭和村、会津美里町、下郷町、只見町、南会津町、北塩原村）",
+      enLocation: "Fukushima (Aizuwakamatsu, Kitakata, Nishi-Aizu, Bandai, Inawashiro, Aizubange, Yugawa, Yanaizu, Mishima, Kaneyama, Showa, Aizumisato, Shimogo, Tadami, Minamiaizu, Kitashiobara)"
+    },
+    {
+      jaTitle: "\"奥南部\"漆物語～安比川流域に受け継がれる伝統技術～",
+      enTitle: "The “Oku-Nambu” Lacquer Story – Traditional Techniques Passed Down Along the Appi River",
+      jaLocation: "岩手県（八幡平市、二戸市、一戸町）",
+      enLocation: "Iwate (Hachimantai, Ninohe, Ichinohe)"
+    },
+
+    // ===== 10-20 関東 =====
+    {
+      jaTitle: "かかあ天下－ぐんまの絹物語－",
+      enTitle: "“Kakaa-Tenka” – Gunma’s Silk Story",
+      jaLocation: "群馬県（桐生市、甘楽町、中之条町、片品村）",
+      enLocation: "Gunma (Kiryu, Kanra, Nakanojo, Katashina)"
+    },
+    {
+      jaTitle: "和装文化の足元を支え続ける足袋蔵のまち行田",
+      enTitle: "Gyoda, the Town of Tabi Storehouses Supporting Japan’s Kimono Culture",
+      jaLocation: "埼玉県（行田市）",
+      enLocation: "Saitama (Gyoda)"
+    },
+    {
+      jaTitle: "「北総四都市江戸紀行・江戸を感じる北総の町並み」－佐倉・成田・佐原・銚子：百万都市江戸を支えた江戸近郊の四つの代表的町並み群－",
+      enTitle: "Edo Journeys in Four Cities of Northern Chiba – Sakura, Narita, Sawara and Choshi that Supported the Metropolis",
+      jaLocation: "千葉県（佐倉市、成田市、香取市、銚子市）",
+      enLocation: "Chiba (Sakura, Narita, Katori, Choshi)"
+    },
+    {
+      jaTitle: "江戸庶民の信仰と行楽の地～巨大な木太刀を担いで「大山詣り」～",
+      enTitle: "Edo Commoners’ Faith and Pleasure Trips – The Great Oyama Pilgrimage with Giant Wooden Swords",
+      jaLocation: "神奈川県（伊勢原市）",
+      enLocation: "Kanagawa (Isehara)"
+    },
+    {
+      jaTitle: "鎮守府 横須賀・呉・佐世保・舞鶴～日本近代化の躍動を体感できるまち～",
+      enTitle: "Naval District Cities – Yokosuka, Kure, Sasebo, Maizuru: Feel the Pulse of Japan’s Modernization",
+      jaLocation: "神奈川県（横須賀市）、広島県（呉市）、長崎県（佐世保市）、京都府（舞鶴市）",
+      enLocation: "Kanagawa (Yokosuka), Hiroshima (Kure), Nagasaki (Sasebo), Kyoto (Maizuru)"
+    },
+    {
+      jaTitle: "地下迷宮の秘密を探る旅～大谷石文化が息づくまち宇都宮～",
+      enTitle: "Exploring the Secrets of the Underground Maze – Utsunomiya, City of Oya Stone Culture",
+      jaLocation: "栃木県（宇都宮市）",
+      enLocation: "Tochigi (Utsunomiya)"
+    },
+    {
+      jaTitle: "明治貴族が描いた未来～那須野が原開拓浪漫譚～",
+      enTitle: "The Future Envisioned by Meiji Aristocrats – The Romantic Story of Nasu-no-gahara Development",
+      jaLocation: "栃木県（那須塩原市、大田原市、矢板市）",
+      enLocation: "Tochigi (Nasushiobara, Otawara, Yaita)"
+    },
+    {
+      jaTitle: "里沼（SATO-NUMA）－「祈り」「実り」「守り」の沼が磨き上げた館林の沼辺文化－",
+      enTitle: "SATO-NUMA – Lakeside Culture of Tatebayashi Shaped by Prayer, Harvest and Protection",
+      jaLocation: "群馬県（館林市）",
+      enLocation: "Gunma (Tatebayashi)"
+    },
+    {
+      jaTitle: "かさましこ～兄弟産地が紡ぐ\"焼き物語\"～",
+      enTitle: "Kasamashiko – “Brother Pottery Towns” of Kasama and Mashiko",
+      jaLocation: "栃木県（益子町）、茨城県（笠間市）",
+      enLocation: "Tochigi (Mashiko), Ibaraki (Kasama)"
+    },
+    {
+      jaTitle: "霊気満山 高尾山～人々の祈りが紡ぐ桑都物語～",
+      enTitle: "Takao, Mountain Filled with Sacred Energy – The Story of Hachioji Woven by People’s Prayers",
+      jaLocation: "東京都（八王子市）",
+      enLocation: "Tokyo (Hachioji)"
+    },
+    {
+      jaTitle: "葛飾～江戸を育んだ水と大地がもたらす豊かな食文化～",
+      enTitle: "Katsushika – Rich Food Culture Born from the Waters and Lands that Nurtured Edo",
+      jaLocation: "東京都（葛飾区）、千葉県（松戸市）、埼玉県（三郷市、吉川市）",
+      enLocation: "Tokyo (Katsushika), Chiba (Matsudo), Saitama (Misato, Yoshikawa)"
+    },
+
+    // ===== 21-53 中部 =====
+    {
+      jaTitle: "加賀前田家ゆかりの町民文化が花咲くまち高岡－人､技､心－",
+      enTitle: "Takaoka, Where the Maeda Clan’s Townspeople Culture Blossomed – People, Skills, and Spirit",
+      jaLocation: "富山県（高岡市）",
+      enLocation: "Toyama (Takaoka)"
+    },
+    {
+      jaTitle: "灯（あか）り舞う半島 能登～熱狂のキリコ祭り～",
+      enTitle: "Noto Peninsula of Dancing Lights – The Passionate Kiriko Festivals",
+      jaLocation: "石川県（七尾市、輪島市、珠洲市、穴水町、能登町）",
+      enLocation: "Ishikawa (Nanao, Wajima, Suzu, Anamizu, Noto)"
+    },
+    {
+      jaTitle: "海と都をつなぐ若狭の往来文化遺産群～御食国（みけつくに）若狭と鯖街道～",
+      enTitle: "The Cultural Heritage of Wakasa Connecting Sea and Capital – Miketsukuni Wakasa and the Saba Road",
+      jaLocation: "福井県（小浜市、若狭町）",
+      enLocation: "Fukui (Obama, Wakasa)"
+    },
+    {
+      jaTitle: "「信長公のおもなし」が息づく戦国城下町・岐阜",
+      enTitle: "Gifu – Sengoku Castle Town Where Lord Nobunaga’s Hospitality Lives On",
+      jaLocation: "岐阜県（岐阜市）",
+      enLocation: "Gifu (Gifu City)"
+    },
+    {
+      jaTitle: "祈る皇女斎王のみやこ 斎宮",
+      enTitle: "Saiku – Capital of the Sacred Imperial Princess, the Saiō",
+      jaLocation: "三重県（明和町）",
+      enLocation: "Mie (Meiwa)"
+    },
+    {
+      jaTitle: "海女（Ama）に出逢えるまち 鳥羽・志摩～素潜り漁に生きる女性たち",
+      enTitle: "Toba & Shima – Towns Where You Meet the Ama, Women Divers Living by Skin-Diving",
+      jaLocation: "三重県（鳥羽市、志摩市）",
+      enLocation: "Mie (Toba, Shima)"
+    },
+    {
+      jaTitle: "\"日本海のゴールドラッシュ\"に沸いた佐渡金銀山",
+      enTitle: "Sado Gold and Silver Mines – The “Gold Rush” of the Sea of Japan",
+      jaLocation: "新潟県（佐渡市）",
+      enLocation: "Niigata (Sado)"
+    },
+    {
+      jaTitle: "「珠玉と歩む物語」小松～時の流れの中で磨き上げた石の文化～",
+      enTitle: "Komatsu, the Story Walked with “Gems” – Stone Culture Polished Through Time",
+      jaLocation: "石川県（小松市）",
+      enLocation: "Ishikawa (Komatsu)"
+    },
+    {
+      jaTitle: "木曽路はすべて山の中～山を守り 山に生きる～",
+      enTitle: "The Kisoji is Deep in the Mountains – Living with and Protecting the Mountains",
+      jaLocation: "長野県（上松町、南木曽町、木祖村、木曽町、大桑村、塩尻市）、岐阜県（中津川市）",
+      enLocation: "Nagano (Agematsu, Nagiso, Kiso Village, Kiso Town, Okuwa, Shiojiri), Gifu (Nakatsugawa)"
+    },
+    {
+      jaTitle: "飛騨匠の技・こころ－木とともに、今に引き継ぐ1300年－",
+      enTitle: "Hida Master Carpenters’ Skills and Spirit – 1,300 Years of Working with Wood",
+      jaLocation: "岐阜県（高山市）",
+      enLocation: "Gifu (Takayama)"
+    },
+    {
+      jaTitle: "忍びの里 伊賀・甲賀－リアル忍者を求めて－",
+      enTitle: "Homelands of the Ninja: Iga & Koka – In Search of Real Ninja",
+      jaLocation: "三重県（伊賀市）、滋賀県（甲賀市）",
+      enLocation: "Mie (Iga), Shiga (Koka)"
+    },
+    {
+      jaTitle: "宮大工の鑿一丁から生まれた木彫刻美術館・井波",
+      enTitle: "Inami, the Open-Air Woodcarving Museum Born from a Temple Carpenter’s Single Chisel",
+      jaLocation: "富山県（南砺市）",
+      enLocation: "Toyama (Nanto)"
+    },
+    {
+      jaTitle: "星降る中部高地の縄文世界－数千年を遡（さかのぼ）る黒曜石鉱山と縄文人に出会う旅－",
+      enTitle: "The Jomon World of the Starry Central Highlands – Journey to Obsidian Mines and Jomon People Thousands of Years Back",
+      jaLocation: "山梨県（甲府市、北杜市、韮崎市、南アルプス市、甲州市、笛吹市、甲斐市）、長野県（諏訪市、茅野市、富士見町、原村、岡谷市、下諏訪町、長和町、川上村）",
+      enLocation: "Yamanashi (Kofu, Hokuto, Nirasaki, Minami-Alps, Koshu, Fuefuki, Kai), Nagano (Suwa, Chino, Fujimi, Hara, Okaya, Shimosuwa, Nagawa, Kawakami)"
+    },
+    {
+      jaTitle: "旅人たちの足跡残る悠久の石畳道－箱根八里で辿る遥かな江戸の旅路－",
+      enTitle: "The Timeless Stone-Paved Road – Tracing Edo-Era Journeys on Hakone’s Eight-Leagues Route",
+      jaLocation: "静岡県（三島市、函南町）、神奈川県（小田原市、箱根町）",
+      enLocation: "Shizuoka (Mishima, Kannami), Kanagawa (Odawara, Hakone)"
+    },
+    {
+      jaTitle: "400年の歴史の扉を開ける旅～石から読み解く中世・近世のまちづくり 越前・福井～",
+      enTitle: "Opening 400 Years of History – Reading Medieval and Early Modern Urban Design from Stone in Echizen & Fukui",
+      jaLocation: "福井県（福井市、坂井市、越前町、永平寺町）",
+      enLocation: "Fukui (Fukui, Sakai, Echizen, Eiheiji)"
+    },
+    {
+      jaTitle: "江戸時代の情緒に触れる絞りの産地～藍染が風にゆれる町 有松～",
+      enTitle: "Arimatsu, the Shibori-Dyeing Town – Edo-Era Atmosphere and Indigo Fluttering in the Wind",
+      jaLocation: "愛知県（名古屋市）",
+      enLocation: "Aichi (Nagoya – Arimatsu area)"
+    },
+    {
+      jaTitle: "「森の都」の木造建築～時の記憶を未来へつなぐ～",
+      enTitle: "Wooden Architecture of the “Forest Capital” – Linking Memories of Time to the Future",
+      jaLocation: "静岡県（静岡市）",
+      enLocation: "Shizuoka (Shizuoka City)"
+    },
+    {
+      jaTitle: "甲州の匠の源流・御嶽昇仙峡～水晶の鼓動が導いた信仰と技、そして先進技術へ～",
+      enTitle: "Origins of Koshu Craftsmanship – Shosenkyo Gorge and the Crystal-Driven Path from Faith and Skill to Innovation",
+      jaLocation: "山梨県（甲府市）",
+      enLocation: "Yamanashi (Kofu)"
+    },
+    {
+      jaTitle: "月の都 千曲－姨捨の棚田がつくる摩訶不思議な月景色「田毎の月」－",
+      enTitle: "Chikuma, the Capital of the Moon – The Mysterious “Moon in Every Rice Terrace” of Obasute",
+      jaLocation: "長野県（千曲市）",
+      enLocation: "Nagano (Chikuma)"
+    },
+    {
+      jaTitle: "レイラインがつなぐ「太陽と大地の聖地」～龍と生きるまち 信州上田・塩田平～",
+      enTitle: "Ley Lines Linking the Sacred Land of Sun and Earth – Ueda & Shiodadaira, the Dragon-Lived Towns",
+      jaLocation: "長野県（上田市）",
+      enLocation: "Nagano (Ueda)"
+    },
+    {
+      jaTitle: "日本初「旅ブーム」を起こした弥次さん喜多さん、駿州の旅～滑稽本と浮世絵が描く東海道旅のガイドブック（道中記）～",
+      enTitle: "Yaji and Kita’s Suruga Journey that Sparked Japan’s First Travel Boom – The Tokaido Guidebook Drawn in Funny Stories and Ukiyo-e",
+      jaLocation: "静岡県（静岡市、藤枝市）",
+      enLocation: "Shizuoka (Shizuoka, Fujieda)"
+    },
+    {
+      jaTitle: "「伊勢ぺディア」～ご利益満載の「お伊勢さん」参り～",
+      enTitle: "“Ise-pedia” – The Blessing-Filled Pilgrimage to Ise",
+      jaLocation: "三重県（伊勢市、玉城町、明和町）",
+      enLocation: "Mie (Ise, Tamaki, Meiwa)"
+    },
+    {
+      jaTitle: "黄金（こがね）の国ジパング、産金はじまりの地・奥州～黄金文化を象徴する産金遺跡群～",
+      enTitle: "Zipangu, the Land of Gold – Oshu, the Birthplace of Gold Mining and Its Golden Heritage Sites",
+      jaLocation: "宮城県（涌谷町、登米市、南三陸町、気仙沼市、石巻市）、岩手県（陸前高田市、平泉町）",
+      enLocation: "Miyagi (Wakuya, Tome, Minamisanriku, Kesennuma, Ishinomaki), Iwate (Rikuzentakata, Hiraizumi)"
+    },
+    {
+      jaTitle: "越後長岡の米百俵と肴（さかな）～セルフヘルプの精神が息づく、雪国の食と酒の文化～",
+      enTitle: "Nagaoka’s “One Hundred Bags of Rice” and Its Cuisine – Food and Sake Culture Born from Self-Help in the Snow Country",
+      jaLocation: "新潟県（長岡市）",
+      enLocation: "Niigata (Nagaoka)"
+    },
+    {
+      jaTitle: "豪雪地有数のスキーリゾート「妙高」～欧州の知恵を取り入れ、国策と共に発展した日本の山岳リゾート～",
+      enTitle: "Myoko, One of Japan’s Top Snow Resorts – A Mountain Resort Developed with European Wisdom and National Policy",
+      jaLocation: "新潟県（妙高市）",
+      enLocation: "Niigata (Myoko)"
+    },
+    {
+      jaTitle: "富山湾の神秘が生んだ「蜃気楼」～\"魚の形の蜃気楼\"に愛された魚津の文化～",
+      enTitle: "Mirages Born from the Mysteries of Toyama Bay – Uozu’s Culture Loved by Fish-Shaped Mirages",
+      jaLocation: "富山県（魚津市）",
+      enLocation: "Toyama (Uozu)"
+    },
+    {
+      jaTitle: "加賀藩が育んだ絢爛（けんらん）豪華な加賀文化の粋～百万石の\"プライド\"が詰まった\"金沢箔\"～",
+      enTitle: "The Essence of Magnificent Kaga Culture Fostered by the Kaga Domain – “Kanazawa Gold Leaf” Filled with One-Million-Koku Pride",
+      jaLocation: "石川県（金沢市）",
+      enLocation: "Ishikawa (Kanazawa)"
+    },
+    {
+      jaTitle: "荒波を越えた男たちの夢が紡いだ異空間～北前船寄港地・船主集落～",
+      enTitle: "Another World Woven by Men Who Crossed Rough Seas – Kitamae Ship Ports and Shipowners’ Villages",
+      jaLocation: "（広域）北海道、青森県、秋田県、山形県、新潟県、石川県、福井県、京都府、大阪府、兵庫県、鳥取県、島根県、岡山県、広島県、山口県、香川県、愛媛県、福岡県",
+      enLocation: "(Wide area) Hokkaido, Aomori, Akita, Yamagata, Niigata, Ishikawa, Fukui, Kyoto, Osaka, Hyogo, Tottori, Shimane, Okayama, Hiroshima, Yamaguchi, Kagawa, Ehime, Fukuoka"
+    },
+    {
+      jaTitle: "きっと恋する六古窯－日本生まれ日本育ちのやきもの産地－",
+      enTitle: "You Will Fall in Love with the Six Ancient Kilns – Japan’s Native Pottery Production Areas",
+      jaLocation: "愛知県（常滑市、瀬戸市）、福井県（越前町）、滋賀県（甲賀市）、兵庫県（丹波篠山市）、岡山県（備前市）",
+      enLocation: "Aichi (Tokoname, Seto), Fukui (Echizen), Shiga (Koka), Hyogo (Tamba-Sasayama), Okayama (Bizen)"
+    },
+    {
+      jaTitle: "日本ワイン140年史～国産ブドウで醸造する和文化の結晶～",
+      enTitle: "140 Years of Japanese Wine – The Culmination of Wa-Culture Made from Domestic Grapes",
+      jaLocation: "山梨県（甲府市、山梨市、笛吹市、甲州市）、東京都（中央区）、大阪府（柏原市）、茨城県（牛久市）",
+      enLocation: "Yamanashi (Kofu, Yamanashi, Fuefuki, Koshu), Tokyo (Chuo), Osaka (Kashiwara), Ibaraki (Ushiku)"
+    },
+    {
+      jaTitle: "葡萄畑が織りなす風景－山梨県峡東地域－",
+      enTitle: "Vineyard Landscapes – Kyōtō Area of Yamanashi",
+      jaLocation: "山梨県（山梨市、笛吹市、甲州市）",
+      enLocation: "Yamanashi (Yamanashi, Fuefuki, Koshu)"
+    },
+    {
+      jaTitle: "究極の雪国とおかまち－真説！豪雪地ものがたり－",
+      enTitle: "Tokamachi, the Ultimate Snow Country – The True Story of a Heavy-Snow Region",
+      jaLocation: "新潟県（十日町市）",
+      enLocation: "Niigata (Tokamachi)"
+    },
+    {
+      jaTitle: "海を越えた鉄道～世界へつながる 鉄路のキセキ～",
+      enTitle: "Railway that Crossed the Sea – The Miracle Rail Connecting to the World",
+      jaLocation: "福井県（敦賀市）、滋賀県（長浜市）、京都府（舞鶴市）、大阪府（大阪市）",
+      enLocation: "Fukui (Tsuruga), Shiga (Nagahama), Kyoto (Maizuru), Osaka (Osaka)"
+    },
+
+    // ===== 54-75 近畿 =====
+    {
+      jaTitle: "琵琶湖とその水辺景観－祈りと暮らしの水遺産－",
+      enTitle: "Lake Biwa and Its Waterside Landscapes – Water Heritage of Prayer and Daily Life",
+      jaLocation: "滋賀県（大津市、彦根市、近江八幡市、高島市、東近江市、米原市）",
+      enLocation: "Shiga (Otsu, Hikone, Omihachiman, Takashima, Higashiomi, Maibara)"
+    },
+    {
+      jaTitle: "日本茶800年の歴史散歩",
+      enTitle: "An 800-Year Walk Through the History of Japanese Tea",
+      jaLocation: "京都府（宇治市、城陽市、八幡市、京田辺市、木津川市、宇治田原町、和束町、南山城村）",
+      enLocation: "Kyoto (Uji, Joyo, Yawata, Kyotanabe, Kizugawa, Ujitawara, Wazuka, Minamiyamashiro)"
+    },
+    {
+      jaTitle: "丹波篠山 デカンショ節－民謡に乗せて歌い継ぐふるさとの記憶－",
+      enTitle: "Tamba-Sasayama Dekansho-bushi – Hometown Memories Passed Down in Folk Song",
+      jaLocation: "兵庫県（丹波篠山市）",
+      enLocation: "Hyogo (Tamba-Sasayama)"
+    },
+    {
+      jaTitle: "日本国創成のとき～飛鳥を翔（かけ）た女性たち～",
+      enTitle: "When Japan Was Born – The Women Who Flew Across Asuka",
+      jaLocation: "奈良県（明日香村）",
+      enLocation: "Nara (Asuka)"
+    },
+    {
+      jaTitle: "『古事記』の冒頭を飾る「国生みの島・淡路」～古代国家を支えた海人の営み～",
+      enTitle: "Awaji, the Island of Japan’s Birth in the Kojiki – Life of the Seafaring People that Supported the Ancient State",
+      jaLocation: "兵庫県（洲本市、南あわじ市、淡路市）",
+      enLocation: "Hyogo (Sumoto, Minamiawaji, Awaji)"
+    },
+    {
+      jaTitle: "美林連なる造林発祥の地\"吉野\"～森に育まれ、森を育んだ人々の暮らしとこころ～",
+      enTitle: "Yoshino, Birthplace of Silviculture – Lives and Minds Nurtured by the Forest, Nurturing the Forest",
+      jaLocation: "奈良県（吉野町、川上村、黒滝村、下市町、天川村、上北山村、下北山村、東吉野村）",
+      enLocation: "Nara (Yoshino, Kawakami, Kurotaki, Shimoichi, Tenkawa, Kamikitayama, Shimokitayama, Higashiyoshino)"
+    },
+    {
+      jaTitle: "鯨とともに生きる",
+      enTitle: "Living with Whales",
+      jaLocation: "和歌山県（太地町）",
+      enLocation: "Wakayama (Taiji)"
+    },
+    {
+      jaTitle: "300年を紡ぐ絹が織り成す丹後ちりめん回廊",
+      enTitle: "The Tango Chirimen Corridor Woven by 300 Years of Silk",
+      jaLocation: "京都府（京丹後市、伊根町、与謝野町）",
+      enLocation: "Kyoto (Kyotango, Ine, Yosano)"
+    },
+    {
+      jaTitle: "1400年に渡る悠久の歴史を伝える「最古の国道」～竹内街道・横大路（大道）～",
+      enTitle: "Japan’s Oldest Highway Conveying 1,400 Years of History – Takeuchi Kaido and Yoko-Oji",
+      jaLocation: "大阪府（大阪市、堺市、松原市、羽曳野市、太子町）、奈良県（葛城市、大和高田市、橿原市、田原本町、桜井市、明日香村）",
+      enLocation: "Osaka (Osaka, Sakai, Matsubara, Habikino, Taishi), Nara (Katsuragi, Yamatotakada, Kashihara, Tawaramoto, Sakurai, Asuka)"
+    },
+    {
+      jaTitle: "播但貫く、銀の馬車道 鉱石の道～資源大国日本の記憶をたどる73kmの轍～",
+      enTitle: "The Bantan Silver Carriage Road and Ore Road – 73 km Tracing Japan’s Resource-Rich History",
+      jaLocation: "兵庫県（姫路市、福崎町、市川町、神河町、朝来市）",
+      enLocation: "Hyogo (Himeji, Fukusaki, Ichikawa, Kamikawa, Asago)"
+    },
+    {
+      jaTitle: "絶景の宝庫 和歌の浦",
+      enTitle: "Wakanoura, a Treasure Trove of Scenic Beauty",
+      jaLocation: "和歌山県（和歌山市）",
+      enLocation: "Wakayama (Wakayama City)"
+    },
+    {
+      jaTitle: "「最初の一滴」醤油醸造の発祥の地 紀州湯浅",
+      enTitle: "Yuasa in Kishu – Birthplace of the “First Drop” of Soy Sauce",
+      jaLocation: "和歌山県（湯浅町）",
+      enLocation: "Wakayama (Yuasa)"
+    },
+    {
+      jaTitle: "「百世の安堵」～津波と復興の記憶が生きる広川の防災遺産～",
+      enTitle: "“Relief for a Hundred Generations” – Hirokawa’s Disaster-Prevention Heritage of Tsunami and Recovery",
+      jaLocation: "和歌山県（広川町）",
+      enLocation: "Wakayama (Hirokawa)"
+    },
+    {
+      jaTitle: "『日本第一』の塩を産したまち 播州赤穂",
+      enTitle: "Banshu Ako – Town that Produced Japan’s Finest Salt",
+      jaLocation: "兵庫県（赤穂市）",
+      enLocation: "Hyogo (Ako)"
+    },
+    {
+      jaTitle: "旅引付と二枚の絵図が伝えるまち－中世日根荘の風景－",
+      enTitle: "The Medieval Hineno Estate Seen in Travel Registers and Twin Maps",
+      jaLocation: "大阪府（泉佐野市）",
+      enLocation: "Osaka (Izumisano)"
+    },
+    {
+      jaTitle: "中世に出逢えるまち～千年にわたり護られてきた中世文化遺産の宝庫～",
+      enTitle: "A Town Where You Meet the Middle Ages – A Treasure House of Cultural Heritage Preserved for 1,000 Years",
+      jaLocation: "和歌山県（有田川町、湯浅町、広川町）",
+      enLocation: "Wakayama (Aridagawa, Yuasa, Hirokawa)"
+    },
+    {
+      jaTitle: "「伊丹諸白」と「灘の生一本」 下り酒が生んだ銘醸地、伊丹と灘五郷",
+      enTitle: "Itami Morohaku and Nada’s Pure Sake – Itami and the Five Nada Villages, Famous Brewing Areas Born from “Down-Sake”",
+      jaLocation: "兵庫県（伊丹市、神戸市、西宮市、芦屋市、尼崎市）",
+      enLocation: "Hyogo (Itami, Kobe, Nishinomiya, Ashiya, Amagasaki)"
+    },
+    {
+      jaTitle: "女性とともに今に息づく女人高野～時を超え、時に合わせて見守り続ける癒しの聖地～",
+      enTitle: "Women’s Koya that Lives On with Women – A Healing Sacred Place Watching Over the Ages",
+      jaLocation: "奈良県（宇陀市、吉野町、明日香村）、和歌山県（高野町、九度山町、かつらぎ町、橋本市）、大阪府（河内長野市）",
+      enLocation: "Nara (Uda, Yoshino, Asuka), Wakayama (Koya, Kudoyama, Katsuragi, Hashimoto), Osaka (Kawachinagano)"
+    },
+    {
+      jaTitle: "京都と大津を繋ぐ希望の水路 琵琶湖疏水～舟に乗り、歩いて触れる明治のひととき～",
+      enTitle: "Lake Biwa Canal, the Hopeful Waterway Connecting Kyoto and Otsu – Experience the Meiji Era by Boat and on Foot",
+      jaLocation: "京都府（京都市）、滋賀県（大津市）",
+      enLocation: "Kyoto (Kyoto City), Shiga (Otsu)"
+    },
+    {
+      jaTitle: "1300年つづく日本の終活の旅～西国三十三所観音巡礼～",
+      enTitle: "Japan’s 1,300-Year “Final Journey” – Saigoku 33 Kannon Pilgrimage",
+      jaLocation: "（広域）和歌山県、奈良県、大阪府、兵庫県、京都府、滋賀県、岐阜県",
+      enLocation: "(Wide area) Wakayama, Nara, Osaka, Hyogo, Kyoto, Shiga, Gifu"
+    },
+    {
+      jaTitle: "日本海の風が生んだ絶景と秘境－幸せを呼ぶ霊獣・麒麟が舞う大地「因幡・但馬」－",
+      enTitle: "Spectacular and Hidden Landscapes Created by the Sea of Japan – Inaba & Tajima, Where the Auspicious Kirin Dances",
+      jaLocation: "鳥取県（鳥取市、岩美町、若桜町、八頭町、香美町、新温泉町）",
+      enLocation: "Tottori (Tottori, Iwami, Wakasa, Yazu), Hyogo (Kami, Shinonsen)"
+    },
+    {
+      jaTitle: "祈りの道「おち」～古代からの信仰の継承と癒しの地～",
+      enTitle: "The Prayer Road “Ochi” – Land of Healing and Faith Continued Since Ancient Times",
+      jaLocation: "奈良県（宇陀市、桜井市、曽爾村、御杖村、東吉野村）",
+      enLocation: "Nara (Uda, Sakurai, Soni, Mitsue, Higashiyoshino)"
+    },
+
+    // ===== 76-92 中国 =====
+    {
+      jaTitle: "六根清浄と六感治癒の地～日本一危ない国宝鑑賞と世界屈指のラドン泉～",
+      enTitle: "Land of Sixfold Purification and Sixfold Healing – Japan’s Most Perilous National Treasure Viewing and World-Class Radon Springs",
+      jaLocation: "鳥取県（三朝町）",
+      enLocation: "Tottori (Misasa)"
+    },
+    {
+      jaTitle: "津和野今昔～百景図を歩く～",
+      enTitle: "Tsuwano, Past and Present – Walking Through a Hundred Scenic Views",
+      jaLocation: "島根県（津和野町）",
+      enLocation: "Shimane (Tsuwano)"
+    },
+    {
+      jaTitle: "尾道水道が紡いだ中世からの箱庭的都市",
+      enTitle: "Onomichi, the Miniature City Shaped by the Onomichi Channel Since Medieval Times",
+      jaLocation: "広島県（尾道市）",
+      enLocation: "Hiroshima (Onomichi)"
+    },
+    {
+      jaTitle: "地蔵信仰が育んだ日本最大の大山牛馬市",
+      enTitle: "Japan’s Largest Daisen Cattle and Horse Market Nurtured by Jizo Faith",
+      jaLocation: "鳥取県（大山町、伯耆町、江府町、米子市、琴浦町）",
+      enLocation: "Tottori (Daisen, Hoki, Kofu, Yonago, Kotoura)"
+    },
+    {
+      jaTitle: "出雲國たたら風土記～鉄づくり千年が生んだ物語～",
+      enTitle: "Izumo Tatara Chronicles – A Story Born from 1,000 Years of Ironmaking",
+      jaLocation: "島根県（雲南市、安来市、奥出雲町）、広島県（庄原市）",
+      enLocation: "Shimane (Unnan, Yasugi, Okuizumo), Hiroshima (Shobara)"
+    },
+    {
+      jaTitle: "\"日本最大の海賊\"の本拠地：芸予諸島～よみがえる村上海賊\"Murakami KAIZOKU\"の記憶～",
+      enTitle: "Headquarters of Japan’s Largest Pirates – Geiyo Islands and the Revived Memory of the Murakami Kaizoku",
+      jaLocation: "愛媛県（今治市）、広島県（尾道市）",
+      enLocation: "Ehime (Imabari), Hiroshima (Onomichi)"
+    },
+    {
+      jaTitle: "一輪の綿花から始まる倉敷物語～和と洋が織りなす繊維のまち～",
+      enTitle: "The Kurashiki Story Beginning with a Single Cotton Flower – A Textile Town Weaving Japanese and Western Styles",
+      jaLocation: "岡山県（倉敷市）",
+      enLocation: "Okayama (Kurashiki)"
+    },
+    {
+      jaTitle: "「桃太郎伝説」の生まれたまち おかやま～古代吉備の遺産が誘う鬼退治の物語～",
+      enTitle: "Okayama, Birthplace of the “Momotaro Legend” – Demon-Slaying Stories Guided by Ancient Kibi Heritage",
+      jaLocation: "岡山県（岡山市、倉敷市、総社市、赤磐市）",
+      enLocation: "Okayama (Okayama, Kurashiki, Soja, Akaiwa)"
+    },
+    {
+      jaTitle: "瀬戸の夕凪が包む国内随一の近世港町～セピア色の港町に日常が溶け込む鞆の浦～",
+      enTitle: "Tomonoura – Japan’s Preeminent Early-Modern Port Town, Wrapped in the Seto Inland Sea’s Evening Calm",
+      jaLocation: "広島県（福山市）",
+      enLocation: "Hiroshima (Fukuyama – Tomonoura)"
+    },
+    {
+      jaTitle: "神々や鬼たちが躍動する神話の世界～石見地域で伝承される神楽～",
+      enTitle: "Mythical World Where Gods and Demons Dance – Kagura Traditions of the Iwami Region",
+      jaLocation: "島根県（浜田市、益田市、大田市、津和野町、吉賀町、川本町、美郷町、邑南町、江津市）",
+      enLocation: "Shimane (Hamada, Masuda, Oda, Tsuwano, Yoshika, Kawamoto, Misato, Onan, Gotsu)"
+    },
+    {
+      jaTitle: "「石」が語る（かたる）日本の近代～国内最大の切り出しの技（わざ）と心（こころ）が息づくまち～",
+      enTitle: "Stone Tells the Story of Modern Japan – Towns Where Japan’s Largest Stone-Quarrying Skills and Spirit Live On",
+      jaLocation: "岡山県（笠岡市）、香川県（丸亀市、土庄町）",
+      enLocation: "Okayama (Kasaoka), Kagawa (Marugame, Tonosho)"
+    },
+    {
+      jaTitle: "サムライの知恵と技、城下町のくらし～和と洋が融合した革新の歴史に出会うまち、松江～",
+      enTitle: "Matsue – Samurai Wisdom and Skills, and Castle-Town Life, Where Japanese and Western Innovations Met",
+      jaLocation: "島根県（松江市）",
+      enLocation: "Shimane (Matsue)"
+    },
+    {
+      jaTitle: "「銀の道」が結ぶ世界遺産 石見銀山と日本の近代化",
+      enTitle: "The “Silver Road” Linking the Iwami Ginzan World Heritage Site and Japan’s Modernization",
+      jaLocation: "島根県（大田市、美郷町）",
+      enLocation: "Shimane (Oda, Misato)"
+    },
+    {
+      jaTitle: "～「あの日の広島」の熱と生きる～復興を支えた人々の想（おも）いが宿るまち",
+      enTitle: "Living with the Passion of “That Day’s Hiroshima” – A City Filled with the Hopes of Those Who Rebuilt",
+      jaLocation: "広島県（広島市）",
+      enLocation: "Hiroshima (Hiroshima City)"
+    },
+    {
+      jaTitle: "山口に花開いた\"大内文化\"～「西の京」に息づく室町時代の雅～",
+      enTitle: "The Ouchi Culture that Blossomed in Yamaguchi – Muromachi Elegance Living in the “Kyoto of the West”",
+      jaLocation: "山口県（山口市）",
+      enLocation: "Yamaguchi (Yamaguchi City)"
+    },
+    {
+      jaTitle: "関門\"ノスタルジック\"海峡～時の停車場、近代化の記憶～",
+      enTitle: "Nostalgic Kanmon Straits – Stations of Time and Memories of Modernization",
+      jaLocation: "福岡県（北九州市）、山口県（下関市）",
+      enLocation: "Fukuoka (Kitakyushu), Yamaguchi (Shimonoseki)"
+    },
+    {
+      jaTitle: "「地底のアンコール・ワット」－巨大（きょだい）地下空間（ちかくうかん）に広（ひろ）がるストーリー",
+      enTitle: "“Underground Angkor Wat” – Stories Spreading Through a Giant Subterranean Space",
+      jaLocation: "岡山県（高梁市、新見市）",
+      enLocation: "Okayama (Takahashi, Niimi)"
+    },
+
+    // ===== 93-99 四国 =====
+    {
+      jaTitle: "「四国遍路」～回遊型巡礼路と独自の巡礼文化～",
+      enTitle: "The Shikoku Pilgrimage – Circular Pilgrimage Route and Its Unique Culture",
+      jaLocation: "徳島県、高知県、愛媛県、香川県（四国4県）",
+      enLocation: "Shikoku (Tokushima, Kochi, Ehime, Kagawa)"
+    },
+    {
+      jaTitle: "森林鉄道から日本一のゆずロードへ－ゆずが香り彩る南国土佐・中芸地域の景観と食文化－",
+      enTitle: "From Forest Railways to Japan’s No.1 Yuzu Road – Landscapes and Food Culture of Nankoku Tosa’s Chugei Area",
+      jaLocation: "高知県（安田町、馬路村、北川村、奈半利町、田野町）",
+      enLocation: "Kochi (Yasuda, Umaji, Kitagawa, Nahari, Tano)"
+    },
+    {
+      jaTitle: "知ってる!?悠久の時が流れる石の島～海を越え、日本の礎を築いた せとうち備讃諸島～",
+      enTitle: "Did You Know? The Stone Islands Where Time Flows Eternally – Setouchi’s Bisan Islands that Built Japan across the Sea",
+      jaLocation: "香川県（丸亀市、坂出市、観音寺市、土庄町、小豆島町、多度津町）",
+      enLocation: "Kagawa (Marugame, Sakaide, Kanonji, Tonosho, Shodoshima, Tadotsu)"
+    },
+    {
+      jaTitle: "藍のふるさと 阿波～日本中を染め上げた至高の青を訪ねて～",
+      enTitle: "Awa, Home of Indigo – In Search of the Supreme Blue that Dyed All of Japan",
+      jaLocation: "徳島県（徳島市、美馬市、阿波市、石井町、藍住町、上板町、つるぎ町、神山町）",
+      enLocation: "Tokushima (Tokushima, Mima, Awa, Ishii, Aizumi, Kamiita, Tsurugi, Kamiyama)"
+    },
+    {
+      jaTitle: "四国\"最西端\"の半島で生まれた一（いち）大（だい）鉱業（こうぎょう）都市（とし）～銅（あかがね）の記憶（きおく）が刻（きざ）まれたまち 新居浜（にいはま）・別子（べっし）～",
+      enTitle: "A Major Mining City Born on Shikoku’s Westernmost Peninsula – Niihama & Besshi, Towns Engraved with Copper Memories",
+      jaLocation: "愛媛県（新居浜市）",
+      enLocation: "Ehime (Niihama)"
+    },
+    {
+      jaTitle: "絶（た）えず水（みず）が湧（わ）き出（い）づる「水の都（みやこ）」西条（さいじょう）～自（みずか）ら噴（ふ）き上（あ）がる水（みず）「うちぬき」が育（はぐく）んだ暮（く）らし・文化（ぶんか）～",
+      enTitle: "Saijo, the “City of Water” Where Springs Never Cease – Life and Culture Nurtured by Self-Gushing Wells",
+      jaLocation: "愛媛県（西条市）",
+      enLocation: "Ehime (Saijo)"
+    },
+    {
+      jaTitle: "「伊予（いよ）灘（なだ）ものがたり」が結（むす）ぶ 四国（しこく）最古（さいこ）の『古（いにしえ）の道（みち）』と『太陽（たいよう）のふりそそぐ町（まち）』",
+      enTitle: "The “Iyo-Nada Monogatari” Links Shikoku’s Oldest Ancient Road and the Sun-Drenched Towns",
+      jaLocation: "愛媛県（八幡浜市、大洲市、内子町、伊予市、松山市）",
+      enLocation: "Ehime (Yawatahama, Ozu, Uchiko, Iyo, Matsuyama)"
+    },
+
+    // ===== 100-118 九州・沖縄 =====
+    {
+      jaTitle: "古代日本の「西の都」～東アジアとの交流拠点～",
+      enTitle: "The “Western Capital” of Ancient Japan – Gateway for Exchange with East Asia",
+      jaLocation: "福岡県（太宰府市）",
+      enLocation: "Fukuoka (Dazaifu)"
+    },
+    {
+      jaTitle: "国境の島 壱岐・対馬・五島～古代からの架け橋～",
+      enTitle: "Border Islands Iki, Tsushima and Goto – Bridges Since Ancient Times",
+      jaLocation: "長崎県（壱岐市、対馬市、五島市、新上五島町、小値賀町）",
+      enLocation: "Nagasaki (Iki, Tsushima, Goto, Shin-Kamigoto, Ojika)"
+    },
+    {
+      jaTitle: "相良700年が生んだ保守と進取の文化～日本でもっとも豊かな隠れ里 人吉球磨～",
+      enTitle: "700 Years of the Sagara Clan – Conservative yet Progressive Culture in Hitoyoshi-Kuma, Japan’s Richest Hidden Village",
+      jaLocation: "熊本県（人吉市、相良村、五木村、山江村、球磨村、あさぎり町、多良木町、湯前町、水上村、錦町）",
+      enLocation: "Kumamoto (Hitoyoshi, Sagara, Itsuki, Yamae, Kuma, Asagiri, Taragi, Yunomae, Mizukami, Nishiki)"
+    },
+    {
+      jaTitle: "日本磁器のふるさと 肥前～百花繚乱のやきもの散歩～",
+      enTitle: "Hizen, the Home of Japanese Porcelain – A Stroll Through a Riot of Pottery",
+      jaLocation: "佐賀県（唐津市、伊万里市、武雄市、嬉野市、有田町）、長崎県（佐世保市、平戸市、波佐見町）",
+      enLocation: "Saga (Karatsu, Imari, Takeo, Ureshino, Arita), Nagasaki (Sasebo, Hirado, Hasami)"
+    },
+    {
+      jaTitle: "米作り、二千年にわたる大地の記憶～菊池川流域「今昔『水稲』物語」～",
+      enTitle: "2,000 Years of Rice Cultivation – The Story of Paddy Rice in the Kikuchi River Basin",
+      jaLocation: "熊本県（菊池市、山鹿市、玉名市、和水町）",
+      enLocation: "Kumamoto (Kikuchi, Yamaga, Tamana, Nagomi)"
+    },
+    {
+      jaTitle: "やばけい遊覧～大地に描いた山水絵巻の道をゆく～",
+      enTitle: "Yabakei Pleasure Tour – Walking the Landscape-Painting Road Drawn on the Earth",
+      jaLocation: "大分県（中津市、玖珠町）",
+      enLocation: "Oita (Nakatsu, Kusu)"
+    },
+    {
+      jaTitle: "鬼が仏になった里「くにさき」",
+      enTitle: "Kunisaki, the Land Where Demons Became Buddhas",
+      jaLocation: "大分県（豊後高田市、国東市）",
+      enLocation: "Oita (Bungotakada, Kunisaki)"
+    },
+    {
+      jaTitle: "古代人のモニュメント－台地に絵を描く 南国宮崎の古墳景観－",
+      enTitle: "Monuments of Ancient People – Kofun Landscapes Drawing Pictures on the Plateaus of Tropical Miyazaki",
+      jaLocation: "宮崎県（宮崎市、西都市、新富町）",
+      enLocation: "Miyazaki (Miyazaki, Saito, Shintomi)"
+    },
+    {
+      jaTitle: "八代を創造した石工たちの軌跡～石工の郷に息づく石造りのレガシー～",
+      enTitle: "The Stonemasons Who Created Yatsushiro – Stone-Built Legacy Living in the Stonemasons’ Homeland",
+      jaLocation: "熊本県（八代市）",
+      enLocation: "Kumamoto (Yatsushiro)"
+    },
+    {
+      jaTitle: "「炭坑のまち」の記憶をたどる～筑豊・北九州・福岡の炭田と港湾～",
+      enTitle: "Tracing the Memories of “Coal-Mining Towns” – Coalfields and Ports of Chikuho, Kitakyushu and Fukuoka",
+      jaLocation: "福岡県（北九州市、中間市、直方市、飯塚市、田川市、糸田町、福智町、芦屋町、岡垣町、遠賀町）",
+      enLocation: "Fukuoka (Kitakyushu, Nakama, Nogata, Iizuka, Tagawa, Itoda, Fukuchi, Ashiya, Okagaki, Onga)"
+    },
+    {
+      jaTitle: "琉球王国時代から連綿と続く沖縄の伝統的な「琉球料理」と「泡盛」、そして「芸能」",
+      enTitle: "Traditional “Ryukyu Cuisine”, “Awamori” and Performing Arts Continuing from the Ryukyu Kingdom Era",
+      jaLocation: "沖縄県（那覇市、浦添市、名護市、沖縄市、うるま市、南城市、本部町、今帰仁村、読谷村、嘉手納町、北谷町、北中城村、中城村、西原町、与那原町、南風原町、八重瀬町、多良間村、竹富町）",
+      enLocation: "Okinawa (Naha, Urasoe, Nago, Okinawa City, Uruma, Nanjo, Motobu, Nakijin, Yomitan, Kadena, Chatan, Kitanakagusuku, Nakagusuku, Nishihara, Yonabaru, Haebaru, Yaese, Tarama, Taketomi)"
+    },
+    {
+      jaTitle: "砂糖文化を広めた長崎街道～シュガーロード～",
+      enTitle: "The Nagasaki Kaido that Spread Sugar Culture – “Sugar Road”",
+      jaLocation: "長崎県（長崎市、諫早市、大村市、雲仙市、平戸市）、佐賀県（佐賀市、嬉野市、小城市、多久市、大町町、基山町）、福岡県（北九州市、飯塚市）",
+      enLocation: "Nagasaki (Nagasaki, Isahaya, Omura, Unzen, Hirado), Saga (Saga, Ureshino, Ogi, Taku, Omachi, Kiyama), Fukuoka (Kitakyushu, Iizuka)"
+    },
+    {
+      jaTitle: "熊本・阿蘇は「火の山」と「水の国」～火山と生きる人々の農耕文化～",
+      enTitle: "Kumamoto & Aso, Land of Fire and Water – Farming Culture of People Living with Volcanoes",
+      jaLocation: "熊本県（阿蘇市、南小国町、小国町、産山村、高森町、南阿蘇村、西原村）",
+      enLocation: "Kumamoto (Aso, Minamioguni, Oguni, Ubuyama, Takamori, Minamiaso, Nishihara)"
+    },
+    {
+      jaTitle: "北九州市（きたきゅうしゅうし）の「あ（A）かい・て（T）つ（T）の・まち（M）」～P（P）RIDE（ライド） O（O）F（ブ） K（K）ITAKYUSHU（イタキュウシュウ）～",
+      enTitle: "Kitakyushu, the “City of Red Iron” – PRIDE OF KITAKYUSHU",
+      jaLocation: "福岡県（北九州市）",
+      enLocation: "Fukuoka (Kitakyushu)"
+    },
+    {
+      jaTitle: "別府（べっぷ）の湯（ゆ）は地獄（じごく）の上（うえ）の天国（てんごく）",
+      enTitle: "Beppu’s Hot Springs – Heaven Above Hell",
+      jaLocation: "大分県（別府市）",
+      enLocation: "Oita (Beppu)"
+    },
+    {
+      jaTitle: "近世日本の教育遺産群－学ぶ心・礼節の本源－",
+      enTitle: "Early Modern Japan’s Educational Heritage – Sources of the Will to Learn and Courtesy",
+      jaLocation: "栃木県（足利市）、茨城県（水戸市）、岡山県（備前市）、大分県（日田市）",
+      enLocation: "Tochigi (Ashikaga), Ibaraki (Mito), Okayama (Bizen), Oita (Hita)"
+    },
+    {
+      jaTitle: "やんばるの自然と共に残る文化景観（※追加）",
+      enTitle: "Cultural Landscapes Living Together with the Nature of Yanbaru",
+      jaLocation: "沖縄県（本島北部）",
+      enLocation: "Okinawa (Northern Okinawa Island)"
+    },
+    {
+      jaTitle: "奄美・離島に伝わる海の信仰と民俗文化（※追加）",
+      enTitle: "Maritime Beliefs and Folk Culture Handed Down in Amami and the Remote Islands",
+      jaLocation: "鹿児島県（奄美群島）",
+      enLocation: "Kagoshima (Amami Islands)"
+    },
+    {
+      jaTitle: "南島に伝わる祈りと芸能の島々（※追加）",
+      enTitle: "Islands of Prayer and Performing Arts in the Southern Archipelago",
+      jaLocation: "沖縄県・鹿児島県（南西諸島広域）",
+      enLocation: "Okinawa & Kagoshima (Nansei Islands, wide area)"
+    }
+  ];
+
+  // ② DOMが完全に読み込まれてから実行（モバイル対応）
+  document.addEventListener('DOMContentLoaded', function() {
+    const langButtons = document.querySelectorAll('.lang-btn');
+    const searchInput = document.getElementById('searchInput');
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const regionBlocks = document.querySelectorAll('.region-block');
+    const resultsInfo = document.getElementById('resultsInfo');
+    const resultsCount = document.getElementById('resultsCount');
+    const noResults = document.getElementById('noResults');
+    const visibleStoriesLabel = document.getElementById('visibleStories');
+
+    // カード要素を最初に拾っておく（順番が命）
+    const storyCards = Array.from(document.querySelectorAll('.story-card'));
+
+  function applyLang(lang) {
+    document.body.classList.remove('lang-ja', 'lang-en');
+    document.body.classList.add('lang-' + lang);
+
+    // ボタンの見た目
+    langButtons.forEach(b => b.classList.remove('active'));
+    const activeBtn = Array.from(langButtons).find(b => b.dataset.lang === lang);
+    if (activeBtn) activeBtn.classList.add('active');
+
+    // 検索placeholder
+    if (searchInput) {
+      searchInput.placeholder = (lang === 'ja')
+        ? 'ストーリー名や地域名で検索...'
+        : 'Search by story or region...';
+    }
+
+    // ★カードの本文を全部切り替える + 併記用要素を追加
+    storyCards.forEach((card, idx) => {
+      const data = storyData[idx];
+      if (!data) return; // 念のため
+      
+      // 既存要素の取得
+      const titleEl = card.querySelector('.story-title');
+      const locEl = card.querySelector('.story-location');
+
+      // 併記切り替えボタンがまだなければ追加
+      if (!card.querySelector('.card-lang-toggle')) {
+        const toggleBtn = document.createElement('button');
+        toggleBtn.className = 'card-lang-toggle';
+        toggleBtn.innerHTML = '🌐';
+        toggleBtn.title = lang === 'ja' ? '日英併記表示' : 'Show bilingual';
+        toggleBtn.setAttribute('aria-label', 'Toggle bilingual display');
+        card.insertBefore(toggleBtn, card.firstChild);
+        
+        // クリックイベント（モバイル対応）
+        const handleToggle = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          card.classList.toggle('bilingual-mode');
+          toggleBtn.classList.toggle('active');
+        };
+        toggleBtn.addEventListener('click', handleToggle);
+        toggleBtn.addEventListener('touchend', handleToggle);
+      }
+
+      // 併記用の要素を追加（まだなければ）
+      if (!card.querySelector('.title-bilingual')) {
+        const titleBilingual = document.createElement('div');
+        titleBilingual.className = 'bilingual-text title-bilingual';
+        titleEl.parentNode.insertBefore(titleBilingual, titleEl.nextSibling);
+      }
+      
+      if (!card.querySelector('.location-bilingual')) {
+        const locBilingual = document.createElement('div');
+        locBilingual.className = 'bilingual-text location-bilingual';
+        locEl.parentNode.insertBefore(locBilingual, locEl.nextSibling);
+      }
+
+      // メインテキストと併記テキストの設定
+      const titleBilingual = card.querySelector('.title-bilingual');
+      const locBilingual = card.querySelector('.location-bilingual');
+
+      if (lang === 'ja') {
+        if (titleEl) titleEl.textContent = data.jaTitle;
+        if (locEl) locEl.innerHTML = '<span class="icon">📍</span>' + data.jaLocation;
+        if (titleBilingual) titleBilingual.textContent = data.enTitle;
+        if (locBilingual) locBilingual.textContent = data.enLocation;
+      } else {
+        if (titleEl) titleEl.textContent = data.enTitle;
+        if (locEl) locEl.innerHTML = '<span class="icon">📍</span>' + data.enLocation;
+        if (titleBilingual) titleBilingual.textContent = data.jaTitle;
+        if (locBilingual) locBilingual.textContent = data.jaLocation;
+      }
+    });
+
+    // 保存
+    localStorage.setItem('heritageLang', lang);
+
+    // 再検索（表示数を保つ）
+    handleSearch();
+  }
+
+  langButtons.forEach(btn => {
+    const handleLangSwitch = () => {
+      applyLang(btn.dataset.lang);
+    };
+    btn.addEventListener('click', handleLangSwitch);
+    btn.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      handleLangSwitch();
+    });
+  });
+
+  // 初期言語
+  (function initLang() {
+    const saved = localStorage.getItem('heritageLang');
+    if (saved === 'ja' || saved === 'en') {
+      applyLang(saved);
+    } else {
+      applyLang('ja');
+    }
+  })();
+
+  // フィルターボタン
+  filterButtons.forEach(btn => {
+    const handleFilter = () => {
+      filterButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      handleSearch();
+    };
+    btn.addEventListener('click', handleFilter);
+    btn.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      handleFilter();
+    });
+  });
+
+  function handleSearch() {
+    const q = (searchInput.value || '').toLowerCase().trim();
+    const activeRegionBtn = document.querySelector('.filter-btn.active');
+    const activeRegion = activeRegionBtn ? activeRegionBtn.dataset.region : 'all';
+    let matchCount = 0;
+
+    regionBlocks.forEach((block, blockIdx) => {
+      const blockRegion = block.dataset.region;
+      const regionHidden = !(activeRegion === 'all' || blockRegion === activeRegion);
+      if (regionHidden) {
+        block.style.display = 'none';
+        return;
+      } else {
+        block.style.display = '';
+      }
+
+      const cards = block.querySelectorAll('.story-card');
+      let blockHasMatch = false;
+      cards.forEach(card => {
+        const title = card.querySelector('.story-title')?.textContent.toLowerCase() || '';
+        const loc = card.querySelector('.story-location')?.textContent.toLowerCase() || '';
+        const hit = !q || title.includes(q) || loc.includes(q);
+        if (hit) {
+          card.classList.remove('hidden');
+          blockHasMatch = true;
+          matchCount++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+
+      block.style.display = blockHasMatch ? '' : 'none';
+    });
+
+    if (q) {
+      resultsInfo.style.display = 'block';
+      resultsCount.textContent = matchCount;
+    } else {
+      resultsInfo.style.display = 'none';
+    }
+
+    if (matchCount === 0) {
+      noResults.style.display = 'block';
+    } else {
+      noResults.style.display = 'none';
+    }
+
+    if (visibleStoriesLabel) {
+      visibleStoriesLabel.textContent = matchCount || 0;
+    }
+  }
+
+  if (searchInput) {
+    searchInput.addEventListener('input', handleSearch);
+    searchInput.addEventListener('search', handleSearch);
+    searchInput.addEventListener('change', handleSearch);
+  }
+
+  // トップに戻る
+  const backToTop = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 300) {
+      backToTop.classList.add('visible');
+    } else {
+      backToTop.classList.remove('visible');
+    }
+  });
+  if (backToTop) {
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+  // 初回検索
+  handleSearch();
+  
+  }); // DOMContentLoaded終了
+</script>
+
+
+<!-- iOS/Chrome on iOS 安定化パッチ ここから -->
+<script id="ios-stability-patch">
+(function(){
+  const $ = (sel, root=document) => root.querySelector(sel);
+  const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+
+  const searchInput   = $('#searchInput') || $('input[type="search"]');
+  const filterButtons = $$('.filter-btn');
+  const regionBlocks  = $$('.region-block, [data-region-block]');
+
+  window.handleSearch = function handleSearch(){
+    const qRaw = (searchInput && typeof searchInput.value === 'string') ? searchInput.value : '';
+    const q = qRaw.toLowerCase().trim();
+
+    const activeBtn = $('.filter-btn.active');
+    const activeRegion = activeBtn ? activeBtn.dataset.region : 'all';
+
+    const resultsInfo    = $('#resultsInfo');
+    const resultsCount   = $('#resultsCount');
+    const noResults      = $('#noResults');
+    const totalDisplayed = $('#totalDisplayed');
+    const visibleStories = $('#visibleStories');
+
+    let matchCount = 0;
+
+    regionBlocks.forEach(block => {
+      const blockRegion = block.dataset.region || '';
+      const regionHidden = !(activeRegion === 'all' || blockRegion === activeRegion);
+      if (regionHidden) {
+        block.style.display = 'none';
+        return;
+      } else {
+        block.style.display = '';
+      }
+
+      const cards = $$('.story-card', block);
+      let blockHasMatch = false;
+
+      cards.forEach(card => {
+        const title = ($('.story-title', card)?.textContent || '').toLowerCase();
+        const loc   = ($('.story-location', card)?.textContent || '').toLowerCase();
+        const hit   = !q || title.includes(q) || loc.includes(q);
+
+        if (hit) {
+          card.classList.remove('hidden');
+          blockHasMatch = true;
+          matchCount++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+
+      block.style.display = blockHasMatch ? '' : 'none';
+    });
+
+    if (resultsInfo)  resultsInfo.style.display = q ? 'block' : 'none';
+    if (resultsCount) resultsCount.textContent  = matchCount;
+    if (noResults)    noResults.style.display   = (matchCount === 0 && q) ? 'block' : 'none';
+
+    if (!q) {
+      if (totalDisplayed) totalDisplayed.textContent = matchCount;
+      if (visibleStories) visibleStories.textContent = matchCount;
+    } else {
+      if (visibleStories) visibleStories.textContent = matchCount;
+    }
+
+    if (activeRegion === 'all' && !q) {
+      if (totalDisplayed) totalDisplayed.textContent = 118;
+      if (visibleStories) visibleStories.textContent = 118;
+    }
+  };
+
+  // pointerup に一本化
+  const resetListeners = (nodes) => {
+    nodes.forEach(node => {
+      const fresh = node.cloneNode(true);
+      node.parentNode.replaceChild(fresh, node);
+    });
+    return nodes.map((n, i) => n.parentNode ? n.parentNode.querySelectorAll('*')[i] : n);
+  };
+
+  // 言語ボタン
+  let langButtons = $$('.lang-btn,[data-lang]');
+  if (langButtons.length) {
+    langButtons.forEach(btn => {
+      const fresh = btn.cloneNode(true);
+      btn.parentNode.replaceChild(fresh, btn);
+    });
+    langButtons = $$('.lang-btn,[data-lang]');
+    langButtons.forEach(btn => {
+      const lang = btn.dataset.lang;
+      btn.addEventListener('pointerup', function(e){
+        e.preventDefault();
+        if (typeof window.applyLang === 'function' && lang) window.applyLang(lang);
+      }, {passive:false});
+    });
+  }
+
+  // フィルタボタン
+  let fbtns = $$('.filter-btn');
+  if (fbtns.length) {
+    fbtns.forEach(btn => {
+      const fresh = btn.cloneNode(true);
+      btn.parentNode.replaceChild(fresh, btn);
+    });
+    fbtns = $$('.filter-btn');
+    fbtns.forEach(btn => {
+      btn.addEventListener('pointerup', function(e){
+        e.preventDefault();
+        fbtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        window.handleSearch();
+      }, {passive:false});
+    });
+  }
+
+  // 検索欄
+  if (searchInput) {
+    const call = () => window.handleSearch();
+    ['input','change','search','compositionend'].forEach(ev => {
+      searchInput.addEventListener(ev, call);
+    });
+  }
+
+  // カード内の 🌐 併記トグル
+  let toggles = $$('.bilingual-toggle, .toggle-bilingual, .btn-bilingual');
+  if (toggles.length) {
+    toggles.forEach(btn => {
+      const fresh = btn.cloneNode(true);
+      btn.parentNode.replaceChild(fresh, btn);
+    });
+    toggles = $$('.bilingual-toggle, .toggle-bilingual, .btn-bilingual');
+    toggles.forEach(btn => {
+      btn.addEventListener('pointerup', function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        const card = btn.closest('.story-card');
+        if (card) {
+          card.classList.toggle('bilingual-mode');
+          btn.classList.toggle('active');
+        }
+      }, {passive:false});
+    });
+  }
+
+  // 初期化
+  try { window.handleSearch(); } catch(e){}
+})();
+</script>
+<!-- iOS/Chrome on iOS 安定化パッチ ここまで -->
+
+</body>
+</html>
