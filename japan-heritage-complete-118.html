@@ -1,0 +1,1373 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+<meta name="description" content="文化庁認定の日本遺産118ストーリー完全版。お気に入り・訪問記録機能付き観光ガイド。">
+<title>日本遺産 118 観光ガイド完全版 | Japan Heritage Complete Guide</title>
+<style>
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  :root {
+    --primary-color: #4b6cb7;
+    --primary-dark: #182848;
+    --accent-color: #7f8c8d;
+    --accent-warm: #e74c3c;
+    --accent-gold: #f39c12;
+    --bg-color: #f4f6f9;
+    --card-bg: #ffffff;
+    --text-primary: #333;
+    --text-secondary: #555;
+    --border-radius: 12px;
+    --shadow-sm: 0 4px 12px rgba(0,0,0,0.08);
+    --shadow-md: 0 8px 20px rgba(0,0,0,0.12);
+    --shadow-lg: 0 10px 30px rgba(0,0,0,0.15);
+    --transition: all 0.3s ease;
+  }
+
+  body {
+    font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    line-height: 1.7;
+    color: var(--text-primary);
+    background: var(--bg-color);
+    scroll-behavior: smooth;
+  }
+
+  body.lang-en {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+
+  body.lang-ja .en-text { display: none !important; }
+  body.lang-en .ja-text { display: none !important; }
+
+  .container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  /* === 言語切り替えボタン === */
+  .language-toggle {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 1001;
+    display: flex;
+    gap: 3px;
+    background: white;
+    padding: 2px 4px;
+    border-radius: 20px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .lang-btn {
+    padding: 5px 10px;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    border-radius: 15px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.75em;
+    transition: var(--transition);
+    font-family: inherit;
+  }
+
+  .lang-btn:hover { background: var(--bg-color); }
+  .lang-btn.active {
+    background: var(--primary-color);
+    color: white;
+  }
+
+  /* === ヘッダー === */
+  header {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    color: white;
+    padding: 40px 20px;
+    text-align: center;
+    margin-bottom: 30px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-lg);
+  }
+
+  header h1 {
+    font-size: clamp(1.8em, 4vw, 2.4em);
+    margin-bottom: 8px;
+    font-weight: 700;
+  }
+
+  header .subtitle {
+    font-size: clamp(0.9em, 2vw, 1.1em);
+    opacity: 0.9;
+  }
+
+  /* === 統計情報 === */
+  .stats {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+  }
+
+  .stat-item {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 15px 25px;
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+  }
+
+  .stat-number {
+    font-size: 2em;
+    font-weight: 700;
+    display: block;
+  }
+
+  .stat-label {
+    font-size: 0.9em;
+    opacity: 0.9;
+  }
+
+  /* === 検索・フィルターエリア === */
+  .controls {
+    background: var(--card-bg);
+    padding: 25px;
+    border-radius: var(--border-radius);
+    margin-bottom: 30px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .search-box {
+    position: relative;
+    margin-bottom: 20px;
+  }
+
+  .search-box input {
+    width: 100%;
+    padding: 15px 50px 15px 20px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 1em;
+    transition: var(--transition);
+    font-family: inherit;
+  }
+
+  .search-box input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(75, 108, 183, 0.1);
+  }
+
+  .search-icon {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--accent-color);
+    font-size: 1.2em;
+  }
+
+  /* === フィルタータブ === */
+  .filter-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 10px;
+  }
+
+  .filter-tab {
+    padding: 8px 16px;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 0.95em;
+    font-weight: 600;
+    border-radius: 8px 8px 0 0;
+    transition: var(--transition);
+    font-family: inherit;
+  }
+
+  .filter-tab:hover {
+    background: var(--bg-color);
+  }
+
+  .filter-tab.active {
+    background: var(--primary-color);
+    color: white;
+  }
+
+  .filter-content {
+    display: none;
+  }
+
+  .filter-content.active {
+    display: flex;
+  }
+
+  .filter-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .filter-btn {
+    padding: 10px 20px;
+    border: 2px solid var(--primary-color);
+    background: transparent;
+    color: var(--primary-color);
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 0.95em;
+    font-weight: 600;
+    transition: var(--transition);
+    font-family: inherit;
+  }
+
+  .filter-btn:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  .filter-btn.active {
+    background: var(--primary-color);
+    color: white;
+  }
+
+  /* === 結果表示 === */
+  .results-info {
+    text-align: center;
+    padding: 15px;
+    margin-bottom: 20px;
+    background: #e8f4f8;
+    border-radius: 8px;
+    font-weight: 600;
+    color: var(--primary-dark);
+  }
+
+  .no-results {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-secondary);
+    font-size: 1.2em;
+  }
+
+  /* === 地域ブロック === */
+  .region-block {
+    margin-bottom: 50px;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+  }
+
+  .region-block.hidden {
+    display: none;
+  }
+
+  .region-title {
+    font-size: clamp(1.5em, 3vw, 2em);
+    color: var(--primary-dark);
+    padding-bottom: 10px;
+    margin-bottom: 25px;
+    border-bottom: 4px solid var(--primary-color);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .region-count {
+    font-size: 0.6em;
+    color: var(--accent-color);
+    font-weight: 400;
+  }
+
+  /* === ストーリーカード === */
+  .story-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 22px;
+  }
+
+  .story-card {
+    background: var(--card-bg);
+    border-radius: 10px;
+    padding: 22px;
+    padding-top: 50px;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+    border: 2px solid transparent;
+    position: relative;
+    cursor: pointer;
+  }
+
+  /* === カードアクションボタン === */
+  .card-actions {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    gap: 5px;
+    z-index: 10;
+  }
+
+  .card-action-btn {
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 1.1em;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+
+  .card-action-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 3px 12px rgba(0,0,0,0.2);
+  }
+
+  .card-action-btn.favorite.active {
+    background: var(--accent-warm);
+    color: white;
+  }
+
+  .card-action-btn.visited.active {
+    background: var(--accent-gold);
+    color: white;
+  }
+
+  .story-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--primary-color);
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+  }
+
+  .story-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary-color);
+  }
+
+  .story-card:hover::before {
+    transform: scaleY(1);
+  }
+
+  /* === バッジ === */
+  .card-badges {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 0.75em;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-weight: 700;
+  }
+
+  .badge.favorite {
+    background: #ffe5e5;
+    color: var(--accent-warm);
+  }
+
+  .badge.visited {
+    background: #fff3cd;
+    color: var(--accent-gold);
+  }
+
+  .story-title {
+    font-size: 1.25em;
+    color: var(--text-primary);
+    font-weight: 700;
+    margin-bottom: 12px;
+    flex-grow: 1;
+    line-height: 1.4;
+  }
+
+  .story-location {
+    font-size: 0.9em;
+    color: var(--text-secondary);
+    background: #f8f9fa;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border-left: 4px solid var(--accent-color);
+    line-height: 1.5;
+  }
+
+  .story-location .icon {
+    margin-right: 5px;
+    color: var(--primary-color);
+  }
+
+  .wide-area-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #ff9a56 0%, #ff6b6b 100%);
+    color: white;
+    font-size: 0.75em;
+    padding: 3px 10px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  body.lang-ja .wide-area-badge::after { content: " 広域"; }
+  body.lang-en .wide-area-badge::after { content: " | Wide-area"; }
+
+  /* === 詳細モーダル === */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    padding: 20px;
+    overflow-y: auto;
+  }
+
+  .modal-overlay.active {
+    display: flex;
+  }
+
+  .modal-content {
+    background: white;
+    border-radius: var(--border-radius);
+    max-width: 800px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    animation: modalSlideIn 0.3s ease;
+  }
+
+  @keyframes modalSlideIn {
+    from {
+      opacity: 0;
+      transform: translateY(-30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .modal-header {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    color: white;
+    padding: 25px;
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    font-size: 1.8em;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+  }
+
+  .modal-close:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: rotate(90deg);
+  }
+
+  .modal-title {
+    font-size: 1.8em;
+    margin-bottom: 10px;
+    padding-right: 50px;
+  }
+
+  .modal-location {
+    opacity: 0.9;
+    font-size: 1em;
+  }
+
+  .modal-body {
+    padding: 30px;
+  }
+
+  .modal-section {
+    margin-bottom: 25px;
+  }
+
+  .modal-section-title {
+    font-size: 1.3em;
+    color: var(--primary-dark);
+    margin-bottom: 12px;
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 8px;
+  }
+
+  .modal-description {
+    line-height: 1.8;
+    color: var(--text-primary);
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    padding: 20px 30px;
+    background: var(--bg-color);
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+  }
+
+  .modal-action-btn {
+    flex: 1;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .btn-favorite {
+    background: var(--accent-warm);
+    color: white;
+  }
+
+  .btn-visited {
+    background: var(--accent-gold);
+    color: white;
+  }
+
+  .btn-favorite:hover,
+  .btn-visited:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+  }
+
+  /* === トップに戻る === */
+  .back-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 1.5em;
+    cursor: pointer;
+    box-shadow: var(--shadow-md);
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transition);
+    z-index: 1000;
+  }
+
+  .back-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .back-to-top:hover {
+    background: var(--primary-dark);
+    transform: translateY(-3px);
+  }
+
+  /* === フッター === */
+  footer {
+    text-align: center;
+    padding: 30px 20px;
+    margin-top: 50px;
+    color: var(--text-secondary);
+    border-top: 2px solid #e0e0e0;
+  }
+
+  /* === レスポンシブ === */
+  @media (max-width: 768px) {
+    .container { padding: 15px; }
+    header { padding: 30px 15px; margin-bottom: 20px; }
+    .stats { gap: 15px; }
+    .controls { padding: 20px 15px; }
+    .story-grid { grid-template-columns: 1fr; gap: 18px; }
+    .modal-content { max-width: 100%; margin: 10px; }
+    .modal-body { padding: 20px; }
+    .modal-actions { flex-direction: column; }
+  }
+
+  .story-card.hidden { display: none !important; }
+</style>
+</head>
+<body class="lang-ja">
+
+<!-- 言語切り替え -->
+<div class="language-toggle">
+  <button class="lang-btn active" data-lang="ja">🇯🇵 日本語</button>
+  <button class="lang-btn" data-lang="en">🇺🇸 English</button>
+</div>
+
+<div class="container">
+  <header>
+    <h1>
+      <span class="ja-text">🇯🇵 日本遺産 118 観光ガイド</span>
+      <span class="en-text">🇯🇵 Japan Heritage 118 Stories</span>
+    </h1>
+    <p class="subtitle">
+      <span class="ja-text">あなただけの旅を見つけよう</span>
+      <span class="en-text">Discover Your Unique Journey</span>
+    </p>
+    <div class="stats">
+      <div class="stat-item">
+        <span class="stat-number">118</span>
+        <span class="stat-label">
+          <span class="ja-text">認定ストーリー</span>
+          <span class="en-text">Stories</span>
+        </span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number" id="favoriteCount">0</span>
+        <span class="stat-label">
+          <span class="ja-text">お気に入り</span>
+          <span class="en-text">Favorites</span>
+        </span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number" id="visitedCount">0</span>
+        <span class="stat-label">
+          <span class="ja-text">訪問済み</span>
+          <span class="en-text">Visited</span>
+        </span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number" id="visibleCount">118</span>
+        <span class="stat-label">
+          <span class="ja-text">表示中</span>
+          <span class="en-text">Showing</span>
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <section class="controls">
+    <!-- タブ -->
+    <div class="filter-tabs">
+      <button class="filter-tab active" data-tab="region">
+        <span class="ja-text">🗾 地域</span>
+        <span class="en-text">🗾 Region</span>
+      </button>
+      <button class="filter-tab" data-tab="status">
+        <span class="ja-text">⭐ ステータス</span>
+        <span class="en-text">⭐ Status</span>
+      </button>
+    </div>
+
+    <div class="search-box">
+      <input
+        type="search"
+        id="searchInput"
+        placeholder="ストーリー名や地域名で検索..."
+      >
+      <span class="search-icon">🔍</span>
+    </div>
+
+    <!-- 地域フィルター -->
+    <div class="filter-buttons filter-content active" id="regionFilters">
+      <button class="filter-btn active" data-region="all">
+        <span class="ja-text">すべて</span>
+        <span class="en-text">All</span>
+      </button>
+      <button class="filter-btn" data-region="hokkaido-tohoku">
+        <span class="ja-text">北海道・東北</span>
+        <span class="en-text">Hokkaido/Tohoku</span>
+      </button>
+      <button class="filter-btn" data-region="kanto">
+        <span class="ja-text">関東</span>
+        <span class="en-text">Kanto</span>
+      </button>
+      <button class="filter-btn" data-region="chubu">
+        <span class="ja-text">中部</span>
+        <span class="en-text">Chubu</span>
+      </button>
+      <button class="filter-btn" data-region="kinki">
+        <span class="ja-text">近畿</span>
+        <span class="en-text">Kinki</span>
+      </button>
+      <button class="filter-btn" data-region="chugoku">
+        <span class="ja-text">中国</span>
+        <span class="en-text">Chugoku</span>
+      </button>
+      <button class="filter-btn" data-region="shikoku">
+        <span class="ja-text">四国</span>
+        <span class="en-text">Shikoku</span>
+      </button>
+      <button class="filter-btn" data-region="kyushu-okinawa">
+        <span class="ja-text">九州・沖縄</span>
+        <span class="en-text">Kyushu/Okinawa</span>
+      </button>
+    </div>
+
+    <!-- ステータスフィルター -->
+    <div class="filter-buttons filter-content" id="statusFilters">
+      <button class="filter-btn active" data-status="all">
+        <span class="ja-text">すべて</span>
+        <span class="en-text">All</span>
+      </button>
+      <button class="filter-btn" data-status="favorite">
+        <span class="ja-text">❤️ お気に入り</span>
+        <span class="en-text">❤️ Favorites</span>
+      </button>
+      <button class="filter-btn" data-status="visited">
+        <span class="ja-text">✓ 訪問済み</span>
+        <span class="en-text">✓ Visited</span>
+      </button>
+      <button class="filter-btn" data-status="unvisited">
+        <span class="ja-text">📍 未訪問</span>
+        <span class="en-text">📍 Not Visited</span>
+      </button>
+    </div>
+  </section>
+
+  <div id="resultsInfo" class="results-info" style="display:none;">
+    <span class="ja-text">検索結果：</span>
+    <span class="en-text">Results: </span>
+    <span id="resultsCount">0</span>
+  </div>
+
+  <main id="mainContent">
+    <!-- JavaScriptで全118件を動的生成 -->
+  </main>
+
+  <div id="noResults" class="no-results" style="display:none;">
+    <span class="ja-text">該当するストーリーがありません。</span>
+    <span class="en-text">No matching stories found.</span>
+  </div>
+
+  <button id="backToTop" class="back-to-top">↑</button>
+
+  <footer>
+    <p>
+      <span class="ja-text">📱 旅の記録を残そう | データは端末に保存されます</span>
+      <span class="en-text">📱 Keep Your Travel Memories | Data saved locally</span>
+    </p>
+  </footer>
+</div>
+
+<!-- 詳細モーダル -->
+<div class="modal-overlay" id="storyModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button class="modal-close" id="modalClose">×</button>
+      <h2 class="modal-title" id="modalTitle"></h2>
+      <p class="modal-location" id="modalLocation"></p>
+    </div>
+    <div class="modal-body">
+      <div class="modal-section">
+        <h3 class="modal-section-title">
+          <span class="ja-text">📖 ストーリー概要</span>
+          <span class="en-text">📖 Story Overview</span>
+        </h3>
+        <p class="modal-description" id="modalDescription"></p>
+      </div>
+      
+      <div class="modal-section">
+        <h3 class="modal-section-title">
+          <span class="ja-text">📍 所在地</span>
+          <span class="en-text">📍 Location</span>
+        </h3>
+        <p class="modal-description" id="modalLocationDetail"></p>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-action-btn btn-favorite" id="modalFavorite">
+        <span>❤️</span>
+        <span class="ja-text">お気に入り</span>
+        <span class="en-text">Favorite</span>
+      </button>
+      <button class="modal-action-btn btn-visited" id="modalVisited">
+        <span>✓</span>
+        <span class="ja-text">訪問済み</span>
+        <span class="en-text">Visited</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+// 全118ストーリーのデータ
+const STORY_DATA = [
+  // 北海道・東北 (1-9)
+  { id: 1, region: "hokkaido-tohoku", wideArea: false, jaTitle: "本邦国策を北海道に観よ！～北の産業革命「炭鉄港」～", enTitle: "See Japan's National Policy in Hokkaido – Northern Industrial Revolution", jaLocation: "北海道（室蘭市、夕張市、岩見沢市、美唄市、芦別市、赤平市、三笠市、栗山町、月形町、沼田町、小樽市）", enLocation: "Hokkaido (Muroran, Yubari, Iwamizawa, Bibai, Ashibetsu, Akabira, Mikasa, Kuriyama, Tsukigata, Numata, Otaru)" },
+  { id: 2, region: "hokkaido-tohoku", wideArea: false, jaTitle: "「鮭の聖地」の物語～知床の鮭漁の伝統と光り輝くイクラ～", enTitle: "Story of the Sacred Land of Salmon – Shiretoko's Traditions", jaLocation: "北海道（標津町、羅臼町）", enLocation: "Hokkaido (Shibetsu, Rausu)" },
+  { id: 3, region: "hokkaido-tohoku", wideArea: false, jaTitle: "カムイと共に生きる上川アイヌ～大雪山のふところに伝承される神々の世界～", enTitle: "Kamikawa Ainu Living with the Kamuy", jaLocation: "北海道（旭川市、上川町）", enLocation: "Hokkaido (Asahikawa, Kamikawa)" },
+  { id: 4, region: "hokkaido-tohoku", wideArea: false, jaTitle: "政宗が育んだ\"伊達\"な文化", enTitle: "The Stylish Culture Fostered by Date Masamune", jaLocation: "宮城県（仙台市、多賀城市、塩竈市、松島町）", enLocation: "Miyagi (Sendai, Tagajo, Shiogama, Matsushima)" },
+  { id: 5, region: "hokkaido-tohoku", wideArea: false, jaTitle: "自然と信仰が息づく『生まれかわりの旅』～樹齢300年を超える杉並木につつまれた2,446段の石段から始まる出羽三山～", enTitle: "A Rebirth Pilgrimage in Nature and Faith – Dewa Sanzan", jaLocation: "山形県（鶴岡市、西川町、庄内町）", enLocation: "Yamagata (Tsuruoka, Nishikawa, Shonai)" },
+  { id: 6, region: "hokkaido-tohoku", wideArea: false, jaTitle: "山寺が支えた紅花文化", enTitle: "The Safflower Culture Sustained by Mountain Temples", jaLocation: "山形県（山形市、天童市、尾花沢市、中山町、河北町、白鷹町）", enLocation: "Yamagata (Yamagata, Tendo, Obanazawa, Nakayama, Kahoku, Shirataka)" },
+  { id: 7, region: "hokkaido-tohoku", wideArea: false, jaTitle: "未来を拓いた「一本の水路」－大久保利通\"最期の夢\"と開拓者の軌跡 郡山・猪苗代－", enTitle: "The Single Waterway that Opened the Future", jaLocation: "福島県（郡山市、猪苗代町）", enLocation: "Fukushima (Koriyama, Inawashiro)" },
+  { id: 8, region: "hokkaido-tohoku", wideArea: false, jaTitle: "会津の三十三観音めぐり～巡礼を通して観た往時の会津の文化～", enTitle: "The 33 Kannon Pilgrimage of Aizu", jaLocation: "福島県（会津若松市ほか）", enLocation: "Fukushima (Aizuwakamatsu, etc.)" },
+  { id: 9, region: "hokkaido-tohoku", wideArea: false, jaTitle: "\"奥南部\"漆物語～安比川流域に受け継がれる伝統技術～", enTitle: "The Oku-Nambu Lacquer Story", jaLocation: "岩手県（八幡平市、二戸市、一戸町）", enLocation: "Iwate (Hachimantai, Ninohe, Ichinohe)" },
+  
+  // 関東 (10-20)
+  { id: 10, region: "kanto", wideArea: false, jaTitle: "かかあ天下－ぐんまの絹物語－", enTitle: "Kakaa-Tenka – Gunma's Silk Story", jaLocation: "群馬県（桐生市、甘楽町、中之条町、片品村）", enLocation: "Gunma (Kiryu, Kanra, Nakanojo, Katashina)" },
+  { id: 11, region: "kanto", wideArea: false, jaTitle: "和装文化の足元を支え続ける足袋蔵のまち行田", enTitle: "Gyoda, the Town of Tabi Storehouses", jaLocation: "埼玉県（行田市）", enLocation: "Saitama (Gyoda)" },
+  { id: 12, region: "kanto", wideArea: false, jaTitle: "「北総四都市江戸紀行・江戸を感じる北総の町並み」－佐倉・成田・佐原・銚子－", enTitle: "Edo Journeys in Four Cities of Northern Chiba", jaLocation: "千葉県（佐倉市、成田市、香取市、銚子市）", enLocation: "Chiba (Sakura, Narita, Katori, Choshi)" },
+  { id: 13, region: "kanto", wideArea: false, jaTitle: "江戸庶民の信仰と行楽の地～巨大な木太刀を担いで「大山詣り」～", enTitle: "Edo Commoners' Faith and Pleasure Trips – The Great Oyama Pilgrimage", jaLocation: "神奈川県（伊勢原市）", enLocation: "Kanagawa (Isehara)" },
+  { id: 14, region: "kanto", wideArea: true, jaTitle: "鎮守府 横須賀・呉・佐世保・舞鶴～日本近代化の躍動を体感できるまち～", enTitle: "Naval District Cities – Yokosuka, Kure, Sasebo, Maizuru", jaLocation: "神奈川県（横須賀市）、広島県（呉市）、長崎県（佐世保市）、京都府（舞鶴市）", enLocation: "Kanagawa (Yokosuka), Hiroshima (Kure), Nagasaki (Sasebo), Kyoto (Maizuru)" },
+  { id: 15, region: "kanto", wideArea: false, jaTitle: "地下迷宮の秘密を探る旅～大谷石文化が息づくまち宇都宮～", enTitle: "Exploring the Secrets of the Underground Maze – Utsunomiya", jaLocation: "栃木県（宇都宮市）", enLocation: "Tochigi (Utsunomiya)" },
+  { id: 16, region: "kanto", wideArea: false, jaTitle: "明治貴族が描いた未来～那須野が原開拓浪漫譚～", enTitle: "The Future Envisioned by Meiji Aristocrats", jaLocation: "栃木県（那須塩原市、大田原市、矢板市）", enLocation: "Tochigi (Nasushiobara, Otawara, Yaita)" },
+  { id: 17, region: "kanto", wideArea: false, jaTitle: "里沼（SATO-NUMA）－「祈り」「実り」「守り」の沼が磨き上げた館林の沼辺文化－", enTitle: "SATO-NUMA – Lakeside Culture of Tatebayashi", jaLocation: "群馬県（館林市）", enLocation: "Gunma (Tatebayashi)" },
+  { id: 18, region: "kanto", wideArea: false, jaTitle: "かさましこ～兄弟産地が紡ぐ\"焼き物語\"～", enTitle: "Kasamashiko – Brother Pottery Towns", jaLocation: "栃木県（益子町）、茨城県（笠間市）", enLocation: "Tochigi (Mashiko), Ibaraki (Kasama)" },
+  { id: 19, region: "kanto", wideArea: false, jaTitle: "霊気満山 高尾山～人々の祈りが紡ぐ桑都物語～", enTitle: "Takao, Mountain Filled with Sacred Energy", jaLocation: "東京都（八王子市）", enLocation: "Tokyo (Hachioji)" },
+  { id: 20, region: "kanto", wideArea: false, jaTitle: "葛飾～江戸を育んだ水と大地がもたらす豊かな食文化～", enTitle: "Katsushika – Rich Food Culture Born from Waters", jaLocation: "東京都（葛飾区）、千葉県（松戸市）、埼玉県（三郷市、吉川市）", enLocation: "Tokyo (Katsushika), Chiba (Matsudo), Saitama (Misato, Yoshikawa)" },
+  
+  // 中部 (21-53)
+  { id: 21, region: "chubu", wideArea: false, jaTitle: "加賀前田家ゆかりの町民文化が花咲くまち高岡－人､技､心－", enTitle: "Takaoka, Where the Maeda Clan's Townspeople Culture Blossomed", jaLocation: "富山県（高岡市）", enLocation: "Toyama (Takaoka)" },
+  { id: 22, region: "chubu", wideArea: false, jaTitle: "灯（あか）り舞う半島 能登～熱狂のキリコ祭り～", enTitle: "Noto Peninsula of Dancing Lights – The Passionate Kiriko Festivals", jaLocation: "石川県（七尾市、輪島市、珠洲市、穴水町、能登町）", enLocation: "Ishikawa (Nanao, Wajima, Suzu, Anamizu, Noto)" },
+  { id: 23, region: "chubu", wideArea: false, jaTitle: "海と都をつなぐ若狭の往来文化遺産群～御食国若狭と鯖街道～", enTitle: "The Cultural Heritage of Wakasa Connecting Sea and Capital", jaLocation: "福井県（小浜市、若狭町）", enLocation: "Fukui (Obama, Wakasa)" },
+  { id: 24, region: "chubu", wideArea: false, jaTitle: "「信長公のおもなし」が息づく戦国城下町・岐阜", enTitle: "Gifu – Sengoku Castle Town Where Lord Nobunaga's Hospitality Lives On", jaLocation: "岐阜県（岐阜市）", enLocation: "Gifu (Gifu City)" },
+  { id: 25, region: "chubu", wideArea: false, jaTitle: "祈る皇女斎王のみやこ 斎宮", enTitle: "Saiku – Capital of the Sacred Imperial Princess", jaLocation: "三重県（明和町）", enLocation: "Mie (Meiwa)" },
+  { id: 26, region: "chubu", wideArea: false, jaTitle: "海女（Ama）に出逢えるまち 鳥羽・志摩～素潜り漁に生きる女性たち", enTitle: "Toba & Shima – Towns Where You Meet the Ama", jaLocation: "三重県（鳥羽市、志摩市）", enLocation: "Mie (Toba, Shima)" },
+  { id: 27, region: "chubu", wideArea: false, jaTitle: "\"日本海のゴールドラッシュ\"に沸いた佐渡金銀山", enTitle: "Sado Gold and Silver Mines – The Gold Rush of the Sea of Japan", jaLocation: "新潟県（佐渡市）", enLocation: "Niigata (Sado)" },
+  { id: 28, region: "chubu", wideArea: false, jaTitle: "「珠玉と歩む物語」小松～時の流れの中で磨き上げた石の文化～", enTitle: "Komatsu, the Story Walked with Gems", jaLocation: "石川県（小松市）", enLocation: "Ishikawa (Komatsu)" },
+  { id: 29, region: "chubu", wideArea: false, jaTitle: "木曽路はすべて山の中～山を守り 山に生きる～", enTitle: "The Kisoji is Deep in the Mountains", jaLocation: "長野県・岐阜県（木曽地域・中津川市）", enLocation: "Nagano & Gifu (Kiso, Nakatsugawa)" },
+  { id: 30, region: "chubu", wideArea: false, jaTitle: "飛騨匠の技・こころ－木とともに、今に引き継ぐ1300年－", enTitle: "Hida Master Carpenters' Skills and Spirit – 1,300 Years", jaLocation: "岐阜県（高山市）", enLocation: "Gifu (Takayama)" },
+  { id: 31, region: "chubu", wideArea: false, jaTitle: "忍びの里 伊賀・甲賀－リアル忍者を求めて－", enTitle: "Homelands of the Ninja: Iga & Koka", jaLocation: "三重県（伊賀市）、滋賀県（甲賀市）", enLocation: "Mie (Iga), Shiga (Koka)" },
+  { id: 32, region: "chubu", wideArea: false, jaTitle: "宮大工の鑿一丁から生まれた木彫刻美術館・井波", enTitle: "Inami, the Open-Air Woodcarving Museum", jaLocation: "富山県（南砺市）", enLocation: "Toyama (Nanto)" },
+  { id: 33, region: "chubu", wideArea: false, jaTitle: "星降る中部高地の縄文世界", enTitle: "The Jomon World of the Starry Central Highlands", jaLocation: "山梨県・長野県（中部高地一帯）", enLocation: "Yamanashi & Nagano (Central Highlands)" },
+  { id: 34, region: "chubu", wideArea: false, jaTitle: "旅人たちの足跡残る悠久の石畳道－箱根八里で辿る遥かな江戸の旅路－", enTitle: "The Timeless Stone-Paved Road – Hakone's Eight-Leagues Route", jaLocation: "静岡県・神奈川県（東海道）", enLocation: "Shizuoka & Kanagawa (Tokaido)" },
+  { id: 35, region: "chubu", wideArea: false, jaTitle: "400年の歴史の扉を開ける旅～石から読み解く中世・近世のまちづくり 越前・福井～", enTitle: "Opening 400 Years of History – Echizen & Fukui", jaLocation: "福井県（福井市ほか）", enLocation: "Fukui (Fukui, etc.)" },
+  { id: 36, region: "chubu", wideArea: false, jaTitle: "江戸時代の情緒に触れる絞りの産地～藍染が風にゆれる町 有松～", enTitle: "Arimatsu, the Shibori-Dyeing Town", jaLocation: "愛知県（名古屋市）", enLocation: "Aichi (Nagoya)" },
+  { id: 37, region: "chubu", wideArea: false, jaTitle: "「森の都」の木造建築～時の記憶を未来へつなぐ～", enTitle: "Wooden Architecture of the Forest Capital", jaLocation: "静岡県（静岡市）", enLocation: "Shizuoka (Shizuoka City)" },
+  { id: 38, region: "chubu", wideArea: false, jaTitle: "甲州の匠の源流・御嶽昇仙峡～水晶の鼓動が導いた信仰と技～", enTitle: "Origins of Koshu Craftsmanship – Shosenkyo Gorge", jaLocation: "山梨県（甲府市）", enLocation: "Yamanashi (Kofu)" },
+  { id: 39, region: "chubu", wideArea: false, jaTitle: "月の都 千曲－姨捨の棚田がつくる摩訶不思議な月景色「田毎の月」－", enTitle: "Chikuma, the Capital of the Moon", jaLocation: "長野県（千曲市）", enLocation: "Nagano (Chikuma)" },
+  { id: 40, region: "chubu", wideArea: false, jaTitle: "レイラインがつなぐ「太陽と大地の聖地」～龍と生きるまち 信州上田・塩田平～", enTitle: "Ley Lines Linking the Sacred Land of Sun and Earth", jaLocation: "長野県（上田市）", enLocation: "Nagano (Ueda)" },
+  { id: 41, region: "chubu", wideArea: false, jaTitle: "日本初「旅ブーム」を起こした弥次さん喜多さん、駿州の旅", enTitle: "Yaji and Kita's Suruga Journey that Sparked Japan's First Travel Boom", jaLocation: "静岡県（静岡市、藤枝市）", enLocation: "Shizuoka (Shizuoka, Fujieda)" },
+  { id: 42, region: "chubu", wideArea: false, jaTitle: "「伊勢ぺディア」～ご利益満載の「お伊勢さん」参り～", enTitle: "Ise-pedia – The Blessing-Filled Pilgrimage to Ise", jaLocation: "三重県（伊勢市ほか）", enLocation: "Mie (Ise, etc.)" },
+  { id: 43, region: "chubu", wideArea: true, jaTitle: "黄金の国ジパング、産金はじまりの地・奥州", enTitle: "Zipangu, the Land of Gold – Oshu", jaLocation: "宮城県・岩手県（広域）", enLocation: "Miyagi & Iwate (Wide area)" },
+  { id: 44, region: "chubu", wideArea: false, jaTitle: "越後長岡の米百俵と肴～セルフヘルプの精神が息づく、雪国の食と酒の文化～", enTitle: "Nagaoka's One Hundred Bags of Rice and Its Cuisine", jaLocation: "新潟県（長岡市）", enLocation: "Niigata (Nagaoka)" },
+  { id: 45, region: "chubu", wideArea: false, jaTitle: "豪雪地有数のスキーリゾート「妙高」", enTitle: "Myoko, One of Japan's Top Snow Resorts", jaLocation: "新潟県（妙高市）", enLocation: "Niigata (Myoko)" },
+  { id: 46, region: "chubu", wideArea: false, jaTitle: "富山湾の神秘が生んだ「蜃気楼」", enTitle: "Mirages Born from the Mysteries of Toyama Bay", jaLocation: "富山県（魚津市）", enLocation: "Toyama (Uozu)" },
+  { id: 47, region: "chubu", wideArea: false, jaTitle: "加賀藩が育んだ絢爛豪華な加賀文化の粋～金沢箔～", enTitle: "The Essence of Magnificent Kaga Culture – Kanazawa Gold Leaf", jaLocation: "石川県（金沢市）", enLocation: "Ishikawa (Kanazawa)" },
+  { id: 48, region: "chubu", wideArea: true, jaTitle: "荒波を越えた男たちの夢が紡いだ異空間～北前船寄港地・船主集落～", enTitle: "Another World Woven by Men Who Crossed Rough Seas – Kitamae Ship Ports", jaLocation: "北海道～九州の日本海側・瀬戸内海沿岸（広域）", enLocation: "(Wide area) Hokkaido to Kyushu" },
+  { id: 49, region: "chubu", wideArea: true, jaTitle: "きっと恋する六古窯－日本生まれ日本育ちのやきもの産地－", enTitle: "You Will Fall in Love with the Six Ancient Kilns", jaLocation: "愛知・福井・滋賀・兵庫・岡山（広域）", enLocation: "(Wide area) Aichi, Fukui, Shiga, Hyogo, Okayama" },
+  { id: 50, region: "chubu", wideArea: true, jaTitle: "日本ワイン140年史～国産ブドウで醸造する和文化の結晶～", enTitle: "140 Years of Japanese Wine", jaLocation: "山梨・東京・大阪・茨城", enLocation: "Yamanashi, Tokyo, Osaka, Ibaraki" },
+  { id: 51, region: "chubu", wideArea: false, jaTitle: "葡萄畑が織りなす風景－山梨県峡東地域－", enTitle: "Vineyard Landscapes – Kyoto Area of Yamanashi", jaLocation: "山梨県（山梨市、笛吹市、甲州市）", enLocation: "Yamanashi (Yamanashi, Fuefuki, Koshu)" },
+  { id: 52, region: "chubu", wideArea: false, jaTitle: "究極の雪国とおかまち－真説！豪雪地ものがたり－", enTitle: "Tokamachi, the Ultimate Snow Country", jaLocation: "新潟県（十日町市）", enLocation: "Niigata (Tokamachi)" },
+  { id: 53, region: "chubu", wideArea: false, jaTitle: "海を越えた鉄道～世界へつながる 鉄路のキセキ～", enTitle: "Railway that Crossed the Sea – The Miracle Rail", jaLocation: "福井県・滋賀県・京都府・大阪府", enLocation: "Fukui, Shiga, Kyoto, Osaka" },
+  
+  // 近畿 (54-75)
+  { id: 54, region: "kinki", wideArea: false, jaTitle: "琵琶湖とその水辺景観－祈りと暮らしの水遺産－", enTitle: "Lake Biwa and Its Waterside Landscapes", jaLocation: "滋賀県（大津市、彦根市、近江八幡市、高島市、東近江市、米原市）", enLocation: "Shiga (Otsu, Hikone, Omihachiman, Takashima, Higashiomi, Maibara)" },
+  { id: 55, region: "kinki", wideArea: false, jaTitle: "日本茶800年の歴史散歩", enTitle: "An 800-Year Walk Through the History of Japanese Tea", jaLocation: "京都府（宇治市ほか）", enLocation: "Kyoto (Uji, etc.)" },
+  { id: 56, region: "kinki", wideArea: false, jaTitle: "丹波篠山 デカンショ節－民謡に乗せて歌い継ぐふるさとの記憶－", enTitle: "Tamba-Sasayama Dekansho-bushi", jaLocation: "兵庫県（丹波篠山市）", enLocation: "Hyogo (Tamba-Sasayama)" },
+  { id: 57, region: "kinki", wideArea: false, jaTitle: "日本国創成のとき～飛鳥を翔（かけ）た女性たち～", enTitle: "When Japan Was Born – The Women Who Flew Across Asuka", jaLocation: "奈良県（明日香村）", enLocation: "Nara (Asuka)" },
+  { id: 58, region: "kinki", wideArea: false, jaTitle: "『古事記』の冒頭を飾る「国生みの島・淡路」～古代国家を支えた海人の営み～", enTitle: "Awaji, the Island of Japan's Birth in the Kojiki", jaLocation: "兵庫県（淡路島）", enLocation: "Hyogo (Awaji Island)" },
+  { id: 59, region: "kinki", wideArea: false, jaTitle: "美林連なる造林発祥の地\"吉野\"", enTitle: "Yoshino, Birthplace of Silviculture", jaLocation: "奈良県（吉野町ほか）", enLocation: "Nara (Yoshino, etc.)" },
+  { id: 60, region: "kinki", wideArea: false, jaTitle: "鯨とともに生きる", enTitle: "Living with Whales", jaLocation: "和歌山県（太地町）", enLocation: "Wakayama (Taiji)" },
+  { id: 61, region: "kinki", wideArea: false, jaTitle: "300年を紡ぐ絹が織り成す丹後ちりめん回廊", enTitle: "The Tango Chirimen Corridor Woven by 300 Years of Silk", jaLocation: "京都府（京丹後市、伊根町、与謝野町）", enLocation: "Kyoto (Kyotango, Ine, Yosano)" },
+  { id: 62, region: "kinki", wideArea: false, jaTitle: "1400年に渡る悠久の歴史を伝える「最古の国道」～竹内街道・横大路（大道）～", enTitle: "Japan's Oldest Highway Conveying 1,400 Years of History", jaLocation: "大阪府・奈良県（南河内～飛鳥）", enLocation: "Osaka & Nara" },
+  { id: 63, region: "kinki", wideArea: false, jaTitle: "播但貫く、銀の馬車道 鉱石の道", enTitle: "The Bantan Silver Carriage Road and Ore Road", jaLocation: "兵庫県（姫路市ほか）", enLocation: "Hyogo (Himeji, etc.)" },
+  { id: 64, region: "kinki", wideArea: false, jaTitle: "絶景の宝庫 和歌の浦", enTitle: "Wakanoura, a Treasure Trove of Scenic Beauty", jaLocation: "和歌山県（和歌山市）", enLocation: "Wakayama (Wakayama City)" },
+  { id: 65, region: "kinki", wideArea: false, jaTitle: "「最初の一滴」醤油醸造の発祥の地 紀州湯浅", enTitle: "Yuasa in Kishu – Birthplace of the First Drop of Soy Sauce", jaLocation: "和歌山県（湯浅町）", enLocation: "Wakayama (Yuasa)" },
+  { id: 66, region: "kinki", wideArea: false, jaTitle: "「百世の安堵」～津波と復興の記憶が生きる広川の防災遺産～", enTitle: "Relief for a Hundred Generations – Hirokawa's Disaster-Prevention Heritage", jaLocation: "和歌山県（広川町）", enLocation: "Wakayama (Hirokawa)" },
+  { id: 67, region: "kinki", wideArea: false, jaTitle: "『日本第一』の塩を産したまち 播州赤穂", enTitle: "Banshu Ako – Town that Produced Japan's Finest Salt", jaLocation: "兵庫県（赤穂市）", enLocation: "Hyogo (Ako)" },
+  { id: 68, region: "kinki", wideArea: false, jaTitle: "旅引付と二枚の絵図が伝えるまち－中世日根荘の風景－", enTitle: "The Medieval Hineno Estate Seen in Travel Registers", jaLocation: "大阪府（泉佐野市）", enLocation: "Osaka (Izumisano)" },
+  { id: 69, region: "kinki", wideArea: false, jaTitle: "中世に出逢えるまち～千年にわたり護られてきた中世文化遺産の宝庫～", enTitle: "A Town Where You Meet the Middle Ages", jaLocation: "和歌山県（有田川町、湯浅町、広川町）", enLocation: "Wakayama (Aridagawa, Yuasa, Hirokawa)" },
+  { id: 70, region: "kinki", wideArea: false, jaTitle: "「伊丹諸白」と「灘の生一本」 下り酒が生んだ銘醸地、伊丹と灘五郷", enTitle: "Itami Morohaku and Nada's Pure Sake", jaLocation: "兵庫県（伊丹市、神戸市、西宮市、芦屋市、尼崎市）", enLocation: "Hyogo (Itami, Kobe, Nishinomiya, Ashiya, Amagasaki)" },
+  { id: 71, region: "kinki", wideArea: false, jaTitle: "女性とともに今に息づく女人高野", enTitle: "Women's Koya that Lives On with Women", jaLocation: "奈良県・和歌山県・大阪府（広域）", enLocation: "Nara, Wakayama & Osaka" },
+  { id: 72, region: "kinki", wideArea: false, jaTitle: "京都と大津を繋ぐ希望の水路 琵琶湖疏水", enTitle: "Lake Biwa Canal, the Hopeful Waterway", jaLocation: "京都府（京都市）、滋賀県（大津市）", enLocation: "Kyoto & Shiga" },
+  { id: 73, region: "kinki", wideArea: true, jaTitle: "1300年つづく日本の終活の旅～西国三十三所観音巡礼～", enTitle: "Japan's 1,300-Year Final Journey – Saigoku 33 Kannon Pilgrimage", jaLocation: "和歌山県・奈良県・大阪府・兵庫県・京都府・滋賀県・岐阜県", enLocation: "(Wide area) 7 prefectures" },
+  { id: 74, region: "kinki", wideArea: false, jaTitle: "日本海の風が生んだ絶景と秘境－麒麟が舞う大地「因幡・但馬」－", enTitle: "Spectacular Landscapes Created by the Sea of Japan – Inaba & Tajima", jaLocation: "鳥取県（鳥取市ほか）・兵庫県（但馬）", enLocation: "Tottori & Hyogo" },
+  { id: 75, region: "kinki", wideArea: false, jaTitle: "祈りの道「おち」～古代からの信仰の継承と癒しの地～", enTitle: "The Prayer Road Ochi – Land of Healing", jaLocation: "奈良県（宇陀市ほか）", enLocation: "Nara (Uda, etc.)" },
+  
+  // 中国 (76-92)
+  { id: 76, region: "chugoku", wideArea: false, jaTitle: "六根清浄と六感治癒の地～日本一危ない国宝鑑賞と世界屈指のラドン泉～", enTitle: "Land of Sixfold Purification and Sixfold Healing", jaLocation: "鳥取県（三朝町）", enLocation: "Tottori (Misasa)" },
+  { id: 77, region: "chugoku", wideArea: false, jaTitle: "津和野今昔～百景図を歩く～", enTitle: "Tsuwano, Past and Present", jaLocation: "島根県（津和野町）", enLocation: "Shimane (Tsuwano)" },
+  { id: 78, region: "chugoku", wideArea: false, jaTitle: "尾道水道が紡いだ中世からの箱庭的都市", enTitle: "Onomichi, the Miniature City Shaped by the Onomichi Channel", jaLocation: "広島県（尾道市）", enLocation: "Hiroshima (Onomichi)" },
+  { id: 79, region: "chugoku", wideArea: false, jaTitle: "地蔵信仰が育んだ日本最大の大山牛馬市", enTitle: "Japan's Largest Daisen Cattle and Horse Market", jaLocation: "鳥取県（大山町ほか）", enLocation: "Tottori (Daisen, etc.)" },
+  { id: 80, region: "chugoku", wideArea: false, jaTitle: "出雲國たたら風土記～鉄づくり千年が生んだ物語～", enTitle: "Izumo Tatara Chronicles – A Story Born from 1,000 Years of Ironmaking", jaLocation: "島根県（雲南市ほか）、広島県（庄原市）", enLocation: "Shimane & Hiroshima" },
+  { id: 81, region: "chugoku", wideArea: true, jaTitle: "\"日本最大の海賊\"の本拠地：芸予諸島～村上海賊の記憶～", enTitle: "Headquarters of Japan's Largest Pirates – Geiyo Islands", jaLocation: "愛媛県（今治市）、広島県（尾道市）", enLocation: "Ehime (Imabari) & Hiroshima (Onomichi)" },
+  { id: 82, region: "chugoku", wideArea: false, jaTitle: "一輪の綿花から始まる倉敷物語～和と洋が織りなす繊維のまち～", enTitle: "The Kurashiki Story Beginning with a Single Cotton Flower", jaLocation: "岡山県（倉敷市）", enLocation: "Okayama (Kurashiki)" },
+  { id: 83, region: "chugoku", wideArea: false, jaTitle: "「桃太郎伝説」の生まれたまち おかやま", enTitle: "Okayama, Birthplace of the Momotaro Legend", jaLocation: "岡山県（岡山市ほか）", enLocation: "Okayama (Okayama, etc.)" },
+  { id: 84, region: "chugoku", wideArea: false, jaTitle: "瀬戸の夕凪が包む国内随一の近世港町～鞆の浦～", enTitle: "Tomonoura – Japan's Preeminent Early-Modern Port Town", jaLocation: "広島県（福山市）", enLocation: "Hiroshima (Fukuyama)" },
+  { id: 85, region: "chugoku", wideArea: false, jaTitle: "神々や鬼たちが躍動する神話の世界～石見地域で伝承される神楽～", enTitle: "Mythical World Where Gods and Demons Dance – Kagura of Iwami", jaLocation: "島根県（浜田市ほか）", enLocation: "Shimane (Hamada, etc.)" },
+  { id: 86, region: "chugoku", wideArea: false, jaTitle: "「石」が語る日本の近代～国内最大の切り出しの技と心～", enTitle: "Stone Tells the Story of Modern Japan", jaLocation: "岡山県（笠岡市）、香川県（丸亀市、土庄町）", enLocation: "Okayama & Kagawa" },
+  { id: 87, region: "chugoku", wideArea: false, jaTitle: "サムライの知恵と技、城下町のくらし～松江～", enTitle: "Matsue – Samurai Wisdom and Skills", jaLocation: "島根県（松江市）", enLocation: "Shimane (Matsue)" },
+  { id: 88, region: "chugoku", wideArea: false, jaTitle: "「銀の道」が結ぶ世界遺産 石見銀山と日本の近代化", enTitle: "The Silver Road Linking Iwami Ginzan and Japan's Modernization", jaLocation: "島根県（大田市、美郷町）", enLocation: "Shimane (Oda, Misato)" },
+  { id: 89, region: "chugoku", wideArea: false, jaTitle: "～「あの日の広島」の熱と生きる～復興を支えた人々の想い", enTitle: "Living with the Passion of That Day's Hiroshima", jaLocation: "広島県（広島市）", enLocation: "Hiroshima (Hiroshima City)" },
+  { id: 90, region: "chugoku", wideArea: false, jaTitle: "山口に花開いた\"大内文化\"～「西の京」に息づく室町時代の雅～", enTitle: "The Ouchi Culture that Blossomed in Yamaguchi", jaLocation: "山口県（山口市）", enLocation: "Yamaguchi (Yamaguchi City)" },
+  { id: 91, region: "chugoku", wideArea: true, jaTitle: "関門\"ノスタルジック\"海峡～時の停車場、近代化の記憶～", enTitle: "Nostalgic Kanmon Straits – Stations of Time", jaLocation: "福岡県（北九州市）、山口県（下関市）", enLocation: "Fukuoka & Yamaguchi" },
+  { id: 92, region: "chugoku", wideArea: false, jaTitle: "「地底のアンコール・ワット」－巨大地下空間に広がるストーリー－", enTitle: "Underground Angkor Wat – Stories in a Giant Subterranean Space", jaLocation: "岡山県（高梁市、新見市）", enLocation: "Okayama (Takahashi, Niimi)" },
+  
+  // 四国 (93-99)
+  { id: 93, region: "shikoku", wideArea: false, jaTitle: "「四国遍路」～回遊型巡礼路と独自の巡礼文化～", enTitle: "The Shikoku Pilgrimage – Circular Pilgrimage Route", jaLocation: "徳島県・高知県・愛媛県・香川県（四国4県）", enLocation: "Shikoku (4 prefectures)" },
+  { id: 94, region: "shikoku", wideArea: false, jaTitle: "森林鉄道から日本一のゆずロードへ", enTitle: "From Forest Railways to Japan's No.1 Yuzu Road", jaLocation: "高知県（中芸地域）", enLocation: "Kochi (Chugei area)" },
+  { id: 95, region: "shikoku", wideArea: false, jaTitle: "知ってる!?悠久の時が流れる石の島～せとうち備讃諸島～", enTitle: "Did You Know? The Stone Islands Where Time Flows Eternally", jaLocation: "香川県（丸亀市ほか）", enLocation: "Kagawa (Marugame, etc.)" },
+  { id: 96, region: "shikoku", wideArea: false, jaTitle: "藍のふるさと 阿波～日本中を染め上げた至高の青を訪ねて～", enTitle: "Awa, Home of Indigo", jaLocation: "徳島県（徳島市ほか）", enLocation: "Tokushima (Tokushima, etc.)" },
+  { id: 97, region: "shikoku", wideArea: false, jaTitle: "四国最西端の半島で生まれた一大鉱業都市～銅の記憶が刻まれたまち 新居浜・別子～", enTitle: "A Major Mining City Born on Shikoku's Westernmost Peninsula", jaLocation: "愛媛県（新居浜市）", enLocation: "Ehime (Niihama)" },
+  { id: 98, region: "shikoku", wideArea: false, jaTitle: "絶えず水が湧き出づる「水の都」西条", enTitle: "Saijo, the City of Water Where Springs Never Cease", jaLocation: "愛媛県（西条市）", enLocation: "Ehime (Saijo)" },
+  { id: 99, region: "shikoku", wideArea: false, jaTitle: "「伊予灘ものがたり」が結ぶ古の道と太陽の町", enTitle: "The Iyo-Nada Monogatari Links Ancient Road and Sun-Drenched Towns", jaLocation: "愛媛県（八幡浜市ほか）", enLocation: "Ehime (Yawatahama, etc.)" },
+  
+  // 九州・沖縄 (100-118)
+  { id: 100, region: "kyushu-okinawa", wideArea: false, jaTitle: "古代日本の「西の都」～東アジアとの交流拠点～", enTitle: "The Western Capital of Ancient Japan", jaLocation: "福岡県（太宰府市）", enLocation: "Fukuoka (Dazaifu)" },
+  { id: 101, region: "kyushu-okinawa", wideArea: false, jaTitle: "国境の島 壱岐・対馬・五島～古代からの架け橋～", enTitle: "Border Islands Iki, Tsushima and Goto", jaLocation: "長崎県（壱岐市、対馬市、五島市、新上五島町、小値賀町）", enLocation: "Nagasaki (Iki, Tsushima, Goto, etc.)" },
+  { id: 102, region: "kyushu-okinawa", wideArea: false, jaTitle: "相良700年が生んだ保守と進取の文化～日本でもっとも豊かな隠れ里 人吉球磨～", enTitle: "700 Years of the Sagara Clan", jaLocation: "熊本県（人吉市ほか）", enLocation: "Kumamoto (Hitoyoshi, etc.)" },
+  { id: 103, region: "kyushu-okinawa", wideArea: false, jaTitle: "日本磁器のふるさと 肥前～百花繚乱のやきもの散歩～", enTitle: "Hizen, the Home of Japanese Porcelain", jaLocation: "佐賀県（唐津市ほか）、長崎県（佐世保市ほか）", enLocation: "Saga & Nagasaki" },
+  { id: 104, region: "kyushu-okinawa", wideArea: false, jaTitle: "米作り、二千年にわたる大地の記憶～菊池川流域「今昔『水稲』物語」～", enTitle: "2,000 Years of Rice Cultivation", jaLocation: "熊本県（菊池市ほか）", enLocation: "Kumamoto (Kikuchi, etc.)" },
+  { id: 105, region: "kyushu-okinawa", wideArea: false, jaTitle: "やばけい遊覧～大地に描いた山水絵巻の道をゆく～", enTitle: "Yabakei Pleasure Tour", jaLocation: "大分県（中津市、玖珠町）", enLocation: "Oita (Nakatsu, Kusu)" },
+  { id: 106, region: "kyushu-okinawa", wideArea: false, jaTitle: "鬼が仏になった里「くにさき」", enTitle: "Kunisaki, the Land Where Demons Became Buddhas", jaLocation: "大分県（豊後高田市、国東市）", enLocation: "Oita (Bungotakada, Kunisaki)" },
+  { id: 107, region: "kyushu-okinawa", wideArea: false, jaTitle: "古代人のモニュメント－台地に絵を描く 南国宮崎の古墳景観－", enTitle: "Monuments of Ancient People – Kofun Landscapes of Miyazaki", jaLocation: "宮崎県（宮崎市、西都市、新富町）", enLocation: "Miyazaki (Miyazaki, Saito, Shintomi)" },
+  { id: 108, region: "kyushu-okinawa", wideArea: false, jaTitle: "八代を創造した石工たちの軌跡～石造りのレガシー～", enTitle: "The Stonemasons Who Created Yatsushiro", jaLocation: "熊本県（八代市）", enLocation: "Kumamoto (Yatsushiro)" },
+  { id: 109, region: "kyushu-okinawa", wideArea: false, jaTitle: "「炭坑のまち」の記憶をたどる～筑豊・北九州・福岡の炭田と港湾～", enTitle: "Tracing the Memories of Coal-Mining Towns", jaLocation: "福岡県（北九州市ほか）", enLocation: "Fukuoka (Kitakyushu, etc.)" },
+  { id: 110, region: "kyushu-okinawa", wideArea: false, jaTitle: "琉球王国時代から連綿と続く沖縄の伝統的な「琉球料理」と「泡盛」、そして「芸能」", enTitle: "Traditional Ryukyu Cuisine, Awamori and Performing Arts", jaLocation: "沖縄県（那覇市ほか県内広域）", enLocation: "Okinawa (Naha, etc.)" },
+  { id: 111, region: "kyushu-okinawa", wideArea: true, jaTitle: "砂糖文化を広めた長崎街道～シュガーロード～", enTitle: "The Nagasaki Kaido that Spread Sugar Culture – Sugar Road", jaLocation: "長崎県・佐賀県・福岡県", enLocation: "Nagasaki, Saga & Fukuoka" },
+  { id: 112, region: "kyushu-okinawa", wideArea: false, jaTitle: "熊本・阿蘇は「火の山」と「水の国」～火山と生きる人々の農耕文化～", enTitle: "Kumamoto & Aso, Land of Fire and Water", jaLocation: "熊本県（阿蘇地域）", enLocation: "Kumamoto (Aso area)" },
+  { id: 113, region: "kyushu-okinawa", wideArea: false, jaTitle: "北九州市の「あかい・てつの・まち」～PRIDE OF KITAKYUSHU～", enTitle: "Kitakyushu, the City of Red Iron – PRIDE OF KITAKYUSHU", jaLocation: "福岡県（北九州市）", enLocation: "Fukuoka (Kitakyushu)" },
+  { id: 114, region: "kyushu-okinawa", wideArea: false, jaTitle: "別府の湯は地獄の上の天国", enTitle: "Beppu's Hot Springs – Heaven Above Hell", jaLocation: "大分県（別府市）", enLocation: "Oita (Beppu)" },
+  { id: 115, region: "kyushu-okinawa", wideArea: true, jaTitle: "近世日本の教育遺産群－学ぶ心・礼節の本源－", enTitle: "Early Modern Japan's Educational Heritage", jaLocation: "栃木県・茨城県・岡山県・大分県", enLocation: "Tochigi, Ibaraki, Okayama, Oita" },
+  { id: 116, region: "kyushu-okinawa", wideArea: false, jaTitle: "やんばるの自然と共に残る文化景観", enTitle: "Cultural Landscapes Living Together with Yanbaru Nature", jaLocation: "沖縄県（北部）", enLocation: "Okinawa (Northern area)" },
+  { id: 117, region: "kyushu-okinawa", wideArea: false, jaTitle: "奄美・離島に伝わる海の信仰と民俗文化", enTitle: "Maritime Beliefs and Folk Culture of Amami", jaLocation: "鹿児島県（奄美群島）", enLocation: "Kagoshima (Amami Islands)" },
+  { id: 118, region: "kyushu-okinawa", wideArea: false, jaTitle: "南島に伝わる祈りと芸能の島々", enTitle: "Islands of Prayer and Performing Arts in the Southern Archipelago", jaLocation: "沖縄県・鹿児島県（南西諸島広域）", enLocation: "Okinawa & Kagoshima" }
+];
+
+// ローカルストレージ管理
+const StorageManager = {
+  FAVORITES_KEY: 'japanHeritageFavorites',
+  VISITED_KEY: 'japanHeritageVisited',
+  
+  getFavorites() {
+    return JSON.parse(localStorage.getItem(this.FAVORITES_KEY) || '[]');
+  },
+  
+  getVisited() {
+    return JSON.parse(localStorage.getItem(this.VISITED_KEY) || '[]');
+  },
+  
+  toggleFavorite(storyId) {
+    const favorites = this.getFavorites();
+    const index = favorites.indexOf(storyId);
+    if (index > -1) {
+      favorites.splice(index, 1);
+    } else {
+      favorites.push(storyId);
+    }
+    localStorage.setItem(this.FAVORITES_KEY, JSON.stringify(favorites));
+    return index === -1;
+  },
+  
+  toggleVisited(storyId) {
+    const visited = this.getVisited();
+    const index = visited.indexOf(storyId);
+    if (index > -1) {
+      visited.splice(index, 1);
+    } else {
+      visited.push(storyId);
+    }
+    localStorage.setItem(this.VISITED_KEY, JSON.stringify(visited));
+    return index === -1;
+  },
+  
+  isFavorite(storyId) {
+    return this.getFavorites().includes(storyId);
+  },
+  
+  isVisited(storyId) {
+    return this.getVisited().includes(storyId);
+  }
+};
+
+// 初期化
+document.addEventListener('DOMContentLoaded', function() {
+  initializeApp();
+});
+
+function initializeApp() {
+  // 言語切り替え
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const lang = btn.dataset.lang;
+      document.body.className = `lang-${lang}`;
+      document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      localStorage.setItem('preferredLang', lang);
+      renderAllStories();
+    });
+  });
+
+  // 保存された言語設定を復元
+  const savedLang = localStorage.getItem('preferredLang');
+  if (savedLang) {
+    document.body.className = `lang-${savedLang}`;
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector(`[data-lang="${savedLang}"]`)?.classList.add('active');
+  }
+
+  // タブ切り替え
+  document.querySelectorAll('.filter-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      
+      const tabType = tab.dataset.tab;
+      document.querySelectorAll('.filter-content').forEach(c => c.classList.remove('active'));
+      document.getElementById(tabType === 'region' ? 'regionFilters' : 'statusFilters').classList.add('active');
+    });
+  });
+
+  // 地域フィルター
+  document.querySelectorAll('#regionFilters .filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#regionFilters .filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      filterStories();
+    });
+  });
+
+  // ステータスフィルター
+  document.querySelectorAll('#statusFilters .filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#statusFilters .filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      filterStories();
+    });
+  });
+
+  // 検索
+  document.getElementById('searchInput').addEventListener('input', filterStories);
+
+  // モーダル
+  setupModal();
+  
+  // トップに戻る
+  setupBackToTop();
+  
+  // 全ストーリーを表示
+  renderAllStories();
+  
+  // 統計更新
+  updateStats();
+}
+
+function renderAllStories() {
+  const lang = document.body.classList.contains('lang-en') ? 'en' : 'ja';
+  const mainContent = document.getElementById('mainContent');
+  
+  // 地域ごとにグループ化
+  const regions = {
+    'hokkaido-tohoku': { ja: '🗾 北海道・東北ブロック', en: '🗾 Hokkaido & Tohoku Block', count: 0 },
+    'kanto': { ja: '🏯 関東ブロック', en: '🏯 Kanto Block', count: 0 },
+    'chubu': { ja: '🗻 中部ブロック', en: '🗻 Chubu Block', count: 0 },
+    'kinki': { ja: '🏛️ 近畿ブロック', en: '🏛️ Kinki Block', count: 0 },
+    'chugoku': { ja: '⛩️ 中国ブロック', en: '⛩️ Chugoku Block', count: 0 },
+    'shikoku': { ja: '🍊 四国ブロック', en: '🍊 Shikoku Block', count: 0 },
+    'kyushu-okinawa': { ja: '🏝️ 九州・沖縄ブロック', en: '🏝️ Kyushu & Okinawa Block', count: 0 }
+  };
+
+  // カウント
+  STORY_DATA.forEach(story => {
+    if (regions[story.region]) regions[story.region].count++;
+  });
+
+  let html = '';
+  Object.keys(regions).forEach(regionKey => {
+    const region = regions[regionKey];
+    const stories = STORY_DATA.filter(s => s.region === regionKey);
+    
+    html += `
+      <section class="region-block" data-region="${regionKey}">
+        <h2 class="region-title">
+          <span class="ja-text">${region.ja}</span>
+          <span class="en-text">${region.en}</span>
+          <span class="region-count">
+            <span class="ja-text">(${region.count}件)</span>
+            <span class="en-text">(${region.count} stories)</span>
+          </span>
+        </h2>
+        <div class="story-grid">
+          ${stories.map(story => createStoryCard(story, lang)).join('')}
+        </div>
+      </section>
+    `;
+  });
+  
+  mainContent.innerHTML = html;
+  
+  // イベントリスナー追加
+  attachCardEvents();
+}
+
+function createStoryCard(story, lang) {
+  const isFav = StorageManager.isFavorite(story.id);
+  const isVis = StorageManager.isVisited(story.id);
+  const titleKey = lang === 'en' ? 'enTitle' : 'jaTitle';
+  const locKey = lang === 'en' ? 'enLocation' : 'jaLocation';
+  
+  return `
+    <article class="story-card" data-story-id="${story.id}" data-region="${story.region}">
+      <div class="card-actions">
+        <button class="card-action-btn favorite ${isFav ? 'active' : ''}" title="お気に入り" data-action="favorite">
+          ❤️
+        </button>
+        <button class="card-action-btn visited ${isVis ? 'active' : ''}" title="訪問済み" data-action="visited">
+          ✓
+        </button>
+      </div>
+      <div class="card-badges">
+        ${isFav ? '<span class="badge favorite">❤️ <span class="ja-text">お気に入り</span><span class="en-text">Favorite</span></span>' : ''}
+        ${isVis ? '<span class="badge visited">✓ <span class="ja-text">訪問済み</span><span class="en-text">Visited</span></span>' : ''}
+      </div>
+      ${story.wideArea ? '<span class="wide-area-badge"></span>' : ''}
+      <h3 class="story-title">${story[titleKey]}</h3>
+      <p class="story-location"><span class="icon">📍</span>${story[locKey]}</p>
+    </article>
+  `;
+}
+
+function attachCardEvents() {
+  document.querySelectorAll('.story-card').forEach(card => {
+    const storyId = parseInt(card.dataset.storyId);
+    
+    // カードクリック
+    card.addEventListener('click', (e) => {
+      if (!e.target.closest('.card-action-btn')) {
+        showStoryDetails(storyId);
+      }
+    });
+    
+    // アクションボタン
+    card.querySelectorAll('.card-action-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const action = btn.dataset.action;
+        
+        if (action === 'favorite') {
+          const isActive = StorageManager.toggleFavorite(storyId);
+          btn.classList.toggle('active', isActive);
+        } else if (action === 'visited') {
+          const isActive = StorageManager.toggleVisited(storyId);
+          btn.classList.toggle('active', isActive);
+        }
+        
+        const lang = document.body.classList.contains('lang-en') ? 'en' : 'ja';
+        const story = STORY_DATA.find(s => s.id === storyId);
+        card.querySelector('.card-badges').innerHTML = getBadgesHTML(storyId, lang);
+        updateStats();
+        
+        // ステータスフィルター適用中の場合は再フィルター
+        const activeStatusBtn = document.querySelector('#statusFilters .filter-btn.active');
+        if (activeStatusBtn && activeStatusBtn.dataset.status !== 'all') {
+          filterStories();
+        }
+      });
+    });
+  });
+}
+
+function getBadgesHTML(storyId, lang) {
+  const isFav = StorageManager.isFavorite(storyId);
+  const isVis = StorageManager.isVisited(storyId);
+  let html = '';
+  
+  if (isFav) {
+    html += lang === 'en' 
+      ? '<span class="badge favorite">❤️ Favorite</span>'
+      : '<span class="badge favorite">❤️ お気に入り</span>';
+  }
+  if (isVis) {
+    html += lang === 'en'
+      ? '<span class="badge visited">✓ Visited</span>'
+      : '<span class="badge visited">✓ 訪問済み</span>';
+  }
+  
+  return html;
+}
+
+function filterStories() {
+  const searchQuery = document.getElementById('searchInput').value.toLowerCase().trim();
+  const activeRegionBtn = document.querySelector('#regionFilters .filter-btn.active');
+  const activeStatusBtn = document.querySelector('#statusFilters .filter-btn.active');
+  const regionFilter = activeRegionBtn ? activeRegionBtn.dataset.region : 'all';
+  const statusFilter = activeStatusBtn ? activeStatusBtn.dataset.status : 'all';
+  
+  let visibleCount = 0;
+  let hasResults = false;
+  
+  document.querySelectorAll('.region-block').forEach(block => {
+    const blockRegion = block.dataset.region;
+    let blockHasVisible = false;
+    
+    // 地域フィルター
+    if (regionFilter !== 'all' && blockRegion !== regionFilter) {
+      block.classList.add('hidden');
+      return;
+    }
+    
+    block.querySelectorAll('.story-card').forEach(card => {
+      const storyId = parseInt(card.dataset.storyId);
+      const story = STORY_DATA.find(s => s.id === storyId);
+      const title = (story.jaTitle + story.enTitle).toLowerCase();
+      const location = (story.jaLocation + story.enLocation).toLowerCase();
+      
+      // 検索フィルター
+      const matchesSearch = !searchQuery || title.includes(searchQuery) || location.includes(searchQuery);
+      
+      // ステータスフィルター
+      let matchesStatus = true;
+      if (statusFilter === 'favorite') {
+        matchesStatus = StorageManager.isFavorite(storyId);
+      } else if (statusFilter === 'visited') {
+        matchesStatus = StorageManager.isVisited(storyId);
+      } else if (statusFilter === 'unvisited') {
+        matchesStatus = !StorageManager.isVisited(storyId);
+      }
+      
+      const isVisible = matchesSearch && matchesStatus;
+      card.classList.toggle('hidden', !isVisible);
+      
+      if (isVisible) {
+        blockHasVisible = true;
+        visibleCount++;
+        hasResults = true;
+      }
+    });
+    
+    block.classList.toggle('hidden', !blockHasVisible);
+  });
+  
+  // 結果表示
+  const resultsInfo = document.getElementById('resultsInfo');
+  const noResults = document.getElementById('noResults');
+  
+  if (searchQuery) {
+    resultsInfo.style.display = 'block';
+    document.getElementById('resultsCount').textContent = visibleCount;
+  } else {
+    resultsInfo.style.display = 'none';
+  }
+  
+  noResults.style.display = hasResults ? 'none' : 'block';
+  document.getElementById('visibleCount').textContent = visibleCount;
+}
+
+function updateStats() {
+  document.getElementById('favoriteCount').textContent = StorageManager.getFavorites().length;
+  document.getElementById('visitedCount').textContent = StorageManager.getVisited().length;
+}
+
+function showStoryDetails(storyId) {
+  const story = STORY_DATA.find(s => s.id === storyId);
+  if (!story) return;
+  
+  const modal = document.getElementById('storyModal');
+  const lang = document.body.classList.contains('lang-en') ? 'en' : 'ja';
+  
+  document.getElementById('modalTitle').textContent = story[lang === 'en' ? 'enTitle' : 'jaTitle'];
+  document.getElementById('modalLocation').textContent = story[lang === 'en' ? 'enLocation' : 'jaLocation'];
+  document.getElementById('modalLocationDetail').textContent = story[lang === 'en' ? 'enLocation' : 'jaLocation'];
+  
+  // 簡易説明文
+  document.getElementById('modalDescription').textContent = lang === 'en'
+    ? 'This Japan Heritage story represents a unique aspect of Japanese culture and history. Visit to experience the authentic traditions and landscapes that have been preserved for generations.'
+    : 'この日本遺産ストーリーは、日本の文化と歴史の独特な側面を表しています。何世代にもわたって保存されてきた本物の伝統と風景を体験するために、ぜひ訪れてください。';
+  
+  // アクションボタン
+  const favBtn = document.getElementById('modalFavorite');
+  const visBtn = document.getElementById('modalVisited');
+  
+  favBtn.classList.toggle('active', StorageManager.isFavorite(storyId));
+  visBtn.classList.toggle('active', StorageManager.isVisited(storyId));
+  
+  favBtn.onclick = () => {
+    StorageManager.toggleFavorite(storyId);
+    favBtn.classList.toggle('active');
+    const card = document.querySelector(`[data-story-id="${storyId}"]`);
+    if (card) {
+      card.querySelector('.card-badges').innerHTML = getBadgesHTML(storyId, lang);
+      card.querySelector('.card-action-btn.favorite').classList.toggle('active', StorageManager.isFavorite(storyId));
+    }
+    updateStats();
+  };
+  
+  visBtn.onclick = () => {
+    StorageManager.toggleVisited(storyId);
+    visBtn.classList.toggle('active');
+    const card = document.querySelector(`[data-story-id="${storyId}"]`);
+    if (card) {
+      card.querySelector('.card-badges').innerHTML = getBadgesHTML(storyId, lang);
+      card.querySelector('.card-action-btn.visited').classList.toggle('active', StorageManager.isVisited(storyId));
+    }
+    updateStats();
+  };
+  
+  modal.classList.add('active');
+}
+
+function setupModal() {
+  const modal = document.getElementById('storyModal');
+  const closeBtn = document.getElementById('modalClose');
+  
+  closeBtn.addEventListener('click', () => {
+    modal.classList.remove('active');
+  });
+  
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.classList.remove('active');
+    }
+  });
+}
+
+function setupBackToTop() {
+  const backToTop = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => {
+    backToTop.classList.toggle('visible', window.scrollY > 300);
+  });
+  
+  backToTop.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+}
+</script>
+
+</body>
+</html>
