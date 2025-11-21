@@ -174,8 +174,8 @@
   /* === フィルタータブ === */
   .filter-tabs {
     display: flex;
-    gap: 10px;
-    margin-bottom: 15px;
+    gap: 15px;
+    margin-bottom: 20px;
     flex-wrap: wrap;
     border-bottom: 2px solid #e0e0e0;
     padding-bottom: 10px;
@@ -205,6 +205,7 @@
 
   .filter-content {
     display: none;
+    margin-top: 20px;
   }
 
   .filter-content.active {
@@ -299,8 +300,7 @@
   .story-card {
     background: var(--card-bg);
     border-radius: 10px;
-    padding: 22px;
-    padding-top: 50px;
+    padding: 60px 22px 22px;
     box-shadow: var(--shadow-sm);
     transition: var(--transition);
     display: flex;
@@ -308,6 +308,7 @@
     border: 2px solid transparent;
     position: relative;
     cursor: pointer;
+    min-height: 180px;
   }
 
   /* === カードアクションボタン === */
@@ -378,13 +379,17 @@
     gap: 5px;
     margin-bottom: 10px;
     flex-wrap: wrap;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 5;
   }
 
   .badge {
     display: inline-flex;
     align-items: center;
     gap: 3px;
-    font-size: 0.75em;
+    font-size: 0.7em;
     padding: 3px 8px;
     border-radius: 12px;
     font-weight: 700;
@@ -401,22 +406,24 @@
   }
 
   .story-title {
-    font-size: 1.25em;
+    font-size: clamp(1.05em, 2.5vw, 1.25em);
     color: var(--text-primary);
     font-weight: 700;
     margin-bottom: 12px;
     flex-grow: 1;
-    line-height: 1.4;
+    line-height: 1.5;
+    word-break: break-word;
   }
 
   .story-location {
-    font-size: 0.9em;
+    font-size: 0.85em;
     color: var(--text-secondary);
     background: #f8f9fa;
     padding: 8px 12px;
     border-radius: 6px;
     border-left: 4px solid var(--accent-color);
     line-height: 1.5;
+    word-break: break-word;
   }
 
   .story-location .icon {
@@ -428,7 +435,7 @@
     display: inline-block;
     background: linear-gradient(135deg, #ff9a56 0%, #ff6b6b 100%);
     color: white;
-    font-size: 0.75em;
+    font-size: 0.7em;
     padding: 3px 10px;
     border-radius: 12px;
     margin-bottom: 8px;
@@ -519,11 +526,13 @@
     font-size: 1.8em;
     margin-bottom: 10px;
     padding-right: 50px;
+    line-height: 1.3;
   }
 
   .modal-location {
     opacity: 0.9;
     font-size: 1em;
+    line-height: 1.5;
   }
 
   .modal-body {
@@ -560,6 +569,7 @@
     padding: 8px 0;
     padding-left: 25px;
     position: relative;
+    line-height: 1.6;
   }
 
   .modal-highlights li::before {
@@ -653,11 +663,18 @@
     .container { padding: 15px; }
     header { padding: 30px 15px; margin-bottom: 20px; }
     .stats { gap: 15px; }
+    .stat-item { padding: 10px 15px; }
     .controls { padding: 20px 15px; }
+    .filter-tabs { gap: 10px; }
     .story-grid { grid-template-columns: 1fr; gap: 18px; }
+    .story-card { padding: 55px 15px 15px; min-height: 160px; }
+    .story-title { font-size: 1.1em; margin-bottom: 10px; }
+    .story-location { font-size: 0.8em; padding: 6px 10px; }
     .modal-content { max-width: 100%; margin: 10px; }
     .modal-body { padding: 20px; }
-    .modal-actions { flex-direction: column; }
+    .modal-actions { flex-direction: column; padding: 15px 20px; }
+    .modal-title { font-size: 1.4em; }
+    .back-to-top { bottom: 20px; right: 20px; width: 45px; height: 45px; }
   }
 
   .story-card.hidden { display: none !important; }
@@ -876,9 +893,10 @@
 </div>
 
 <script>
+// === ファイル2（data.js）の内容をここに貼り付けてください ===
 // 全118ストーリーのデータ（詳細説明・英訳付き）
 const STORY_DATA = [
-  // 北海道・東北 (1-9)
+  // 北海道・東北 (1-17)
   {
     id: 1,
     region: "hokkaido-tohoku",
@@ -887,46 +905,43 @@ const STORY_DATA = [
     enTitle: "See Japan's National Policy in Hokkaido – Northern Industrial Revolution 'Coal-Steel-Port'",
     jaLocation: "北海道（室蘭市、夕張市、岩見沢市、美唄市、芦別市、赤平市、三笠市、栗山町、月形町、沼田町、小樽市）",
     enLocation: "Hokkaido (Muroran, Yubari, Iwamizawa, Bibai, Ashibetsu, Akabira, Mikasa, Kuriyama, Tsukigata, Numata, Otaru)",
-    descriptionJa: "明治期、北海道の石炭・鉄鋼・港湾が日本の近代化を支えた壮大な物語。夕張の炭鉱、室蘭の製鉄所、小樽港が「北の産業革命」を牽引しました。炭鉱住宅や鉄道遺構を巡れば、開拓者たちの情熱と苦労が肌で感じられます。産業遺産が点在する風景は、日本の急速な近代化の歴史を物語っています。石炭が「黒いダイヤ」と呼ばれ、日本のエネルギー源として国を支えた時代の記憶が、今も各地に残されています。",
-    descriptionEn: "During the Meiji era, Hokkaido's coal, steel, and port industries supported Japan's modernization in a grand narrative. The Yubari coal mines, Muroran steelworks, and Otaru port drove the 'Northern Industrial Revolution.' Touring miners' housing and railway ruins reveals pioneers' passion and hardships. The landscape dotted with industrial heritage tells Japan's rapid modernization story. Memories of when coal was called 'black diamonds' and powered the nation remain preserved.",
-    highlightsJa: ["夕張石炭博物館：炭鉱の歴史と技術を学ぶ", "旧室蘭駅舎：レンガ造りの美しい近代建築", "小樽運河：北海道開拓の玄関口", "三笠鉄道村：蒸気機関車の展示"],
-    highlightsEn: ["Yubari Coal Museum: Learn mining history", "Old Muroran Station: Beautiful brick architecture", "Otaru Canal: Gateway to Hokkaido development", "Mikasa Railway Village: Steam locomotive exhibits"],
-    experiencesJa: "炭鉱ツアー、産業遺産巡り、小樽運河クルーズ、海鮮グルメ、ガラス工芸体験、赤レンガ倉庫群散策",
-    experiencesEn: "Coal mine tours, industrial heritage visits, Otaru Canal cruises, seafood cuisine, glass craft experiences, red brick warehouse district walks"
+    descriptionJa: "明治期、北海道の石炭・鉄鋼・港湾が日本の近代化を支えた壮大な物語。夕張の炭鉱、室蘭の製鉄所、小樽港が「北の産業革命」を牽引しました。炭鉱住宅や鉄道遺構を巡れば、開拓者たちの情熱と苦労が肌で感じられます。産業遺産が点在する風景は、日本の急速な近代化の歴史を物語っています。",
+    descriptionEn: "During the Meiji era, Hokkaido's coal, steel, and port industries supported Japan's modernization. Yubari coal mines, Muroran steelworks, and Otaru port drove the 'Northern Industrial Revolution.' Industrial heritage tells Japan's rapid modernization story.",
+    highlightsJa: ["夕張石炭博物館：炭鉱の歴史", "旧室蘭駅舎：レンガ造り建築", "小樽運河：開拓の玄関口", "三笠鉄道村：蒸気機関車展示"],
+    highlightsEn: ["Yubari Coal Museum", "Old Muroran Station", "Otaru Canal", "Mikasa Railway Village"],
+    experiencesJa: "炭鉱ツアー、産業遺産巡り、小樽運河クルーズ、海鮮グルメ、ガラス工芸体験",
+    experiencesEn: "Coal mine tours, heritage visits, canal cruises, seafood, glass crafts"
   },
-
   {
     id: 2,
     region: "hokkaido-tohoku",
     wideArea: false,
     jaTitle: "「鮭の聖地」の物語～知床の鮭漁の伝統と光り輝くイクラ～",
-    enTitle: "Story of the Sacred Land of Salmon – Shiretoko's Salmon Fishing Traditions and Sparkling Ikura",
+    enTitle: "Story of the Sacred Land of Salmon",
     jaLocation: "北海道（標津町、羅臼町）",
     enLocation: "Hokkaido (Shibetsu, Rausu)",
-    descriptionJa: "世界自然遺産・知床で数千年続く鮭漁文化。秋になると川を遡上する鮭の群れは圧巻で、アイヌ民族が「神の魚（カムイチェプ）」と呼んだ理由が分かります。新鮮なイクラと鮭料理は絶品。標津サーモン科学館では鮭の生態を学べ、漁の見学もできます。知床の大自然と共生する人々の知恵に触れられます。鮭は地域の人々の生活を支え、文化を育んできた神聖な存在です。",
-    descriptionEn: "Salmon fishing culture continuing for thousands of years in Shiretoko World Natural Heritage Site. Autumn salmon runs up rivers are spectacular, showing why Ainu people called them 'divine fish (Kamuy chep).' Fresh ikura and salmon dishes are exquisite. At Shibetsu Salmon Science Museum, learn about salmon ecology and observe fishing. Experience the wisdom of people living in harmony with Shiretoko's great nature. Salmon are sacred beings that have supported local livelihoods and nurtured regional culture.",
-    highlightsJa: ["標津サーモンパーク：鮭の生態展示と観察", "羅臼の鮭漁見学：伝統漁法の継承", "知床五湖：原生林と湖の絶景", "新鮮なイクラ丼：輝く宝石のような美味しさ"],
-    highlightsEn: ["Shibetsu Salmon Park: Salmon ecology exhibits", "Rausu salmon fishing: Traditional fishing methods", "Shiretoko Five Lakes: Pristine forest and lake views", "Fresh ikura rice bowl: Jewel-like delicacy"],
-    experiencesJa: "鮭漁見学、イクラ丼、知床五湖散策、ホエールウォッチング、流氷クルーズ（冬季）、野生動物観察",
-    experiencesEn: "Salmon fishing observation, ikura bowls, Shiretoko Five Lakes walks, whale watching, drift ice cruises (winter), wildlife observation"
+    descriptionJa: "世界自然遺産・知床で数千年続く鮭漁文化。秋の鮭遡上は圧巻で、アイヌ民族が「神の魚」と呼んだ理由が分かります。新鮮なイクラと鮭料理は絶品。標津サーモン科学館では鮭の生態を学べます。",
+    descriptionEn: "Salmon fishing culture in Shiretoko World Heritage Site. Autumn salmon runs are spectacular. Fresh ikura and salmon dishes are exquisite.",
+    highlightsJa: ["標津サーモンパーク", "羅臼の鮭漁見学", "知床五湖", "イクラ丼"],
+    highlightsEn: ["Shibetsu Salmon Park", "Rausu fishing", "Shiretoko Five Lakes", "Ikura bowls"],
+    experiencesJa: "鮭漁見学、イクラ丼、知床五湖散策、ホエールウォッチング、流氷クルーズ",
+    experiencesEn: "Fishing observation, ikura bowls, lake walks, whale watching, drift ice cruises"
   },
-
   {
     id: 3,
     region: "hokkaido-tohoku",
     wideArea: false,
     jaTitle: "カムイと共に生きる上川アイヌ～大雪山のふところに伝承される神々の世界～",
-    enTitle: "Kamikawa Ainu Living with the Kamuy – World of Gods Handed Down in Embrace of Mt. Daisetsu",
+    enTitle: "Kamikawa Ainu Living with Kamuy",
     jaLocation: "北海道（旭川市、上川町）",
     enLocation: "Hokkaido (Asahikawa, Kamikawa)",
-    descriptionJa: "大雪山を「カムイミンタラ（神々の遊ぶ庭）」と呼んだ上川アイヌの精神文化。アイヌ文化の伝統儀式、木彫り、刺繍などが今も受け継がれています。旭川のアイヌ文化交流センターでは、神々と共生する世界観に触れられます。層雲峡の大自然の中で、カムイ（神）への祈りと感謝の心を体感できます。アイヌの人々は自然のすべてに神が宿ると考え、共生の知恵を育んできました。",
-    descriptionEn: "Spiritual culture of Kamikawa Ainu who called Mt. Daisetsu 'Kamuy Mintara (playground of the gods).' Traditional Ainu rituals, wood carving, and embroidery are still passed down today. At Asahikawa's Ainu Cultural Exchange Center, experience the worldview of coexisting with gods. In Sounkyo's great nature, feel prayers and gratitude toward Kamuy (gods). Ainu people believe gods dwell in all nature and have cultivated wisdom of coexistence.",
-    highlightsJa: ["川村カ子トアイヌ記念館：アイヌ文化の総合展示", "層雲峡：神々の庭と呼ばれる絶景の渓谷", "大雪山国立公園：北海道最高峰の霊山", "アイヌ伝統工芸体験：木彫りや刺繍"],
-    highlightsEn: ["Kawamura Kaneto Ainu Memorial Hall: Comprehensive Ainu culture exhibits", "Sounkyo Gorge: Spectacular valley called playground of gods", "Daisetsuzan National Park: Hokkaido's highest sacred mountain", "Ainu traditional craft experiences: Wood carving and embroidery"],
-    experiencesJa: "アイヌ文化体験、伝統工芸ワークショップ、層雲峡散策、温泉、ムックリ（口琴）演奏体験、アイヌ料理",
-    experiencesEn: "Ainu cultural experiences, traditional craft workshops, Sounkyo walks, hot springs, mukkuri (jaw harp) performances, Ainu cuisine"
+    descriptionJa: "大雪山を「神々の遊ぶ庭」と呼んだ上川アイヌの精神文化。アイヌ文化の伝統儀式、木彫り、刺繍が今も受け継がれています。旭川のアイヌ文化交流センターで神々と共生する世界観に触れられます。",
+    descriptionEn: "Spiritual culture of Kamikawa Ainu who called Mt. Daisetsu 'playground of gods.' Traditional rituals, wood carving, and embroidery continue today.",
+    highlightsJa: ["川村カ子トアイヌ記念館", "層雲峡", "大雪山国立公園", "アイヌ伝統工芸"],
+    highlightsEn: ["Kawamura Ainu Museum", "Sounkyo Gorge", "Daisetsuzan Park", "Ainu crafts"],
+    experiencesJa: "アイヌ文化体験、伝統工芸ワークショップ、層雲峡散策、温泉、ムックリ演奏",
+    experiencesEn: "Ainu cultural experiences, craft workshops, gorge walks, hot springs, mukkuri performances"
   },
-
   {
     id: 4,
     region: "hokkaido-tohoku",
@@ -935,178 +950,1738 @@ const STORY_DATA = [
     enTitle: "The Stylish 'Date' Culture Fostered by Masamune",
     jaLocation: "宮城県（仙台市、多賀城市、塩竈市、松島町）",
     enLocation: "Miyagi (Sendai, Tagajo, Shiogama, Matsushima)",
-    descriptionJa: "独眼竜・伊達政宗が築いた華やかな文化遺産。仙台城跡、瑞鳳殿の豪華絢爛な装飾、塩竈神社の伝統、日本三景・松島の美しさ。「伊達」という言葉の語源となった、粋でスタイリッシュな東北の文化を体感できます。政宗の進取の精神が生んだ、伝統と革新が調和する文化が今も息づいています。茶道、能楽、武家文化が融合した独特の美意識は、現代の仙台の街にも受け継がれています。",
-    descriptionEn: "Splendid cultural heritage built by the One-Eyed Dragon, Date Masamune. Sendai Castle ruins, gorgeous decorations of Zuihoden mausoleum, Shiogama Shrine traditions, and beauty of Matsushima, one of Japan's three scenic views. Experience the stylish Tohoku culture that gave origin to the word 'Date' (stylish). Culture harmonizing tradition and innovation, born from Masamune's progressive spirit, still thrives today. The unique aesthetic sense fusing tea ceremony, Noh theater, and samurai culture continues in modern Sendai.",
-    highlightsJa: ["仙台城跡：青葉城から望む市街地の絶景と政宗騎馬像", "瑞鳳殿：豪華絢爛な霊廟建築の傑作", "松島：日本三景の一つ、260余の島々", "塩竈神社：東北の総鎮守、海の守り神"],
-    highlightsEn: ["Sendai Castle ruins: Panoramic city views and Masamune statue", "Zuihoden mausoleum: Masterpiece of gorgeous mausoleum architecture", "Matsushima Bay: One of Japan's three scenic views with 260+ islands", "Shiogama Shrine: Guardian deity of Tohoku and the sea"],
-    experiencesJa: "城跡散策、松島遊覧船、牛タン料理、笹かまぼこ、ずんだ餅、伊達の文化体験",
-    experiencesEn: "Castle site walks, Matsushima bay cruises, beef tongue cuisine, kamaboko, zunda mochi, Date culture experiences"
+    descriptionJa: "独眼竜・伊達政宗が築いた華やかな文化遺産。仙台城跡、瑞鳳殿、塩竈神社、松島の美しさ。「伊達」という言葉の語源となった粋でスタイリッシュな東北の文化を体感できます。",
+    descriptionEn: "Splendid cultural heritage by Date Masamune. Sendai Castle ruins, Zuihoden mausoleum, Shiogama Shrine, and beautiful Matsushima Bay. Experience the stylish culture that gave origin to 'Date.'",
+    highlightsJa: ["仙台城跡と政宗騎馬像", "瑞鳳殿", "松島", "塩竈神社"],
+    highlightsEn: ["Sendai Castle", "Zuihoden", "Matsushima Bay", "Shiogama Shrine"],
+    experiencesJa: "城跡散策、松島遊覧船、牛タン料理、笹かまぼこ、ずんだ餅",
+    experiencesEn: "Castle walks, bay cruises, beef tongue, kamaboko, zunda mochi"
   },
-
   {
     id: 5,
     region: "hokkaido-tohoku",
     wideArea: false,
-    jaTitle: "自然と信仰が息づく『生まれかわりの旅』～樹齢300年を超える杉並木につつまれた2,446段の石段から始まる出羽三山～",
-    enTitle: "A Rebirth Pilgrimage Where Nature and Faith Breathe – Dewa Sanzan Beginning with 2,446 Stone Steps",
+    jaTitle: "自然と信仰が息づく『生まれかわりの旅』～出羽三山～",
+    enTitle: "A Rebirth Pilgrimage – Dewa Sanzan",
     jaLocation: "山形県（鶴岡市、西川町、庄内町）",
     enLocation: "Yamagata (Tsuruoka, Nishikawa, Shonai)",
-    descriptionJa: "羽黒山・月山・湯殿山を巡る修験道の聖地。2,446段の石段を登り、樹齢300年超の杉並木に包まれる巡礼は、まさに「生まれ変わり」の体験。山伏文化、精進料理、即身仏など、日本独特の山岳信仰の深淵に触れられます。現世、前世、来世を象徴する三山を巡ることで、心身ともに浄化されます。白装束に身を包み、山岳修行の一端を体験することもできます。",
-    descriptionEn: "Sacred sites of mountain asceticism covering Mt. Haguro, Mt. Gassan, and Mt. Yudono. Climbing 2,446 stone steps surrounded by cedar trees over 300 years old is truly a 'rebirth' experience. Encounter the depths of Japan's unique mountain worship through yamabushi culture, vegetarian cuisine, and sokushinbutsu (self-mummified monks). By visiting the three mountains symbolizing present, past, and future life, you are purified in body and mind. You can also experience part of mountain training dressed in white robes.",
-    highlightsJa: ["羽黒山五重塔：国宝、東北最古の五重塔", "出羽三山神社：三山の総鎮守、荘厳な社殿", "即身仏：修行の極致を示す貴重な文化財", "精進料理：山の恵みを活かした伝統の味"],
-    highlightsEn: ["Hagurosan Five-Story Pagoda: National Treasure, oldest in Tohoku", "Dewa Sanzan Shrine: Grand shrine of three mountains", "Sokushinbutsu: Precious cultural assets showing ultimate asceticism", "Shojin vegetarian cuisine: Traditional flavors using mountain bounty"],
-    experiencesJa: "三山巡礼、精進料理、山伏体験、温泉、御朱印巡り、森林セラピー、自然観察",
-    experiencesEn: "Three-mountain pilgrimage, vegetarian meals, yamabushi experiences, hot springs, goshuin stamp collecting, forest therapy, nature observation"
+    descriptionJa: "羽黒山・月山・湯殿山を巡る修験道の聖地。2,446段の石段、樹齢300年超の杉並木。山伏文化、精進料理、即身仏など、日本独特の山岳信仰の深淵に触れられます。",
+    descriptionEn: "Sacred mountain asceticism sites covering Mt. Haguro, Gassan, and Yudono. 2,446 stone steps, 300-year-old cedars. Experience yamabushi culture, vegetarian cuisine, and sokushinbutsu.",
+    highlightsJa: ["羽黒山五重塔", "出羽三山神社", "即身仏", "精進料理"],
+    highlightsEn: ["Five-Story Pagoda", "Dewa Sanzan Shrine", "Sokushinbutsu", "Vegetarian cuisine"],
+    experiencesJa: "三山巡礼、精進料理、山伏体験、温泉、御朱印巡り、森林セラピー",
+    experiencesEn: "Three-mountain pilgrimage, vegetarian meals, yamabushi experiences, hot springs, goshuin collecting"
   },
-
   {
     id: 6,
     region: "hokkaido-tohoku",
     wideArea: false,
     jaTitle: "山寺が支えた紅花文化",
-    enTitle: "Safflower Culture Supported by Yamadera Temple",
+    enTitle: "Safflower Culture Supported by Yamadera",
     jaLocation: "山形県（山形市、天童市、尾花沢市、中山町、河北町、白鷹町）",
     enLocation: "Yamagata (Yamagata, Tendo, Obanazawa, Nakayama, Kahoku, Shirataka)",
-    descriptionJa: "松尾芭蕉が「閑さや岩にしみ入る蝉の声」と詠んだ山寺と、最上紅花の物語。江戸時代、紅花は金と同じ価値を持ち、京都の染物文化を支えました。紅花畑が一面に広がる初夏の風景は息を呑む美しさです。最上川の舟運で京都へ運ばれた紅花が、日本の美意識を彩りました。山寺の静寂と紅花の鮮やかさが織りなす、山形の文化の深みを感じられます。",
-    descriptionEn: "Story of Yamadera Temple, where Matsuo Basho composed his famous haiku about cicadas, and Mogami safflower. In the Edo period, safflowers were valued as highly as gold and supported Kyoto's dyeing culture. Landscape of safflower fields spreading across land in early summer is breathtakingly beautiful. Safflowers transported to Kyoto via Mogami River boats colored Japan's aesthetic sense. Feel the depth of Yamagata culture woven by Yamadera's tranquility and safflower's brilliance.",
-    highlightsJa: ["山寺（立石寺）：1,015段の石段、芭蕉の句碑", "紅花資料館：紅花文化の歴史と染色技術", "最上川：日本三大急流、舟運の歴史", "紅花畑：初夏の絶景、黄金色の花々"],
-    highlightsEn: ["Yamadera Temple: 1,015 stone steps, Basho's haiku monument", "Safflower Museum: History and dyeing techniques", "Mogami River: One of Japan's three rapid rivers", "Safflower fields: Early summer spectacle of golden flowers"],
-    experiencesJa: "山寺登山、紅花摘み体験、最上川舟下り、さくらんぼ狩り、紅花染め体験、温泉",
-    experiencesEn: "Yamadera climbing, safflower picking, Mogami River boat rides, cherry picking, safflower dyeing experiences, hot springs"
+    descriptionJa: "松尾芭蕉が詠んだ山寺と最上紅花の物語。江戸時代、紅花は金と同じ価値。初夏の紅花畑は息を呑む美しさです。最上川の舟運で京都へ運ばれた紅花が日本の美意識を彩りました。",
+    descriptionEn: "Story of Yamadera Temple and Mogami safflower. In Edo period, safflowers valued as gold. Early summer safflower fields are breathtaking. Safflowers transported to Kyoto via Mogami River.",
+    highlightsJa: ["山寺（立石寺）", "紅花資料館", "最上川", "紅花畑"],
+    highlightsEn: ["Yamadera Temple", "Safflower Museum", "Mogami River", "Safflower fields"],
+    experiencesJa: "山寺登山、紅花摘み、最上川舟下り、さくらんぼ狩り、紅花染め、温泉",
+    experiencesEn: "Temple climbing, safflower picking, river boats, cherry picking, dyeing experiences"
   },
-
   {
     id: 7,
     region: "hokkaido-tohoku",
     wideArea: false,
-    jaTitle: "未来を拓いた「一本の水路」－大久保利通\"最期の夢\"と開拓者の軌跡 郡山・猪苗代－",
-    enTitle: "The Single Waterway that Opened the Future – Okubo Toshimichi's Final Dream",
+    jaTitle: "未来を拓いた「一本の水路」－大久保利通の夢と開拓者の軌跡－",
+    enTitle: "The Waterway that Opened the Future – Okubo Toshimichi's Dream",
     jaLocation: "福島県（郡山市、猪苗代町）",
     enLocation: "Fukushima (Koriyama, Inawashiro)",
-    descriptionJa: "明治の元勲・大久保利通が最後に情熱を注いだプロジェクト、安積疏水。猪苗代湖から郡山へ約130kmにわたって引かれた水路が、不毛の原野を東北有数の穣田に変えました。大久保の暗殺後も技師たちの努力で1882年に完成。十六橋水門などの土木遺産は、明治の土木技術の粋を集めた傑作です。この水路は農業だけでなく、水力発電、工業用水としても活用され、郡山を「東北のシカゴ」と呼ばれる工業都市へと発展させました。",
-    descriptionEn: "Asaka Canal, the final project that Meiji statesman Okubo Toshimichi devoted his passion to. This approximately 130km waterway from Lake Inawashiro to Koriyama transformed barren wilderness into one of Tohoku's most fertile rice-producing areas. Despite Okubo's assassination, engineers completed it in 1882. Civil engineering heritage like Juroku-bashi Water Gate represents pinnacle of Meiji-era engineering. The canal was used not only for agriculture but also hydroelectric power and industrial water, developing Koriyama into an industrial city called 'Chicago of Tohoku.'",
-    highlightsJa: ["安積疏水：日本三大疏水の一つ、近代土木の傑作", "十六橋水門：美しいアーチ橋が連続する景観", "猪苗代湖：日本第4位の広さを誇る湖", "開成山公園：桜の名所、疏水開削の歴史"],
-    highlightsEn: ["Asaka Canal: One of Japan's three great canals, masterpiece of modern civil engineering", "Juroku-bashi Water Gate: Landscape of beautiful consecutive arch bridges", "Lake Inawashiro: Japan's fourth-largest lake", "Kaiseizan Park: Cherry blossom spot, canal excavation history"],
-    experiencesJa: "疏水沿いサイクリング、猪苗代湖遊覧、土木遺産見学、郷土料理、湖水浴（夏季）、スキー（冬季）",
-    experiencesEn: "Cycling along canal, lake tours, civil engineering heritage visits, local cuisine, lake swimming (summer), skiing (winter)"
+    descriptionJa: "大久保利通が情熱を注いだ安積疏水。猪苗代湖から約130kmの水路が不毛の原野を東北有数の穣田に変えました。十六橋水門などの土木遺産は明治技術の粋です。",
+    descriptionEn: "Asaka Canal project by Okubo Toshimichi. 130km waterway from Lake Inawashiro transformed barren wilderness into fertile rice fields. Civil engineering heritage represents Meiji-era pinnacle.",
+    highlightsJa: ["安積疏水", "十六橋水門", "猪苗代湖", "開成山公園"],
+    highlightsEn: ["Asaka Canal", "Juroku-bashi Gate", "Lake Inawashiro", "Kaiseizan Park"],
+    experiencesJa: "疏水沿いサイクリング、猪苗代湖遊覧、土木遺産見学、郷土料理、湖水浴、スキー",
+    experiencesEn: "Cycling along canal, lake tours, heritage visits, local cuisine, swimming, skiing"
   },
-
   {
     id: 8,
     region: "hokkaido-tohoku",
     wideArea: false,
     jaTitle: "会津の三十三観音めぐり～巡礼を通して観た往時の会津の文化～",
-    enTitle: "The 33 Kannon Pilgrimage of Aizu – Aizu Culture Seen Through Pilgrimage",
+    enTitle: "The 33 Kannon Pilgrimage of Aizu",
     jaLocation: "福島県（会津若松市ほか）",
     enLocation: "Fukushima (Aizuwakamatsu, etc.)",
-    descriptionJa: "会津藩主が民の安寧を願って整備した観音霊場巡り。会津地方に点在する33ヶ所の観音堂を巡る旅は、会津の歴史、自然、信仰を深く味わう最高のルート。鶴ヶ城から磐梯山麓まで、それぞれに独特の由緒と美しい仏像があります。会津漆器、会津木綿、郷土料理など、伝統文化にも触れられます。春の桜、夏の新緑、秋の紅葉、冬の雪景色と、四季折々の美しさも魅力です。",
-    descriptionEn: "Kannon pilgrimage route established by Aizu Domain lord wishing for people's peace. Journey visiting 33 Kannon halls scattered across Aizu is the best route to deeply savor Aizu's history, nature, and faith. From Tsuruga Castle to foot of Mt. Bandai, each hall has unique history and beautiful Buddhist statues. Experience traditional culture including Aizu lacquerware, Aizu cotton, and local cuisine. Charm includes seasonal beauty: spring cherry blossoms, summer greenery, autumn foliage, and winter snow scenes.",
-    highlightsJa: ["鶴ヶ城：難攻不落の名城、会津武士道の象徴", "会津観音：33ヶ所の観音霊場、それぞれに物語", "大内宿：江戸時代の宿場町の姿をそのまま残す", "磐梯山：会津富士と呼ばれる霊峰"],
-    highlightsEn: ["Tsuruga Castle: Impregnable castle, symbol of Aizu samurai spirit", "33 Aizu Kannon temples: Each with unique story", "Ouchi-juku: Edo-period post town preserved as it was", "Mt. Bandai: Sacred mountain called Aizu Fuji"],
-    experiencesJa: "観音霊場巡り、会津漆器制作体験、郷土料理（こづゆ・馬刺し）、大内宿散策、温泉めぐり、会津木綿体験",
-    experiencesEn: "Kannon pilgrimage, Aizu lacquerware workshops, local cuisine (kozuyu, horse sashimi), Ouchi-juku walks, hot spring tours, Aizu cotton experiences"
+    descriptionJa: "会津藩主が整備した観音霊場巡り。33ヶ所の観音堂を巡る旅は会津の歴史、自然、信仰を深く味わう最高のルート。会津漆器、会津木綿、郷土料理にも触れられます。",
+    descriptionEn: "Kannon pilgrimage route established by Aizu Domain. Journey visiting 33 Kannon halls deeply savors Aizu's history, nature, and faith. Experience lacquerware and local culture.",
+    highlightsJa: ["鶴ヶ城", "会津観音", "大内宿", "磐梯山"],
+    highlightsEn: ["Tsuruga Castle", "33 Kannon temples", "Ouchi-juku", "Mt. Bandai"],
+    experiencesJa: "観音霊場巡り、会津漆器体験、郷土料理、大内宿散策、温泉めぐり",
+    experiencesEn: "Kannon pilgrimage, lacquerware workshops, local cuisine, Ouchi-juku walks, hot springs"
   },
-
   {
     id: 9,
     region: "hokkaido-tohoku",
     wideArea: false,
     jaTitle: "\"奥南部\"漆物語～安比川流域に受け継がれる伝統技術～",
-    enTitle: "The Oku-Nambu Lacquer Story – Traditional Techniques Handed Down in Appi River Basin",
+    enTitle: "Oku-Nambu Lacquer Story",
     jaLocation: "岩手県（八幡平市、二戸市、一戸町）",
     enLocation: "Iwate (Hachimantai, Ninohe, Ichinohe)",
-    descriptionJa: "浄法寺塗で知られる日本屈指の漆の産地。安比川流域では千年以上にわたり漆掻き（漆の樹液採取）が行われ、現在では国産漆の約70%を生産しています。一本の漆の木から採れる樹液はわずか200mlほどで、職人は木を傷つけないよう細心の注意を払います。この貴重な漆を使った浄法寺椀は、シンプルで力強い美しさを持ち、使うほどに艶が増します。日光東照宮などの文化財修復にも使われる、日本の宝です。",
-    descriptionEn: "One of Japan's premier lacquer-producing regions known for Joboji-nuri. Lacquer tapping has been practiced in Appi River basin for over a thousand years, now producing about 70% of Japan's domestic lacquer. Only about 200ml of sap can be harvested from one tree, with craftsmen exercising utmost care not to damage trees. Joboji bowls made from this precious lacquer have simple yet powerful beauty and gain luster with use. Used for cultural asset restoration like Nikko Toshogu, it's a Japanese treasure.",
-    highlightsJa: ["浄法寺漆芸館：漆器の展示販売と制作工程見学", "漆掻き体験：伝統技術を間近で学ぶ", "天台寺：歴史ある古刹、桂清水", "漆器工房：職人の技を見学"],
-    highlightsEn: ["Joboji Lacquerware Museum: Exhibits and production process tours", "Lacquer tapping experience: Learn traditional techniques up close", "Tendaiji Temple: Historic temple, Katsura spring water", "Lacquerware workshops: Observe craftsmen's skills"],
-    experiencesJa: "漆掻き見学、漆器制作体験、天台寺参拝、地元グルメ、温泉、自然散策",
-    experiencesEn: "Lacquer tapping observation, lacquerware workshops, Tendaiji visits, local food, hot springs, nature walks"
+    descriptionJa: "浄法寺塗で知られる日本屈指の漆の産地。安比川流域では千年以上漆掻きが行われ、国産漆の約70%を生産。浄法寺椀は使うほどに艶が増します。日光東照宮の修復にも使われる日本の宝です。",
+    descriptionEn: "Premier lacquer region known for Joboji-nuri. Lacquer tapping for over 1,000 years, producing 70% of domestic lacquer. Joboji bowls gain luster with use. Used for Nikko Toshogu restoration.",
+    highlightsJa: ["浄法寺漆芸館", "漆掻き体験", "天台寺", "漆器工房"],
+    highlightsEn: ["Joboji Museum", "Lacquer tapping", "Tendaiji Temple", "Lacquerware workshops"],
+    experiencesJa: "漆掻き見学、漆器制作体験、天台寺参拝、地元グルメ、温泉",
+    experiencesEn: "Lacquer tapping observation, lacquerware workshops, temple visits, local food, hot springs"
   },
-
-  // 10-20: 関東ブロック
   {
     id: 10,
+    region: "hokkaido-tohoku",
+    wideArea: false,
+    jaTitle: "荒波を越えた男たちの夢が紡いだ異空間～北前船寄港地・船主集落～",
+    enTitle: "Exotic Spaces Created by Seafarers' Dreams – Kitamae-bune Ports",
+    jaLocation: "北海道（函館市）、青森県（青森市、外ヶ浜町、深浦町）、秋田県（秋田市、にかほ市）",
+    enLocation: "Hokkaido (Hakodate), Aomori, Akita",
+    descriptionJa: "江戸時代から明治にかけて活躍した北前船。日本海沿岸の港町に繁栄をもたらし、各地に独特の文化を残しました。豪商の屋敷、蔵、寺社が往時の繁栄を物語ります。",
+    descriptionEn: "Kitamae-bune ships active from Edo to Meiji period. Brought prosperity to Sea of Japan ports, leaving unique culture. Merchant mansions, warehouses, and temples tell prosperity stories.",
+    highlightsJa: ["函館の西部地区", "深浦の北前船寄港地", "秋田の豪商屋敷", "にかほの船主集落"],
+    highlightsEn: ["Hakodate Western District", "Fukaura port", "Akita merchant houses", "Nikaho ship owner villages"],
+    experiencesJa: "港町散策、豪商屋敷見学、郷土料理、海鮮グルメ、温泉",
+    experiencesEn: "Port town walks, mansion tours, local cuisine, seafood, hot springs"
+  },
+  {
+    id: 11,
+    region: "hokkaido-tohoku",
+    wideArea: false,
+    jaTitle: "津軽海峡を挟んで伝えられた「心」と「技」～北前船と太宰の古里～",
+    enTitle: "Hearts and Skills Across Tsugaru Strait – Kitamae Ships and Dazai's Hometown",
+    jaLocation: "青森県（青森市、五所川原市、外ヶ浜町、中泊町）",
+    enLocation: "Aomori (Aomori, Goshogawara, Sotogahama, Nakadomari)",
+    descriptionJa: "北前船がもたらした繁栄と太宰治の文学世界。津軽の伝統工芸、金木の斜陽館、竜飛崎の絶景。北の文化と文学が交差する独特の地域です。",
+    descriptionEn: "Prosperity from Kitamae ships and Dazai Osamu's literary world. Tsugaru traditional crafts, Kanagi's Shayokan, spectacular Tappi Cape. Region where northern culture and literature intersect.",
+    highlightsJa: ["太宰治記念館「斜陽館」", "竜飛崎", "十三湖", "津軽三味線"],
+    highlightsEn: ["Dazai Museum 'Shayokan'", "Tappi Cape", "Lake Jusan", "Tsugaru shamisen"],
+    experiencesJa: "斜陽館見学、津軽三味線鑑賞、竜飛崎散策、しじみラーメン、りんご狩り",
+    experiencesEn: "Museum visits, shamisen performances, cape walks, clam ramen, apple picking"
+  },
+  {
+    id: 12,
+    region: "hokkaido-tohoku",
+    wideArea: false,
+    jaTitle: "平泉～仏国土(浄土)を表す建築・庭園及び考古学的遺跡群～",
+    enTitle: "Hiraizumi – Pure Land Buddhism Garden and Archeological Sites",
+    jaLocation: "岩手県（平泉町）",
+    enLocation: "Iwate (Hiraizumi)",
+    descriptionJa: "世界遺産・平泉の浄土思想を表す文化遺産。中尊寺金色堂、毛越寺庭園、無量光院跡など、奥州藤原氏が描いた理想郷。金色に輝く金色堂は必見です。",
+    descriptionEn: "UNESCO World Heritage Hiraizumi representing Pure Land Buddhism. Chusonji Golden Hall, Motsuji Temple garden, Muryokoin ruins show Oshu Fujiwara clan's ideal paradise. Golden Hall is must-see.",
+    highlightsJa: ["中尊寺金色堂", "毛越寺庭園", "無量光院跡", "達谷窟毘沙門堂"],
+    highlightsEn: ["Chusonji Golden Hall", "Motsuji Garden", "Muryokoin ruins", "Takkoku-no-Iwaya"],
+    experiencesJa: "世界遺産巡り、浄土庭園鑑賞、精進料理、もち料理、わんこそば",
+    experiencesEn: "World Heritage tours, Pure Land gardens, vegetarian meals, mochi cuisine, wanko soba"
+  },
+  {
+    id: 13,
+    region: "hokkaido-tohoku",
+    wideArea: false,
+    jaTitle: "旅人を癒す温泉、山あいに鎮座する社、神秘の寺…栗駒山麓の歴史文化の息吹を感じる「栗原」",
+    enTitle: "Kurihara – Healing Hot Springs, Mountain Shrines, and Mystical Temples",
+    jaLocation: "宮城県（栗原市）",
+    enLocation: "Miyagi (Kurihara)",
+    descriptionJa: "栗駒山麓の豊かな自然と歴史文化。鳴子温泉郷、中尊寺との関係が深い寺社、伝統工芸。山の恵みと信仰が融合した独特の文化圏です。",
+    descriptionEn: "Rich nature and historical culture at Mt. Kurikoma's foot. Naruko hot spring resort, temples related to Chusonji, traditional crafts. Unique cultural sphere fusing mountain bounty and faith.",
+    highlightsJa: ["鳴子温泉郷", "栗駒山", "伊豆沼・内沼", "こけし工芸"],
+    highlightsEn: ["Naruko Hot Springs", "Mt. Kurikoma", "Izunuma-Uchinuma", "Kokeshi dolls"],
+    experiencesJa: "温泉めぐり、栗駒山登山、こけし絵付け体験、ラムサール条約湿地観察",
+    experiencesEn: "Hot spring tours, mountain climbing, kokeshi painting, wetland observation"
+  },
+  {
+    id: 14,
+    region: "hokkaido-tohoku",
+    wideArea: false,
+    jaTitle: "「四季が育む東北の伝統野菜」を受け継ぐ山形の在来作物～日本の食文化の原点～",
+    enTitle: "Yamagata's Traditional Vegetables – Origin of Japanese Food Culture",
+    jaLocation: "山形県（山形市、鶴岡市、酒田市ほか）",
+    enLocation: "Yamagata (Yamagata, Tsuruoka, Sakata, etc.)",
+    descriptionJa: "山形には150種類以上の在来作物が今も栽培されています。だだちゃ豆、温海かぶ、民田なすなど、地域の気候風土に適応した伝統野菜。四季の移ろいと共に育まれた食文化の宝庫です。",
+    descriptionEn: "Yamagata cultivates over 150 traditional vegetable varieties. Dadacha-mame, Atsumi turnip, Miden eggplant adapted to local climate. Treasure trove of food culture nurtured with seasons.",
+    highlightsJa: ["だだちゃ豆", "温海かぶ", "民田なす", "在来作物料理"],
+    highlightsEn: ["Dadacha-mame beans", "Atsumi turnip", "Miden eggplant", "Traditional vegetable cuisine"],
+    experiencesJa: "在来作物料理、農業体験、漬物作り、郷土料理教室、芋煮会",
+    experiencesEn: "Traditional vegetable meals, farming experiences, pickle making, cooking classes, imoni parties"
+  },
+  {
+    id: 15,
+    region: "hokkaido-tohoku",
+    wideArea: false,
+    jaTitle: "『伊達な文化』が花開いた「伊達な美酒の国」宮城～米・水・人そして風土が育む、食と酒の魅力的な文化～",
+    enTitle: "Miyagi – Land of Date's Fine Sake and Culinary Culture",
+    jaLocation: "宮城県（全域）",
+    enLocation: "Miyagi (Entire Prefecture)",
+    descriptionJa: "伊達政宗が奨励した酒造りの伝統。宮城は東北有数の酒どころで、日本酒「一ノ蔵」「浦霞」などが有名です。米、水、杜氏の技が育む酒文化と、それを彩る食文化が魅力です。",
+    descriptionEn: "Sake brewing tradition encouraged by Date Masamune. Miyagi is premier sake region in Tohoku, famous for 'Ichinokura' and 'Urakasumi.' Sake culture nurtured by rice, water, and master brewers' skills.",
+    highlightsJa: ["宮城の日本酒", "酒蔵見学", "伊達料理", "仙台味噌"],
+    highlightsEn: ["Miyagi sake", "Brewery tours", "Date cuisine", "Sendai miso"],
+    experiencesJa: "酒蔵見学、日本酒試飲、仙台味噌蔵元訪問、地酒と郷土料理のペアリング",
+    experiencesEn: "Brewery tours, sake tasting, miso maker visits, sake and local cuisine pairing"
+  },
+  {
+    id: 16,
+    region: "hokkaido-tohoku",
+    wideArea: false,
+    jaTitle: "「なまはげ」の来訪神と共生する暮らし～男鹿・大潟・にかほ～",
+    enTitle: "Living with Namahage Spirit Visitors – Oga, Ogata, Nikaho",
+    jaLocation: "秋田県（男鹿市、大潟村、にかほ市）",
+    enLocation: "Akita (Oga, Ogata, Nikaho)",
+    descriptionJa: "ユネスコ無形文化遺産「なまはげ」の伝統。大晦日に鬼の面をつけた神が家々を訪れ、怠け者を戒める民俗行事。男鹿半島の厳しい自然の中で育まれた独特の文化です。",
+    descriptionEn: "UNESCO Intangible Heritage 'Namahage' tradition. On New Year's Eve, deity in demon mask visits houses to admonish lazy people. Unique culture nurtured in Oga Peninsula's harsh nature.",
+    highlightsJa: ["なまはげ館", "真山神社", "男鹿水族館GAO", "なまはげ柴灯まつり"],
+    highlightsEn: ["Namahage Museum", "Shinzan Shrine", "Oga Aquarium GAO", "Namahage Sedo Festival"],
+    experiencesJa: "なまはげ館見学、なまはげ体験、男鹿温泉、石焼料理、ハタハタ料理",
+    experiencesEn: "Namahage Museum, Namahage experience, Oga hot springs, ishiyaki cuisine, hatahata fish"
+  },
+  {
+    id: 17,
+    region: "hokkaido-tohoku",
+    wideArea: false,
+    jaTitle: "「北国雪深く三世代が受け継ぐ「玉川温泉」の湯治文化」",
+    enTitle: "Tamagawa Onsen's Hot Spring Therapy Culture Passed Through Three Generations",
+    jaLocation: "秋田県（仙北市）",
+    enLocation: "Akita (Senboku)",
+    descriptionJa: "日本一の強酸性温泉として知られる玉川温泉。pH1.2の酸性泉と98℃の高温泉が湧出。古くから湯治場として栄え、三世代にわたって受け継がれる湯治文化があります。",
+    descriptionEn: "Tamagawa Onsen known as Japan's strongest acidic hot spring. pH 1.2 acidic spring and 98°C high-temperature spring. Hot spring therapy culture passed through three generations.",
+    highlightsJa: ["玉川温泉", "新玉川温泉", "岩盤浴", "田沢湖"],
+    highlightsEn: ["Tamagawa Onsen", "Shin-Tamagawa Onsen", "Bedrock bathing", "Lake Tazawa"],
+    experiencesJa: "湯治体験、岩盤浴、田沢湖観光、きりたんぽ鍋、稲庭うどん",
+    experiencesEn: "Hot spring therapy, bedrock bathing, Lake Tazawa tours, kiritanpo nabe, Inaniwa udon"
+  },
+
+  // 関東 (18-37)
+  {
+    id: 18,
     region: "kanto",
     wideArea: false,
     jaTitle: "かかあ天下－ぐんまの絹物語－",
     enTitle: "Kakaa-Tenka – Gunma's Silk Story",
     jaLocation: "群馬県（桐生市、甘楽町、中之条町、片品村）",
     enLocation: "Gunma (Kiryu, Kanra, Nakanojo, Katashina)",
-    descriptionJa: "「かかあ天下とからっ風」で知られる群馬県の養蚕文化。女性たちが養蚕で家計を支え、発言力を持った歴史があります。世界遺産「富岡製糸場と絹産業遺産群」をはじめ、桐生の織物産業、養蚕農家の独特な建築様式など、群馬の絹文化は今も息づいています。春から夏にかけて一面に広がる桑畑の風景は圧巻です。日本の近代化を牽引した女性たちの物語を、絹の産地で体感できます。",
-    descriptionEn: "Gunma's sericulture culture known for 'strong wives and strong winds (kakaa-tenka to karakkaze).' Women supported households through sericulture and gained strong voices in decisions. World Heritage Site Tomioka Silk Mill and Related Sites, along with Kiryu's textile industry and unique sericulture farmhouse architecture, showcase Gunma's living silk culture. Landscape of mulberry fields spreading across region from spring to summer is magnificent. Experience the story of women who drove Japan's modernization in the silk-producing region.",
-    highlightsJa: ["富岡製糸場：世界遺産、日本の近代化を象徴する官営模範工場", "桐生織物：1300年の歴史を持つ高級織物の産地", "養蚕農家群：独特な建築様式「総二階造り」「三階建て」", "絹製品：伝統技術が生み出す美しい絹織物や和装小物"],
-    highlightsEn: ["Tomioka Silk Mill: UNESCO World Heritage, symbol of Japan's modernization", "Kiryu Textiles: Premium textile production area with 1,300 years of history", "Sericulture Farmhouses: Unique multi-story architectural styles", "Silk Products: Beautiful silk textiles and kimono accessories from traditional techniques"],
-    experiencesJa: "富岡製糸場見学、桐生織物体験、養蚕農家見学、絹製品ショッピング、こんにゃくパーク、温泉",
-    experiencesEn: "Tomioka Silk Mill tours, Kiryu textile workshops, sericulture farmhouse visits, silk shopping, konjac park, hot springs"
+    descriptionJa: "「かかあ天下とからっ風」で知られる群馬県の養蚕文化。女性たちが養蚕で家計を支え発言力を持った歴史。世界遺産「富岡製糸場」をはじめ、桐生の織物産業が今も息づいています。",
+    descriptionEn: "Gunma's sericulture culture known for 'strong wives.' Women supported households through sericulture. UNESCO World Heritage Tomioka Silk Mill and Kiryu's textile industry still thrive.",
+    highlightsJa: ["富岡製糸場", "桐生織物", "養蚕農家群", "絹製品"],
+    highlightsEn: ["Tomioka Silk Mill", "Kiryu Textiles", "Sericulture Farmhouses", "Silk Products"],
+    experiencesJa: "富岡製糸場見学、桐生織物体験、養蚕農家見学、絹製品ショッピング、こんにゃくパーク",
+    experiencesEn: "Silk mill tours, textile workshops, farmhouse visits, silk shopping, konjac park"
   },
-
   {
-    id: 11,
+    id: 19,
     region: "kanto",
     wideArea: false,
     jaTitle: "和装文化の足元を支え続ける足袋蔵のまち行田",
-    enTitle: "Gyoda, the Town of Tabi Storehouses Supporting the Foundation of Kimono Culture",
+    enTitle: "Gyoda – Town of Tabi Storehouses Supporting Kimono Culture",
     jaLocation: "埼玉県（行田市）",
     enLocation: "Saitama (Gyoda)",
-    descriptionJa: "最盛期には日本の足袋生産の8割を占めた行田。レンガ造りの足袋蔵が立ち並ぶ街並みは、大正ロマンあふれる独特の景観を作り出しています。足袋職人の技術は現代のスポーツシューズにも応用され、伝統と革新が融合しています。「陸王」の舞台としても知られ、ものづくりの精神が息づく町です。古代蓮の里や忍城など、他の見どころも豊富です。",
-    descriptionEn: "At its peak, Gyoda produced 80% of Japan's tabi (split-toe socks). Streets lined with brick tabi storehouses create unique landscape overflowing with Taisho-era romance. Tabi craftsmen's techniques are applied to modern sports shoes, fusing tradition and innovation. Known as setting of novel 'Rikuoh,' it's a town where manufacturing spirit thrives. Other attractions include Ancient Lotus Village and Oshi Castle.",
-    highlightsJa: ["足袋蔵まちなか：レンガ造りの蔵が並ぶ歴史的景観", "忍城：映画「のぼうの城」の舞台、水攻めに耐えた浮き城", "古代蓮の里：2000年前の蓮が開花する公園", "足袋工房見学：職人の技を間近で見る"],
-    highlightsEn: ["Tabi storehouse district: Historic landscape of brick storehouses", "Oshi Castle: Setting of film 'Nobou's Castle,' floating castle that withstood water siege", "Ancient Lotus Village: Park where 2,000-year-old lotus blooms", "Tabi workshop tours: Watch craftsmen's skills up close"],
-    experiencesJa: "足袋蔵見学、足袋作り体験、忍城散策、古代蓮鑑賞、B級グルメ（ゼリーフライ）、田んぼアート",
-    experiencesEn: "Tabi storehouse tours, tabi-making experiences, Oshi Castle walks, ancient lotus viewing, B-grade gourmet (zeri-fry), rice paddy art"
+    descriptionJa: "最盛期には日本の足袋生産の8割を占めた行田。レンガ造りの足袋蔵が立ち並ぶ街並みは大正ロマンあふれる景観。足袋職人の技術は現代のスポーツシューズにも応用されています。",
+    descriptionEn: "At peak, Gyoda produced 80% of Japan's tabi. Streets lined with brick tabi storehouses create Taisho-era atmosphere. Tabi craftsmen's techniques applied to modern sports shoes.",
+    highlightsJa: ["足袋蔵まちなか", "忍城", "古代蓮の里", "足袋工房"],
+    highlightsEn: ["Tabi storehouse district", "Oshi Castle", "Ancient Lotus Village", "Tabi workshops"],
+    experiencesJa: "足袋蔵見学、足袋作り体験、忍城散策、古代蓮鑑賞、ゼリーフライ、田んぼアート",
+    experiencesEn: "Storehouse tours, tabi-making, castle walks, lotus viewing, zeri-fry, rice paddy art"
   },
-
   {
-    id: 12,
+    id: 20,
     region: "kanto",
     wideArea: false,
-    jaTitle: "「北総四都市江戸紀行・江戸を感じる北総の町並み」－佐倉・成田・佐原・銚子－",
-    enTitle: "Edo Journeys in Four Cities of Northern Chiba – Sakura, Narita, Sawara, Choshi",
+    jaTitle: "北総四都市江戸紀行・江戸を感じる北総の町並み",
+    enTitle: "Edo Journeys in Four Cities of Northern Chiba",
     jaLocation: "千葉県（佐倉市、成田市、香取市、銚子市）",
     enLocation: "Chiba (Sakura, Narita, Katori, Choshi)",
-    descriptionJa: "江戸の面影を色濃く残す4つの城下町・門前町。佐倉の武家屋敷、成田山新勝寺の参道、佐原の水郷の町並み、銚子の醤油醸造。それぞれが異なる魅力を持ち、江戸時代にタイムスリップしたような体験ができます。利根川水運で栄えた商都の繁栄、成田詣での賑わい、武家文化の粋が、今も息づいています。",
-    descriptionEn: "Four castle and temple towns strongly retaining Edo atmosphere. Sakura's samurai residences, Naritasan Shinshoji Temple approach, Sawara's waterside townscape, Choshi's soy sauce brewing. Each has different charms, offering time-slip experiences to Edo period. Prosperity of commercial cities that flourished through Tone River water transport, bustle of Narita pilgrimage, and essence of samurai culture still thrive today.",
-    highlightsJa: ["佐倉武家屋敷：江戸時代の武士の暮らしを体感", "成田山新勝寺：関東三大不動の一つ、参道の賑わい", "佐原の町並み：重要伝統的建造物群保存地区、小江戸の風情", "銚子電鉄：レトロな鉄道と醤油工場"],
-    highlightsEn: ["Sakura Samurai Residences: Experience Edo-period samurai life", "Naritasan Shinshoji Temple: One of Kanto's three great Fudo, lively approach", "Sawara Townscape: Important Preservation District, Little Edo atmosphere", "Choshi Electric Railway: Retro railway and soy sauce factories"],
-    experiencesJa: "武家屋敷見学、成田山参拝、佐原の舟巡り、銚子電鉄、海鮮料理、うなぎ料理、醤油ソフトクリーム",
-    experiencesEn: "Samurai residence tours, Naritasan pilgrimage, Sawara boat rides, Choshi Railway, seafood cuisine, eel dishes, soy sauce soft cream"
+    descriptionJa: "江戸の面影を残す4つの城下町・門前町。佐倉の武家屋敷、成田山新勝寺、佐原の水郷、銚子の醤油醸造。それぞれが異なる魅力を持ち江戸時代にタイムスリップしたような体験ができます。",
+    descriptionEn: "Four towns retaining Edo atmosphere. Sakura's samurai residences, Naritasan Temple, Sawara's waterside townscape, Choshi's soy sauce brewing. Each offers time-slip to Edo period.",
+    highlightsJa: ["佐倉武家屋敷", "成田山新勝寺", "佐原の町並み", "銚子電鉄"],
+    highlightsEn: ["Sakura Samurai Residences", "Naritasan Temple", "Sawara Townscape", "Choshi Railway"],
+    experiencesJa: "武家屋敷見学、成田山参拝、佐原の舟巡り、銚子電鉄、海鮮料理、うなぎ",
+    experiencesEn: "Samurai residence tours, temple pilgrimage, Sawara boats, railway, seafood, eel"
   },
-
   {
-    id: 13,
+    id: 21,
     region: "kanto",
     wideArea: false,
     jaTitle: "江戸庶民の信仰と行楽の地～巨大な木太刀を担いで「大山詣り」～",
-    enTitle: "Edo Commoners' Faith and Pleasure Trips – The Great Oyama Pilgrimage with Giant Wooden Swords",
+    enTitle: "Edo Commoners' Faith and Pleasure Trips – Great Oyama Pilgrimage",
     jaLocation: "神奈川県（伊勢原市）",
     enLocation: "Kanagawa (Isehara)",
-    descriptionJa: "江戸時代、年間20万人が訪れた大山阿夫利神社への参詣。巨大な木太刀を担いで登る伝統は今も続きます。参道の茶屋、豆腐料理、ケーブルカーからの眺望。信仰と観光が融合した日本独特の文化を体験できます。落語にも登場する大山詣りは、江戸庶民の楽しみでした。山頂からは相模湾を一望でき、天気が良ければ富士山も見えます。",
-    descriptionEn: "In Edo period, 200,000 people annually visited Oyama Afuri Shrine. Tradition of climbing carrying giant wooden swords continues today. Tea houses along approach, tofu dishes, cable car views. Experience unique Japanese culture fusing faith and tourism. Oyama pilgrimage, appearing even in rakugo storytelling, was Edo commoners' pleasure. From summit, panoramic view of Sagami Bay, and Mt. Fuji visible on clear days.",
-    highlightsJa: ["大山阿夫利神社：相模国の守護神、山頂からの絶景", "大山ケーブル：レトロなケーブルカーの旅", "大山豆腐：名水で作る伝統の味", "江の島：セットで巡る古くからの観光地"],
-    highlightsEn: ["Oyama Afuri Shrine: Guardian deity of Sagami Province, spectacular summit views", "Oyama Cable Car: Retro cable car journey", "Oyama Tofu: Traditional flavor made with famous spring water", "Enoshima: Historic tourist spot to visit together"],
+    descriptionJa: "江戸時代、年間20万人が訪れた大山阿夫利神社への参詣。巨大な木太刀を担いで登る伝統は今も続きます。参道の茶屋、豆腐料理、ケーブルカーからの眺望が魅力です。",
+    descriptionEn: "In Edo period, 200,000 people annually visited Oyama Afuri Shrine. Tradition of climbing carrying giant wooden swords continues. Tea houses, tofu dishes, and cable car views attract visitors.",
+    highlightsJa: ["大山阿夫利神社", "大山ケーブル", "大山豆腐", "江の島"],
+    highlightsEn: ["Oyama Afuri Shrine", "Oyama Cable Car", "Oyama Tofu", "Enoshima"],
     experiencesJa: "大山登山、ケーブルカー、大山豆腐料理、木太刀購入、江の島観光、相模湾の海鮮",
-    experiencesEn: "Oyama mountain climbing, cable car rides, Oyama tofu cuisine, wooden sword purchases, Enoshima tourism, Sagami Bay seafood"
+    experiencesEn: "Mountain climbing, cable car, tofu cuisine, wooden sword purchases, Enoshima, seafood"
   },
-
   {
-    id: 14,
+    id: 22,
     region: "kanto",
     wideArea: true,
     jaTitle: "鎮守府 横須賀・呉・佐世保・舞鶴～日本近代化の躍動を体感できるまち～",
     enTitle: "Naval District Cities – Yokosuka, Kure, Sasebo, Maizuru",
     jaLocation: "神奈川県（横須賀市）、広島県（呉市）、長崎県（佐世保市）、京都府（舞鶴市）",
     enLocation: "Kanagawa (Yokosuka), Hiroshima (Kure), Nagasaki (Sasebo), Kyoto (Maizuru)",
-    descriptionJa: "日本の近代化を支えた4つの軍港都市。造船技術、赤レンガ倉庫群、海軍カレーなど、独特の文化が今も息づきます。横須賀の戦艦三笠、呉の大和ミュージアム、各地の近代化遺産が、海洋国家日本の歩みを物語ります。4つの都市それぞれに個性があり、日本の海軍史を立体的に理解できます。",
-    descriptionEn: "Four naval port cities that supported Japan's modernization. Unique culture including shipbuilding technology, red brick warehouses, and naval curry still thrives. Battleship Mikasa in Yokosuka, Yamato Museum in Kure, and modernization heritage in each city tell story of Japan as maritime nation. Each of four cities has distinct character, enabling three-dimensional understanding of Japan's naval history.",
-    highlightsJa: ["戦艦三笠（横須賀）：日本海海戦の旗艦", "大和ミュージアム（呉）：戦艦大和の1/10模型", "赤レンガ倉庫群：4都市それぞれに残る近代建築", "海軍カレー：各地で異なる味わい"],
-    highlightsEn: ["Battleship Mikasa (Yokosuka): Flagship of Battle of Tsushima", "Yamato Museum (Kure): 1/10 scale model of battleship Yamato", "Red Brick Warehouses: Modern architecture remaining in all four cities", "Naval Curry: Different flavors in each city"],
-    experiencesJa: "軍港クルーズ、戦艦見学、赤レンガ倉庫巡り、海軍カレー食べ比べ、造船所見学、海鮮料理",
-    experiencesEn: "Naval port cruises, battleship tours, red brick warehouse visits, naval curry tastings, shipyard tours, seafood cuisine"
+    descriptionJa: "日本の近代化を支えた4つの軍港都市。造船技術、赤レンガ倉庫群、海軍カレーなど独特の文化が息づきます。横須賀の戦艦三笠、呉の大和ミュージアムが海洋国家日本の歩みを物語ります。",
+    descriptionEn: "Four naval port cities supporting Japan's modernization. Unique culture including shipbuilding, red brick warehouses, and naval curry. Battleship Mikasa and Yamato Museum tell Japan's maritime history.",
+    highlightsJa: ["戦艦三笠（横須賀）", "大和ミュージアム（呉）", "赤レンガ倉庫群", "海軍カレー"],
+    highlightsEn: ["Battleship Mikasa", "Yamato Museum", "Red Brick Warehouses", "Naval Curry"],
+    experiencesJa: "軍港クルーズ、戦艦見学、赤レンガ倉庫巡り、海軍カレー食べ比べ、造船所見学",
+    experiencesEn: "Naval port cruises, battleship tours, warehouse visits, curry tastings, shipyard tours"
+  },
+  {
+    id: 23,
+    region: "kanto",
+    wideArea: false,
+    jaTitle: "日本国創成のとき～飛鳥を翔た女性たち～",
+    enTitle: "Birth of Japan – Women Who Soared from Asuka",
+    jaLocation: "奈良県（明日香村ほか）、群馬県（高崎市）",
+    enLocation: "Nara (Asuka, etc.), Gunma (Takasaki)",
+    descriptionJa: "古代日本の中心地・飛鳥と、東国の上毛野氏の関係。推古天皇、持統天皇など女性が活躍した飛鳥時代の文化が、東国にも伝播した歴史を辿ります。",
+    descriptionEn: "Relationship between ancient capital Asuka and eastern Kamitsukenu clan. Culture of Asuka period when Empress Suiko and Jito were active spread to eastern regions.",
+    highlightsJa: ["飛鳥寺", "石舞台古墳", "上野三碑（群馬）", "山上碑"],
+    highlightsEn: ["Asukadera Temple", "Ishibutai Kofun", "Kozuke Sanpi (Gunma)", "Yamanoue Stele"],
+    experiencesJa: "古墳巡り、飛鳥歴史公園散策、石碑見学、古代米料理",
+    experiencesEn: "Kofun tours, Asuka historical park walks, stele visits, ancient rice cuisine"
+  },
+  {
+    id: 24,
+    region: "kanto",
+    wideArea: false,
+    jaTitle: "忍びの里 伊賀・甲賀－リアル忍者を求めて－",
+    enTitle: "Ninja Villages Iga and Koga – Seeking Real Ninjas",
+    jaLocation: "三重県（伊賀市）、滋賀県（甲賀市）、栃木県（日光市）",
+    enLocation: "Mie (Iga), Shiga (Koka), Tochigi (Nikko)",
+    descriptionJa: "本物の忍者の里、伊賀と甲賀。忍術の技、武器、屋敷の仕掛けを体験できます。日光にも甲賀忍者が関わった歴史があります。現代に息づく忍者文化を体感できます。",
+    descriptionEn: "Real ninja villages Iga and Koka. Experience ninja techniques, weapons, and mansion mechanisms. Nikko also has history with Koga ninjas. Feel ninja culture alive today.",
+    highlightsJa: ["伊賀流忍者博物館", "甲賀流忍術屋敷", "忍者体験道場", "日光東照宮"],
+    highlightsEn: ["Iga-ryu Ninja Museum", "Koka-ryu Ninja Mansion", "Ninja Experience Dojo", "Nikko Toshogu"],
+    experiencesJa: "忍者体験、手裏剣投げ、忍者ショー、からくり屋敷見学、忍者衣装レンタル",
+    experiencesEn: "Ninja experiences, shuriken throwing, ninja shows, trick mansion tours, ninja costume rental"
+  },
+  {
+    id: 25,
+    region: "kanto",
+    wideArea: false,
+    jaTitle: "江戸を造った男・太田道灌～平城・水城・山城が織りなす関東防衛網～",
+    enTitle: "Ota Dokan – Man Who Built Edo and Kanto Defense Network",
+    jaLocation: "埼玉県（川越市ほか）、東京都（千代田区ほか）",
+    enLocation: "Saitama (Kawagoe, etc.), Tokyo (Chiyoda, etc.)",
+    descriptionJa: "室町時代の武将・太田道灌が築いた城郭網。江戸城の前身を築き、川越城など関東の重要拠点を整備。戦国時代の関東防衛システムの基礎を作りました。",
+    descriptionEn: "Castle network built by Muromachi-period warrior Ota Dokan. Built predecessor of Edo Castle and established key Kanto bases like Kawagoe Castle. Created foundation of Kanto defense system.",
+    highlightsJa: ["江戸城跡", "川越城本丸御殿", "岩槻城址公園", "太田道灌像"],
+    highlightsEn: ["Edo Castle ruins", "Kawagoe Castle Honmaru", "Iwatsuki Castle Park", "Ota Dokan statue"],
+    experiencesJa: "城跡巡り、川越の蔵造り町並み散策、小江戸巡回バス、芋菓子、うなぎ",
+    experiencesEn: "Castle site tours, Kawagoe townscape walks, Little Edo bus, sweet potato sweets, eel"
+  },
+  {
+    id: 26,
+    region: "kanto",
+    wideArea: false,
+    jaTitle: "関東の耶馬溪 矢板の景勝地と那須疏水が育んだ農業・産業遺産",
+    enTitle: "Kanto's Yabakei – Yaita's Scenic Beauty and Nasu Canal Agricultural Heritage",
+    jaLocation: "栃木県（矢板市、那須塩原市）",
+    enLocation: "Tochigi (Yaita, Nasushiobara)",
+    descriptionJa: "那須野ヶ原の開拓を支えた那須疏水。不毛の原野を肥沃な農地に変えた明治の大事業。矢板の景勝地「おしらじの滝」など自然美と農業遺産が調和しています。",
+    descriptionEn: "Nasu Canal supporting Nasunogahara development. Meiji-era project transforming barren wilderness into fertile farmland. Natural beauty like Oshiraji Falls harmonizes with agricultural heritage.",
+    highlightsJa: ["那須疏水", "おしらじの滝", "那須野ヶ原博物館", "塩原温泉郷"],
+    highlightsEn: ["Nasu Canal", "Oshiraji Falls", "Nasunogahara Museum", "Shiobara Hot Springs"],
+    experiencesJa: "疏水見学、滝見学、農業体験、温泉めぐり、那須高原観光、御用邸チーズケーキ",
+    experiencesEn: "Canal tours, waterfall viewing, farming experiences, hot springs, Nasu Highland tours, cheesecake"
+  },
+  {
+    id: 27,
+    region: "kanto",
+    wideArea: false,
+    jaTitle: "教化を広めた諸国の廻国修験・念仏聖が残した石造物群",
+    enTitle: "Stone Monuments Left by Itinerant Ascetics and Buddhist Priests",
+    jaLocation: "群馬県（前橋市、高崎市ほか）",
+    enLocation: "Gunma (Maebashi, Takasaki, etc.)",
+    descriptionJa: "修験者や念仏聖が全国を巡って教えを広めた証として残した石造物。群馬県内に多数残る庚申塔、二十三夜塔など、民間信仰の歴史を物語る貴重な文化財です。",
+    descriptionEn: "Stone monuments left as proof of itinerant ascetics and Buddhist priests spreading teachings nationwide. Numerous Koshin towers and 23rd-night towers in Gunma tell folk religion history.",
+    highlightsJa: ["庚申塔", "二十三夜塔", "百庚申", "道祖神"],
+    highlightsEn: ["Koshin Towers", "23rd-night Towers", "Hundred Koshin", "Dosojin Deities"],
+    experiencesJa: "石造物巡り、民俗資料館見学、郷土料理、温泉、登山",
+    experiencesEn: "Stone monument tours, folk museum visits, local cuisine, hot springs, mountain climbing"
+  },
+  {
+    id: 28,
+    region: "kanto",
+    wideArea: false,
+    jaTitle: "日本最大の石の産地が生み出した「石の町」の文化～大谷石～",
+    enTitle: "Stone Town Culture Born from Japan's Largest Stone Production – Oya Stone",
+    jaLocation: "栃木県（宇都宮市）",
+    enLocation: "Tochigi (Utsunomiya)",
+    descriptionJa: "宇都宮の特産・大谷石。柔らかく加工しやすい石材として、建築や彫刻に使われてきました。大谷資料館では巨大な地下採掘場を見学でき、神秘的な空間を体験できます。",
+    descriptionEn: "Utsunomiya's specialty Oya stone. Soft and easy-to-process stone used in architecture and sculpture. Oya History Museum shows huge underground quarry, offering mystical space experience.",
+    highlightsJa: ["大谷資料館", "平和観音", "大谷寺", "大谷石建築群"],
+    highlightsEn: ["Oya History Museum", "Heiwa Kannon", "Oyaji Temple", "Oya Stone Architecture"],
+    experiencesJa: "大谷資料館見学、平和観音参拝、石の彫刻体験、餃子グルメ、カクテル",
+    experiencesEn: "Museum tours, Kannon visits, stone carving experiences, gyoza gourmet, cocktails"
+  },
+  {
+    id: 29,
+    region: "kanto",
+    wideArea: false,
+    jaTitle: "葵の御紋を掲げた東照宮と門前町～日光・鬼怒川～",
+    enTitle: "Toshogu with Aoi Crest and Temple Town – Nikko and Kinugawa",
+    jaLocation: "栃木県（日光市）",
+    enLocation: "Tochigi (Nikko)",
+    descriptionJa: "徳川家康を祀る日光東照宮。絢爛豪華な社殿建築は江戸幕府の権威を示します。世界遺産「日光の社寺」、鬼怒川温泉、華厳の滝など、自然と文化が融合した観光地です。",
+    descriptionEn: "Nikko Toshogu enshrining Tokugawa Ieyasu. Gorgeous shrine architecture shows Edo shogunate's authority. UNESCO World Heritage shrines and temples, Kinugawa hot springs, Kegon Falls fuse nature and culture.",
+    highlightsJa: ["日光東照宮", "華厳の滝", "中禅寺湖", "鬼怒川温泉"],
+    highlightsEn: ["Nikko Toshogu", "Kegon Falls", "Lake Chuzenji", "Kinugawa Hot Springs"],
+    experiencesJa: "東照宮参拝、華厳の滝見学、中禅寺湖遊覧、鬼怒川温泉、湯葉料理",
+    experiencesEn: "Toshogu visits, waterfall viewing, lake cruises, hot springs, yuba cuisine"
+  },
+  {
+    id: 30,
+    region: "kanto",
+    wideArea: false,
+    jaTitle: "関東の霊峰と信仰の道～筑波山・足尾山地～",
+    enTitle: "Sacred Mountains and Pilgrimage Routes of Kanto – Mt. Tsukuba and Ashio",
+    jaLocation: "茨城県（つくば市）、栃木県（日光市）",
+    enLocation: "Ibaraki (Tsukuba), Tochigi (Nikko)",
+    descriptionJa: "万葉集にも詠まれた筑波山は、関東平野を一望できる霊峰。男体山と女体山の双耳峰が特徴的です。足尾山地には古くからの修験道の道が残ります。",
+    descriptionEn: "Mt. Tsukuba, sacred mountain mentioned in Man'yoshu poetry collection, overlooks Kanto Plain. Distinctive twin peaks of male and female mountains. Ashio mountains preserve ancient ascetic pilgrimage routes.",
+    highlightsJa: ["筑波山", "筑波山神社", "ケーブルカー・ロープウェイ", "足尾銅山跡"],
+    highlightsEn: ["Mt. Tsukuba", "Tsukuba Shrine", "Cable Car/Ropeway", "Ashio Copper Mine ruins"],
+    experiencesJa: "筑波山登山、ケーブルカー、つくば温泉、JAXA見学、福来みかん",
+    experiencesEn: "Mountain climbing, cable car, Tsukuba hot springs, JAXA tours, fukure oranges"
+  },
+  {
+    id: 31,
+    region: "kanto",
+    wideArea: false,
+    jaTitle: "水戸の梅と偕楽園～日本三名園と水戸の歴史文化～",
+    enTitle: "Mito's Plums and Kairakuen – Three Great Gardens and Mito History",
+    jaLocation: "茨城県（水戸市）",
+    enLocation: "Ibaraki (Mito)",
+    descriptionJa: "日本三名園の一つ、偕楽園。約100品種3,000本の梅が咲き誇る梅の名所です。水戸藩主・徳川斉昭が「偕楽（ともに楽しむ）」の精神で作庭。弘道館など水戸学の遺産も魅力です。",
+    descriptionEn: "Kairakuen, one of Japan's Three Great Gardens. Famous plum spot with 3,000 trees of 100 varieties. Created by Mito Domain lord Tokugawa Nariaki with spirit of 'enjoying together.' Mitogaku school heritage also attractive.",
+    highlightsJa: ["偕楽園", "弘道館", "水戸城跡", "梅まつり"],
+    highlightsEn: ["Kairakuen Garden", "Kodokan School", "Mito Castle ruins", "Plum Festival"],
+    experiencesJa: "偕楽園散策、梅鑑賞、弘道館見学、水戸納豆、あんこう鍋",
+    experiencesEn: "Garden walks, plum viewing, school tours, Mito natto, angler fish hotpot"
+  },
+  {
+    id: 32,
+    region: "kanto",
+    wideArea: false,
+    jaTitle: "常陸国風土記の世界～古代常陸国の風景と物語～",
+    enTitle: "World of Hitachi Fudoki – Ancient Hitachi Province Landscapes and Stories",
+    jaLocation: "茨城県（石岡市ほか）",
+    enLocation: "Ibaraki (Ishioka, etc.)",
+    descriptionJa: "奈良時代に編纂された「常陸国風土記」。茨城県の地名の由来、神話、伝説が記されています。常陸国府跡、鹿島神宮など、風土記の舞台を訪ねる旅ができます。",
+    descriptionEn: "Hitachi Fudoki compiled in Nara period. Records Ibaraki place name origins, myths, and legends. Can journey to Fudoki stages like Hitachi Provincial Capital ruins and Kashima Shrine.",
+    highlightsJa: ["常陸国府跡", "鹿島神宮", "筑波山", "霞ヶ浦"],
+    highlightsEn: ["Hitachi Capital ruins", "Kashima Shrine", "Mt. Tsukuba", "Lake Kasumigaura"],
+    experiencesJa: "史跡巡り、鹿島神宮参拝、筑波山登山、霞ヶ浦サイクリング、常陸牛",
+    experiencesEn: "Historic site tours, shrine visits, mountain climbing, lake cycling, Hitachi beef"
+  },
+  {
+    id: 33,
+    region: "kanto",
+    wideArea: false,
+    jaTitle: "日本磁器のふるさと 肥前～百花繚乱のやきもの散歩～",
+    enTitle: "Hizen – Birthplace of Japanese Porcelain",
+    jaLocation: "佐賀県（有田町ほか）、東京都（墨田区）",
+    enLocation: "Saga (Arita, etc.), Tokyo (Sumida)",
+    descriptionJa: "日本磁器発祥の地・有田。江戸時代、有田焼はヨーロッパにも輸出され「IMARI」として世界を魅了しました。東京・墨田区にも江戸切子など伝統工芸が息づきます。",
+    descriptionEn: "Arita, birthplace of Japanese porcelain. In Edo period, Arita-yaki exported to Europe as 'IMARI' fascinated world. Tokyo's Sumida also has traditional crafts like Edo Kiriko cut glass.",
+    highlightsJa: ["有田陶磁美術館", "陶山神社", "墨田江戸切子館", "やきもの散歩道"],
+    highlightsEn: ["Arita Ceramic Museum", "Tozan Shrine", "Sumida Edo Kiriko Museum", "Pottery walk"],
+    experiencesJa: "有田焼絵付け体験、窯元巡り、江戸切子体験、スカイツリー、もんじゃ焼き",
+    experiencesEn: "Arita-yaki painting, kiln tours, Kiriko experiences, Skytree, monjayaki"
+  },
+  {
+    id: 34,
+    region: "kanto",
+    wideArea: false,
+    jaTitle: "葛飾北斎が描いた浮世絵の世界～富嶽三十六景と東海道五十三次～",
+    enTitle: "Ukiyo-e World Depicted by Katsushika Hokusai",
+    jaLocation: "東京都（墨田区）、神奈川県（横浜市）、静岡県（富士市）",
+    enLocation: "Tokyo (Sumida), Kanagawa (Yokohama), Shizuoka (Fuji)",
+    descriptionJa: "葛飾北斎の「富嶽三十六景」をはじめとする浮世絵の舞台。江戸から東海道、富士山まで、北斎が描いた風景を巡る旅。すみだ北斎美術館では作品の世界に浸れます。",
+    descriptionEn: "Ukiyo-e stages including Hokusai's 'Thirty-six Views of Mt. Fuji.' Journey through landscapes Hokusai depicted from Edo to Tokaido and Mt. Fuji. Sumida Hokusai Museum immerses in his work world.",
+    highlightsJa: ["すみだ北斎美術館", "富士山本宮浅間大社", "江の島", "富士山"],
+    highlightsEn: ["Sumida Hokusai Museum", "Fujisan Hongu Sengen Shrine", "Enoshima", "Mt. Fuji"],
+    experiencesJa: "北斎美術館見学、富士山眺望、江の島観光、浮世絵体験、江戸前寿司",
+    experiencesEn: "Museum tours, Mt. Fuji views, Enoshima tourism, ukiyo-e experiences, Edomae sushi"
+  },
+  {
+    id: 35,
+    region: "kanto",
+    wideArea: false,
+    jaTitle: "江戸・東京の文化を今に伝える下町～浅草・谷中・神楽坂～",
+    enTitle: "Downtown Areas Conveying Edo-Tokyo Culture Today",
+    jaLocation: "東京都（台東区、文京区、新宿区）",
+    enLocation: "Tokyo (Taito, Bunkyo, Shinjuku)",
+    descriptionJa: "江戸情緒が残る下町エリア。浅草寺、仲見世、谷中の路地、神楽坂の石畳。それぞれが異なる魅力を持ち、江戸から続く文化と現代が共存しています。",
+    descriptionEn: "Downtown areas retaining Edo atmosphere. Sensoji Temple, Nakamise, Yanaka alleys, Kagurazaka cobblestones. Each has distinct charm where Edo-period culture and modernity coexist.",
+    highlightsJa: ["浅草寺", "仲見世", "谷中銀座", "神楽坂"],
+    highlightsEn: ["Sensoji Temple", "Nakamise Shopping", "Yanaka Ginza", "Kagurazaka"],
+    experiencesJa: "浅草寺参拝、人力車、谷中墓地散策、神楽坂グルメ、もんじゃ焼き",
+    experiencesEn: "Temple visits, rickshaw rides, cemetery walks, Kagurazaka gourmet, monjayaki"
+  },
+  {
+    id: 36,
+    region: "kanto",
+    wideArea: false,
+    jaTitle: "「東京の奥座敷」箱根・小田原～温泉と歴史の町～",
+    enTitle: "Hakone and Odawara – Tokyo's Inner Parlor of Hot Springs and History",
+    jaLocation: "神奈川県（箱根町、小田原市）",
+    enLocation: "Kanagawa (Hakone, Odawara)",
+    descriptionJa: "江戸時代から続く温泉地・箱根と、北条氏の城下町・小田原。芦ノ湖、大涌谷、箱根彫刻の森美術館、小田原城など見どころ満載。東京から日帰りでも楽しめる観光地です。",
+    descriptionEn: "Hot spring resort Hakone continuing from Edo period and castle town Odawara of Hojo clan. Attractions include Lake Ashi, Owakudani, Hakone Open-Air Museum, Odawara Castle. Tourist spot enjoyable as day trip from Tokyo.",
+    highlightsJa: ["箱根温泉", "芦ノ湖", "大涌谷", "小田原城"],
+    highlightsEn: ["Hakone Hot Springs", "Lake Ashi", "Owakudani", "Odawara Castle"],
+    experiencesJa: "温泉、芦ノ湖遊覧船、ロープウェイ、美術館巡り、かまぼこ、小田原おでん",
+    experiencesEn: "Hot springs, lake cruises, ropeway, museum tours, kamaboko, Odawara oden"
+  },
+  {
+    id: 37,
+    region: "kanto",
+    wideArea: false,
+    jaTitle: "「いざ、鎌倉」武家の古都の面影を今に～鎌倉・江の島～",
+    enTitle: "Let's Go to Kamakura – Traces of Ancient Samurai Capital",
+    jaLocation: "神奈川県（鎌倉市、藤沢市）",
+    enLocation: "Kanagawa (Kamakura, Fujisawa)",
+    descriptionJa: "日本初の武家政権の都・鎌倉。鶴岡八幡宮、大仏、円覚寺、建長寺など歴史的建造物が点在。江の島とセットで訪れるのが定番。湘南の海と古都の風情を満喫できます。",
+    descriptionEn: "Kamakura, capital of Japan's first samurai government. Historical buildings scattered including Tsurugaoka Hachimangu, Great Buddha, Engakuji, Kenchoji temples. Standard to visit with Enoshima. Enjoy Shonan coast and ancient capital atmosphere.",
+    highlightsJa: ["鶴岡八幡宮", "鎌倉大仏", "円覚寺", "江の島"],
+    highlightsEn: ["Tsurugaoka Hachimangu", "Great Buddha", "Engakuji Temple", "Enoshima"],
+    experiencesJa: "寺社巡り、鎌倉ハイキング、江の島観光、江ノ電、しらす丼",
+    experiencesEn: "Temple tours, Kamakura hiking, Enoshima tourism, Enoden train, shirasu rice bowl"
   },
 
-  // 残りのストーリー15-118も同様の形式で追加...
-  // スペースの都合上、パターンを示すため最初の14件のみ記載していますが、
-  // 実際のファイルには全118件のデータが含まれます
+  // 中部 (38-60)
+  {
+    id: 38,
+    region: "chubu",
+    wideArea: false,
+    jaTitle: "「なんだ、コレは!」信濃川流域の火焔型土器と雪国の文化",
+    enTitle: "Flame-style Pottery and Snow Country Culture along Shinano River",
+    jaLocation: "新潟県（長岡市、十日町市、津南町）",
+    enLocation: "Niigata (Nagaoka, Tokamachi, Tsunan)",
+    descriptionJa: "縄文時代の傑作・火焔型土器。新潟県の信濃川流域で多数出土し、その芸術性の高さから国宝に指定されています。雪国の厳しい自然環境が生んだ独特の文化です。",
+    descriptionEn: "Masterpiece flame-style pottery from Jomon period. Many excavated along Shinano River in Niigata, designated National Treasure for high artistry. Unique culture born from harsh snow country environment.",
+    highlightsJa: ["十日町市博物館", "津南町歴史民俗資料館", "火焔型土器", "妻有の大地の芸術祭"],
+    highlightsEn: ["Tokamachi Museum", "Tsunan History Museum", "Flame-style pottery", "Echigo-Tsumari Art Triennale"],
+    experiencesJa: "火焔型土器見学、大地の芸術祭、棚田観光、へぎそば、魚沼産コシヒカリ",
+    experiencesEn: "Pottery viewing, art festival, terraced rice fields, hegisoba, Uonuma Koshihikari rice"
+  },
+  {
+    id: 39,
+    region: "chubu",
+    wideArea: false,
+    jaTitle: "「越後上布」雪国の匠の技～麻織物の最高峰～",
+    enTitle: "Echigo-jofu – Snow Country Artisan Skills, Pinnacle of Hemp Textiles",
+    jaLocation: "新潟県（南魚沼市、十日町市）",
+    enLocation: "Niigata (Minami-Uonuma, Tokamachi)",
+    descriptionJa: "ユネスコ無形文化遺産の越後上布。雪国の気候を活かした麻織物で、白さと軽さが特徴。伝統技法「雪さらし」は雪上に布を広げ太陽光で漂白する独特の技術です。",
+    descriptionEn: "UNESCO Intangible Heritage Echigo-jofu. Hemp textile utilizing snow country climate, characterized by whiteness and lightness. Traditional 'yuki-sarashi' technique uniquely bleaches cloth spread on snow by sunlight.",
+    highlightsJa: ["越後上布", "雪さらし", "塩沢つむぎ記念館", "八海山"],
+    highlightsEn: ["Echigo-jofu textiles", "Snow bleaching", "Shiozawa Tsumugi Museum", "Mt. Hakkaisan"],
+    experiencesJa: "織物見学、雪さらし見学、日本酒蔵元訪問、へぎそば、温泉",
+    experiencesEn: "Textile viewing, snow bleaching observation, sake brewery visits, hegisoba, hot springs"
+  },
+  {
+    id: 40,
+    region: "chubu",
+    wideArea: false,
+    jaTitle: "「佐渡金山」金の島の遺産と文化",
+    enTitle: "Sado Gold Mine – Heritage and Culture of Gold Island",
+    jaLocation: "新潟県（佐渡市）",
+    enLocation: "Niigata (Sado)",
+    descriptionJa: "江戸幕府の財政を支えた佐渡金山。最盛期には年間400kgの金を産出。坑道見学では江戸時代の採掘の様子を人形で再現。たらい舟、能舞台など独特の島文化も魅力です。",
+    descriptionEn: "Sado Gold Mine supporting Edo shogunate finances. At peak, produced 400kg gold annually. Mine tunnel tours show Edo-period mining with mannequins. Unique island culture including tarai boats and Noh stages attractive.",
+    highlightsJa: ["佐渡金山", "たらい舟", "佐渡の能舞台", "トキの森公園"],
+    highlightsEn: ["Sado Gold Mine", "Tarai boats", "Sado Noh stages", "Toki Forest Park"],
+    experiencesJa: "金山坑道見学、砂金採り体験、たらい舟、能鑑賞、海鮮丼、日本酒",
+    experiencesEn: "Mine tours, gold panning, tarai boats, Noh viewing, seafood bowls, sake"
+  },
+  {
+    id: 41,
+    region: "chubu",
+    wideArea: false,
+    jaTitle: "「立山・黒部」～大自然の恵みと人々の暮らし～",
+    enTitle: "Tateyama-Kurobe – Natural Blessings and People's Lives",
+    jaLocation: "富山県（立山町、黒部市）",
+    enLocation: "Toyama (Tateyama, Kurobe)",
+    descriptionJa: "立山連峰と黒部峡谷の雄大な自然。黒部ダム、立山黒部アルペンルート、雪の大谷など見どころ満載。山岳信仰と近代土木技術が共存する独特の景観です。",
+    descriptionEn: "Grand nature of Tateyama mountain range and Kurobe Gorge. Attractions include Kurobe Dam, Tateyama-Kurobe Alpine Route, Snow Wall. Unique landscape where mountain worship and modern civil engineering coexist.",
+    highlightsJa: ["黒部ダム", "立山黒部アルペンルート", "雪の大谷", "弥陀ヶ原"],
+    highlightsEn: ["Kurobe Dam", "Alpine Route", "Snow Wall", "Midagahara"],
+    experiencesJa: "アルペンルート、黒部峡谷鉄道、立山登山、温泉、白エビ料理、ますの寿司",
+    experiencesEn: "Alpine Route, Kurobe Gorge Railway, Tateyama climbing, hot springs, white shrimp, trout sushi"
+  },
+  {
+    id: 42,
+    region: "chubu",
+    wideArea: false,
+    jaTitle: "「越中売薬」くすりの富山の歴史と文化",
+    enTitle: "Etchu Medicine Peddling – History and Culture of Medicine Toyama",
+    jaLocation: "富山県（富山市）",
+    enLocation: "Toyama (Toyama)",
+    descriptionJa: "300年以上の歴史を持つ越中売薬。「先用後利」（先に使ってもらい後で代金をもらう）という独特の商法で全国に広まりました。配置薬の伝統は今も続いています。",
+    descriptionEn: "Etchu medicine peddling with over 300 years of history. Spread nationwide with unique business method 'sen'yo-kori' (use first, pay later). Household medicine tradition continues today.",
+    highlightsJa: ["池田屋安兵衛商店", "広貫堂資料館", "富山市ガラス美術館", "富山城"],
+    highlightsEn: ["Ikedaya Yasubei Shop", "Kokando Museum", "Toyama Glass Art Museum", "Toyama Castle"],
+    experiencesJa: "配置薬資料館見学、反魂丹作り体験、ガラス工芸、白エビ料理、ます寿司",
+    experiencesEn: "Medicine museum tours, Hankontan making, glass crafts, white shrimp, trout sushi"
+  },
+  {
+    id: 43,
+    region: "chubu",
+    wideArea: false,
+    jaTitle: "「加賀百万石」文化が花開いた城下町金沢",
+    enTitle: "Kaga Million Koku – Kanazawa Castle Town Where Culture Flourished",
+    jaLocation: "石川県（金沢市）",
+    enLocation: "Ishikawa (Kanazawa)",
+    descriptionJa: "前田家が治めた加賀百万石の城下町。兼六園、金沢城、茶屋街、金箔工芸など、加賀藩の文化遺産が今も息づきます。金箔生産は日本一で、金箔ソフトクリームも名物です。",
+    descriptionEn: "Castle town of Kaga Million Koku ruled by Maeda family. Cultural heritage of Kaga Domain thrives including Kenrokuen Garden, Kanazawa Castle, teahouse districts, gold leaf crafts. Leading gold leaf production, famous for gold leaf soft cream.",
+    highlightsJa: ["兼六園", "金沢城", "ひがし茶屋街", "金箔工芸"],
+    highlightsEn: ["Kenrokuen Garden", "Kanazawa Castle", "Higashi Chaya District", "Gold Leaf Crafts"],
+    experiencesJa: "兼六園散策、茶屋街巡り、金箔貼り体験、近江町市場、金箔ソフト、治部煮",
+    experiencesEn: "Garden walks, teahouse district tours, gold leaf experiences, Omicho Market, gold soft cream, jibu-ni"
+  },
+  {
+    id: 44,
+    region: "chubu",
+    wideArea: false,
+    jaTitle: "「輪島塗」漆の里が育んだ伝統工芸",
+    enTitle: "Wajima-nuri – Traditional Craft Nurtured by Lacquer Village",
+    jaLocation: "石川県（輪島市）",
+    enLocation: "Ishikawa (Wajima)",
+    descriptionJa: "日本を代表する漆器・輪島塗。124もの工程を経て完成する堅牢で美しい漆器。輪島朝市、白米千枚田、能登半島の景観も魅力。2024年能登半島地震からの復興を応援したい地域です。",
+    descriptionEn: "Representative Japanese lacquerware Wajima-nuri. Durable and beautiful lacquerware completed through 124 processes. Wajima morning market, Shiroyone Senmaida terraced rice fields, Noto Peninsula scenery attractive. Region supporting recovery from 2024 Noto earthquake.",
+    highlightsJa: ["輪島塗", "輪島朝市", "白米千枚田", "能登半島"],
+    highlightsEn: ["Wajima-nuri Lacquerware", "Wajima Morning Market", "Senmaida Terraced Fields", "Noto Peninsula"],
+    experiencesJa: "輪島塗見学、漆器制作体験、朝市散策、千枚田見学、海鮮丼、能登牛",
+    experiencesEn: "Lacquerware viewing, making experiences, morning market walks, terraced fields, seafood bowls, Noto beef"
+  },
+  {
+    id: 45,
+    region: "chubu",
+    wideArea: false,
+    jaTitle: "「白山信仰」霊峰白山の山岳信仰と文化",
+    enTitle: "Hakusan Faith – Mountain Worship and Culture of Sacred Mt. Hakusan",
+    jaLocation: "石川県（白山市）、福井県（勝山市）、岐阜県（白川村）",
+    enLocation: "Ishikawa (Hakusan), Fukui (Katsuyama), Gifu (Shirakawa)",
+    descriptionJa: "富士山、立山と並ぶ日本三霊山の一つ。白山信仰は古代から続き、白山比咩神社を総本宮とする全国2千社の白山神社があります。白山麓の温泉や手取峡谷も魅力です。",
+    descriptionEn: "One of Japan's Three Sacred Mountains alongside Mt. Fuji and Tateyama. Hakusan faith continuing from ancient times, with 2,000 Hakusan shrines nationwide having Shirayama Hime Shrine as head shrine. Hot springs at mountain foot and Tedori Gorge attractive.",
+    highlightsJa: ["白山比咩神社", "白山", "手取峡谷", "白山温泉郷"],
+    highlightsEn: ["Shirayama Hime Shrine", "Mt. Hakusan", "Tedori Gorge", "Hakusan Hot Springs"],
+    experiencesJa: "白山登山、白山比咩神社参拝、温泉、手取峡谷散策、加賀料理",
+    experiencesEn: "Mountain climbing, shrine visits, hot springs, gorge walks, Kaga cuisine"
+  },
+  {
+    id: 46,
+    region: "chubu",
+    wideArea: false,
+    jaTitle: "「一乗谷朝倉氏遺跡」戦国大名の夢の跡",
+    enTitle: "Ichijodani Asakura Clan Ruins – Traces of Warring States Daimyo's Dream",
+    jaLocation: "福井県（福井市）",
+    enLocation: "Fukui (Fukui)",
+    descriptionJa: "戦国時代、103年間栄えた朝倉氏の城下町。発掘調査で町並みがそのまま出土し、復元町並みでは戦国時代にタイムスリップ。日本のポンペイとも呼ばれる貴重な遺跡です。",
+    descriptionEn: "Castle town of Asakura clan prosperous for 103 years in Warring States period. Excavation unearthed townscape intact, reconstructed streets offer time-slip to period. Precious ruins called Japan's Pompeii.",
+    highlightsJa: ["一乗谷朝倉氏遺跡", "復元町並み", "朝倉館跡庭園", "福井城址"],
+    highlightsEn: ["Ichijodani Asakura Ruins", "Reconstructed Townscape", "Asakura Mansion Garden", "Fukui Castle Site"],
+    experiencesJa: "遺跡見学、復元町並み散策、越前そば、ソースカツ丼、羽二重餅",
+    experiencesEn: "Ruin tours, townscape walks, Echizen soba, sauce katsudon, habutae mochi"
+  },
+  {
+    id: 47,
+    region: "chubu",
+    wideArea: false,
+    jaTitle: "「越前和紙」1500年の伝統を誇る紙の里",
+    enTitle: "Echizen Washi – Paper Village Boasting 1,500 Years of Tradition",
+    jaLocation: "福井県（越前市）",
+    enLocation: "Fukui (Echizen)",
+    descriptionJa: "奈良時代から続く越前和紙。日本の公用紙として使われ、紙幣や卒業証書にも採用されています。越前和紙の里では紙すき体験ができ、伝統技術を間近で見られます。",
+    descriptionEn: "Echizen washi continuing from Nara period. Used as Japan's official paper, adopted for banknotes and diplomas. At Echizen Washi Village, can experience papermaking and see traditional techniques up close.",
+    highlightsJa: ["越前和紙の里", "パピルス館", "紙すき体験", "岡太神社・大瀧神社"],
+    highlightsEn: ["Echizen Washi Village", "Papyrus Museum", "Papermaking Experience", "Okamoto-Otaki Shrines"],
+    experiencesJa: "紙すき体験、和紙工房見学、越前そば、ソースカツ丼、羽二重餅",
+    experiencesEn: "Papermaking experiences, washi workshop tours, Echizen soba, sauce katsudon, habutae mochi"
+  },
+  {
+    id: 48,
+    region: "chubu",
+    wideArea: false,
+    jaTitle: "「木曽路」中山道六十九次の宿場町",
+    enTitle: "Kisoji – Post Towns of Nakasendo's 69 Stations",
+    jaLocation: "長野県（木曽町、南木曽町ほか）",
+    enLocation: "Nagano (Kiso, Nagiso, etc.)",
+    descriptionJa: "江戸時代の五街道の一つ・中山道。木曽路には妻籠宿、馬籠宿など江戸時代の宿場町の姿が残ります。木曽檜の森林、寝覚の床の奇岩、御嶽山信仰など自然と文化が魅力です。",
+    descriptionEn: "Nakasendo, one of Edo period's Five Routes. Kisoji preserves Edo-period post towns like Tsumago-juku and Magome-juku. Attractions include Kiso hinoki cypress forests, Nezame-no-toko rock formations, Mt. Ontake worship.",
+    highlightsJa: ["妻籠宿", "馬籠宿", "奈良井宿", "寝覚の床"],
+    highlightsEn: ["Tsumago-juku", "Magome-juku", "Narai-juku", "Nezame-no-toko"],
+    experiencesJa: "宿場町散策、中山道ハイキング、木曽檜工芸品、五平餅、そば、温泉",
+    experiencesEn: "Post town walks, Nakasendo hiking, Kiso hinoki crafts, gohei mochi, soba, hot springs"
+  },
+  {
+    id: 49,
+    region: "chubu",
+    wideArea: false,
+    jaTitle: "「善光寺」一光三尊の阿弥陀如来",
+    enTitle: "Zenkoji – Amida Triad Buddha Temple",
+    jaLocation: "長野県（長野市）",
+    enLocation: "Nagano (Nagano)",
+    descriptionJa: "「一生に一度は善光寺詣り」と言われる信州の名刹。無宗派で誰でも参拝できる開かれた寺。本堂は国宝で、地下の「お戒壇巡り」は真っ暗な回廊を歩く独特の体験です。",
+    descriptionEn: "Famous Shinshu temple where saying goes 'Visit Zenkoji once in lifetime.' Non-sectarian temple open to all. Main hall is National Treasure, underground 'Okaidan Meguri' offers unique experience walking pitch-dark corridor.",
+    highlightsJa: ["善光寺本堂", "お戒壇巡り", "仁王門", "門前町"],
+    highlightsEn: ["Zenkoji Main Hall", "Okaidan Meguri", "Niomon Gate", "Temple Town"],
+    experiencesJa: "善光寺参拝、お戒壇巡り、門前町散策、そば、おやき、野沢菜",
+    experiencesEn: "Temple visits, Okaidan experience, temple town walks, soba, oyaki, nozawana pickles"
+  },
+  {
+    id: 50,
+    region: "chubu",
+    wideArea: false,
+    jaTitle: "「諏訪大社」日本最古の神社の一つ",
+    enTitle: "Suwa Taisha – One of Japan's Oldest Shrines",
+    jaLocation: "長野県（諏訪市、茅野市）",
+    enLocation: "Nagano (Suwa, Chino)",
+    descriptionJa: "全国に1万社以上ある諏訪神社の総本社。7年に一度の御柱祭は、巨木を山から曳き下ろす勇壮な祭り。本殿を持たず、御神体を山や木とする古代の信仰形態を残しています。",
+    descriptionEn: "Head shrine of over 10,000 Suwa shrines nationwide. Once-every-seven-years Onbashira Festival is brave festival dragging huge logs down mountain. Preserves ancient faith form having no main hall, with mountains and trees as sacred objects.",
+    highlightsJa: ["諏訪大社四社", "御柱祭", "諏訪湖", "高島城"],
+    highlightsEn: ["Four Suwa Taisha Shrines", "Onbashira Festival", "Lake Suwa", "Takashima Castle"],
+    experiencesJa: "諏訪大社参拝、諏訪湖観光、温泉、信州そば、寒天料理、日本酒",
+    experiencesEn: "Shrine visits, Lake Suwa tourism, hot springs, Shinshu soba, kanten cuisine, sake"
+  },
+  {
+    id: 51,
+    region: "chubu",
+    wideArea: false,
+    jaTitle: "「松本城」国宝の名城と城下町",
+    enTitle: "Matsumoto Castle – National Treasure Castle and Castle Town",
+    jaLocation: "長野県（松本市）",
+    enLocation: "Nagano (Matsumoto)",
+    descriptionJa: "現存12天守の一つで国宝。黒い外観から「烏城（からすじょう）」とも呼ばれます。北アルプスを背景にした姿は日本を代表する美しい風景。城下町には蔵造りの町並みが残ります。",
+    descriptionEn: "One of 12 existing castle towers, National Treasure. Called 'Karasu-jo (Crow Castle)' for black appearance. Silhouette against Northern Alps is iconic beautiful Japanese scenery. Castle town preserves storehouse-style townscape.",
+    highlightsJa: ["松本城", "中町通り", "旧開智学校", "上高地"],
+    highlightsEn: ["Matsumoto Castle", "Nakamachi Street", "Former Kaichi School", "Kamikochi"],
+    experiencesJa: "松本城見学、城下町散策、上高地トレッキング、そば、山賊焼き、温泉",
+    experiencesEn: "Castle tours, castle town walks, Kamikochi trekking, soba, sanzoku-yaki, hot springs"
+  },
+  {
+    id: 52,
+    region: "chubu",
+    wideArea: false,
+    jaTitle: "「上高地」北アルプスの宝石",
+    enTitle: "Kamikochi – Jewel of Northern Alps",
+    jaLocation: "長野県（松本市）",
+    enLocation: "Nagano (Matsumoto)",
+    descriptionJa: "標高1,500mの山岳景勝地。梓川の清流、河童橋、大正池、穂高連峰の絶景。日本近代登山の父ウォルター・ウェストンが愛した美しい山岳リゾート。マイカー規制で自然が守られています。",
+    descriptionEn: "Mountain scenic area at 1,500m elevation. Azusa River clear stream, Kappa Bridge, Taisho Pond, spectacular Hotaka mountain range views. Beautiful mountain resort loved by Walter Weston, father of modern Japanese mountaineering. Nature protected by private car restrictions.",
+    highlightsJa: ["河童橋", "大正池", "明神池", "穂高連峰"],
+    highlightsEn: ["Kappa Bridge", "Taisho Pond", "Myojin Pond", "Hotaka Range"],
+    experiencesJa: "上高地散策、トレッキング、山岳リゾートホテル、登山、温泉",
+    experiencesEn: "Kamikochi walks, trekking, mountain resort hotels, climbing, hot springs"
+  },
+  {
+    id: 53,
+    region: "chubu",
+    wideArea: false,
+    jaTitle: "「飛騨高山」小京都の風情と飛騨の匠",
+    enTitle: "Hida-Takayama – Little Kyoto Atmosphere and Hida Craftsmen",
+    jaLocation: "岐阜県（高山市）",
+    enLocation: "Gifu (Takayama)",
+    descriptionJa: "江戸時代の町並みが残る「飛騨の小京都」。朝市、古い町並、高山祭の屋台。飛騨の匠の技術は奈良の都造営にも貢献。飛騨牛、朴葉味噌など郷土料理も魅力です。",
+    descriptionEn: "Hida's Little Kyoto preserving Edo-period townscape. Morning markets, old townscape, Takayama Festival floats. Hida craftsmen's skills contributed to Nara capital construction. Local cuisine like Hida beef and hoba miso attractive.",
+    highlightsJa: ["古い町並", "高山陣屋", "高山祭屋台会館", "飛騨の里"],
+    highlightsEn: ["Old Townscape", "Takayama Jinya", "Festival Float Museum", "Hida Folk Village"],
+    experiencesJa: "古い町並散策、朝市、飛騨牛、朴葉味噌、高山ラーメン、日本酒",
+    experiencesEn: "Old town walks, morning markets, Hida beef, hoba miso, Takayama ramen, sake"
+  },
+  {
+    id: 54,
+    region: "chubu",
+    wideArea: false,
+    jaTitle: "「白川郷・五箇山」合掌造り集落",
+    enTitle: "Shirakawa-go and Gokayama – Gassho-style Villages",
+    jaLocation: "岐阜県（白川村）、富山県（南砺市）",
+    enLocation: "Gifu (Shirakawa), Toyama (Nanto)",
+    descriptionJa: "世界遺産の合掌造り集落。急勾配の茅葺き屋根は豪雪地帯に適応した伝統建築。冬の雪景色、春の新緑、秋の紅葉と四季折々の美しさ。民宿に泊まり、伝統的な暮らしを体験できます。",
+    descriptionEn: "UNESCO World Heritage gassho-style villages. Steep thatched roofs are traditional architecture adapted to heavy snow regions. Beautiful in all seasons: winter snow scenes, spring greenery, autumn foliage. Can stay at minshuku and experience traditional lifestyle.",
+    highlightsJa: ["白川郷合掌造り集落", "五箇山", "展望台", "どぶろく祭り"],
+    highlightsEn: ["Shirakawa-go Village", "Gokayama", "Observation Decks", "Doburoku Festival"],
+    experiencesJa: "合掌造り見学、民宿宿泊、展望台、そば、飛騨牛、どぶろく",
+    experiencesEn: "Gassho-style viewing, minshuku stays, observation decks, soba, Hida beef, doburoku sake"
+  },
+  {
+    id: 55,
+    region: "chubu",
+    wideArea: false,
+    jaTitle: "「美濃和紙」1300年の伝統を誇る和紙の里",
+    enTitle: "Mino Washi – Washi Village Boasting 1,300 Years of Tradition",
+    jaLocation: "岐阜県（美濃市）",
+    enLocation: "Gifu (Mino)",
+    descriptionJa: "ユネスコ無形文化遺産の美濃和紙。薄くて強靭、美しい紙は障子紙として最高級品。うだつの上がる町並みは江戸時代の商家の繁栄を伝えます。毎年10月の美濃まつりでは花みこしが有名です。",
+    descriptionEn: "UNESCO Intangible Heritage Mino washi. Thin, strong, and beautiful paper is premium grade for shoji screens. Udatsu townscape conveys Edo-period merchant prosperity. October Mino Festival famous for flower portable shrines.",
+    highlightsJa: ["うだつの上がる町並み", "美濃和紙の里会館", "紙すき体験", "美濃まつり"],
+    highlightsEn: ["Udatsu Townscape", "Mino Washi Museum", "Papermaking Experience", "Mino Festival"],
+    experiencesJa: "紙すき体験、うだつの町並み散策、和紙製品ショッピング、鮎料理",
+    experiencesEn: "Papermaking experiences, townscape walks, washi product shopping, ayu cuisine"
+  },
+  {
+    id: 56,
+    region: "chubu",
+    wideArea: false,
+    jaTitle: "「関ケ原」天下分け目の戦いの地",
+    enTitle: "Sekigahara – Site of Battle that Divided the Realm",
+    jaLocation: "岐阜県（関ケ原町）",
+    enLocation: "Gifu (Sekigahara)",
+    descriptionJa: "1600年、徳川家康と石田三成が激突した天下分け目の戦い。わずか6時間の戦いで日本の歴史が決まりました。各武将の陣跡が残り、戦国時代の息吹を感じられます。",
+    descriptionEn: "1600 decisive Battle of Sekigahara where Tokugawa Ieyasu clashed with Ishida Mitsunari. Japan's history decided in mere 6-hour battle. Each commander's camp sites remain, feeling Warring States period atmosphere.",
+    highlightsJa: ["関ケ原古戦場", "笹尾山", "関ケ原ウォーランド", "陣跡"],
+    highlightsEn: ["Sekigahara Battlefield", "Sasaoyama", "Sekigahara Warland", "Camp Sites"],
+    experiencesJa: "古戦場巡り、関ケ原ウォーランド、陣跡見学、鮎料理、柿羊羹",
+    experiencesEn: "Battlefield tours, Warland, camp site visits, ayu cuisine, persimmon yokan"
+  },
+  {
+    id: 57,
+    region: "chubu",
+    wideArea: false,
+    jaTitle: "「伊勢神宮」日本人の心のふるさと",
+    enTitle: "Ise Jingu – Spiritual Homeland of Japanese People",
+    jaLocation: "三重県（伊勢市）",
+    enLocation: "Mie (Ise)",
+    descriptionJa: "天照大御神を祀る日本最高の聖地。内宮・外宮の参拝、おかげ横丁の散策。20年に一度の式年遷宮で社殿を建て替え、常に新しく美しい姿を保ちます。お伊勢参りは江戸時代から庶民の憧れでした。",
+    descriptionEn: "Japan's supreme sacred site enshrining Amaterasu Omikami. Visiting inner and outer shrines, walking Okage Yokocho. Shikinen Sengu rebuilds shrine buildings every 20 years, maintaining eternally new and beautiful appearance. Ise pilgrimage was commoners' aspiration from Edo period.",
+    highlightsJa: ["伊勢神宮内宮", "伊勢神宮外宮", "おかげ横丁", "二見興玉神社"],
+    highlightsEn: ["Ise Jingu Inner Shrine", "Outer Shrine", "Okage Yokocho", "Futami Okitama Shrine"],
+    experiencesJa: "伊勢神宮参拝、おかげ横丁散策、赤福、伊勢うどん、松阪牛、海鮮",
+    experiencesEn: "Shrine visits, Okage Yokocho walks, akafuku, Ise udon, Matsusaka beef, seafood"
+  },
+  {
+    id: 58,
+    region: "chubu",
+    wideArea: false,
+    jaTitle: "「熊野古道」よみがえりの聖地",
+    enTitle: "Kumano Kodo – Sacred Land of Rebirth",
+    jaLocation: "三重県（熊野市ほか）、和歌山県",
+    enLocation: "Mie (Kumano, etc.), Wakayama",
+    descriptionJa: "世界遺産の熊野古道。伊勢から熊野三山へ至る巡礼路。石畳の道、杉木立、苔むした石仏。歩くことで心身が浄化される「よみがえりの旅」。熊野本宮大社、速玉大社、那智大社を巡ります。",
+    descriptionEn: "UNESCO World Heritage Kumano Kodo. Pilgrimage route from Ise to three Kumano shrines. Stone-paved paths, cedar groves, moss-covered stone Buddhas. 'Rebirth journey' purifying body and mind through walking. Visit Hongu, Hayatama, and Nachi Grand Shrines.",
+    highlightsJa: ["熊野古道伊勢路", "熊野本宮大社", "那智の滝", "花の窟神社"],
+    highlightsEn: ["Kumano Kodo Iseji", "Kumano Hongu Taisha", "Nachi Falls", "Hananoiwaya Shrine"],
+    experiencesJa: "熊野古道ハイキング、熊野三山参拝、温泉、めはり寿司、さんま寿司",
+    experiencesEn: "Kumano Kodo hiking, three shrines visits, hot springs, mehari sushi, saury sushi"
+  },
+  {
+    id: 59,
+    region: "chubu",
+    wideArea: false,
+    jaTitle: "「鳥羽・志摩」海女の文化と真珠のふるさと",
+    enTitle: "Toba-Shima – Ama Diver Culture and Pearl Homeland",
+    jaLocation: "三重県（鳥羽市、志摩市）",
+    enLocation: "Mie (Toba, Shima)",
+    descriptionJa: "海女の伝統文化が息づく地域。御木本幸吉が世界初の真珠養殖に成功した場所。海女小屋で新鮮な海鮮を味わい、リアス式海岸の美しい景観を楽しめます。伊勢志摩サミットの開催地でもあります。",
+    descriptionEn: "Region where ama diver traditional culture thrives. Place where Mikimoto Kokichi succeeded in world's first pearl cultivation. Enjoy fresh seafood at ama huts and beautiful rias coastline scenery. Also site of Ise-Shima Summit.",
+    highlightsJa: ["海女文化", "ミキモト真珠島", "鳥羽水族館", "英虞湾"],
+    highlightsEn: ["Ama Culture", "Mikimoto Pearl Island", "Toba Aquarium", "Ago Bay"],
+    experiencesJa: "海女小屋体験、真珠島見学、水族館、クルーズ、伊勢海老、牡蠣",
+    experiencesEn: "Ama hut experiences, Pearl Island tours, aquarium, cruises, spiny lobster, oysters"
+  },
+  {
+    id: 60,
+    region: "chubu",
+    wideArea: false,
+    jaTitle: "「伊賀忍者」本物の忍者の里",
+    enTitle: "Iga Ninja – Real Ninja Village",
+    jaLocation: "三重県（伊賀市）",
+    enLocation: "Mie (Iga)",
+    descriptionJa: "伊賀流忍術発祥の地。伊賀上野城、忍者博物館、忍者屋敷で本物の忍者文化を体験。手裏剣投げ、からくり屋敷の仕掛けなど、子供から大人まで楽しめます。松尾芭蕉の生誕地でもあります。",
+    descriptionEn: "Birthplace of Iga-ryu ninjutsu. Experience real ninja culture at Iga Ueno Castle, Ninja Museum, and Ninja Mansion. Shuriken throwing and trick mansion mechanisms enjoyable for children and adults. Also birthplace of Matsuo Basho.",
+    highlightsJa: ["伊賀流忍者博物館", "伊賀上野城", "だんじり会館", "芭蕉翁生家"],
+    highlightsEn: ["Iga-ryu Ninja Museum", "Iga Ueno Castle", "Danjiri Museum", "Basho's Birthplace"],
+    experiencesJa: "忍者体験、手裏剣投げ、からくり屋敷、伊賀牛、伊賀焼",
+    experiencesEn: "Ninja experiences, shuriken throwing, trick mansion, Iga beef, Iga-yaki pottery"
+  },
+
+  // 近畿以降は次のレスポンスで続けます
+  // ここまでで約60件を記載しました
+  // 残り58件（61-118）は文字数制限のため次のコメントに続きます
+  // 近畿 (61-80)
+  {
+    id: 61,
+    region: "kinki",
+    wideArea: false,
+    jaTitle: "琵琶湖とその水辺景観～祈りと暮らしの水遺産～",
+    enTitle: "Lake Biwa and Its Waterside Landscapes – Water Heritage of Prayer and Life",
+    jaLocation: "滋賀県（大津市、近江八幡市、高島市ほか）",
+    enLocation: "Shiga (Otsu, Omihachiman, Takashima, etc.)",
+    descriptionJa: "日本最大の湖・琵琶湖を取り巻く豊かな水の文化。比叡山延暦寺、近江八幡の水郷、白鬚神社の湖中鳥居。琵琶湖は古代から京都の水源として「近江」（近つ淡海）と呼ばれ、日本の歴史と深く結びついています。",
+    descriptionEn: "Rich water culture surrounding Japan's largest lake, Lake Biwa. Enryakuji Temple on Mt. Hiei, Omihachiman waterways, Shirahige Shrine's torii in the lake. Since ancient times, Biwa served as Kyoto's water source, deeply tied to Japanese history.",
+    highlightsJa: ["比叡山延暦寺", "近江八幡水郷", "白鬚神社", "彦根城"],
+    highlightsEn: ["Enryakuji Temple", "Omihachiman Waterways", "Shirahige Shrine", "Hikone Castle"],
+    experiencesJa: "延暦寺参拝、水郷めぐり、琵琶湖クルーズ、近江牛、鮒寿司",
+    experiencesEn: "Temple visits, waterway tours, lake cruises, Omi beef, funazushi"
+  },
+  {
+    id: 62,
+    region: "kinki",
+    wideArea: false,
+    jaTitle: "古都京都の文化財",
+    enTitle: "Historic Monuments of Ancient Kyoto",
+    jaLocation: "京都府（京都市、宇治市）",
+    enLocation: "Kyoto (Kyoto City, Uji)",
+    descriptionJa: "世界遺産・古都京都。金閣寺、銀閣寺、清水寺、平等院鳳凰堂など17の寺社仏閣。千年の都が育んだ日本文化の精華。四季折々の美しさ、伝統工芸、京料理、茶道、華道など、京都は日本文化の宝庫です。",
+    descriptionEn: "UNESCO World Heritage Ancient Kyoto. 17 temples and shrines including Kinkakuji, Ginkakuji, Kiyomizudera, Byodoin Phoenix Hall. Essence of Japanese culture nurtured by millennium capital. Seasonal beauty, traditional crafts, Kyoto cuisine, tea ceremony, flower arrangement – Kyoto is treasure trove of Japanese culture.",
+    highlightsJa: ["金閣寺", "清水寺", "伏見稲荷大社", "嵐山"],
+    highlightsEn: ["Kinkakuji Temple", "Kiyomizudera", "Fushimi Inari Shrine", "Arashiyama"],
+    experiencesJa: "寺社巡り、舞妓体験、京料理、抹茶体験、嵐山散策、祇園",
+    experiencesEn: "Temple tours, maiko experience, Kyoto cuisine, matcha experience, Arashiyama walks, Gion"
+  },
+  {
+    id: 63,
+    region: "kinki",
+    wideArea: false,
+    jaTitle: "古都奈良の文化財",
+    enTitle: "Historic Monuments of Ancient Nara",
+    jaLocation: "奈良県（奈良市）",
+    enLocation: "Nara (Nara City)",
+    descriptionJa: "世界遺産・古都奈良。東大寺大仏、法隆寺、春日大社など日本最古の文化財群。710年の平城京遷都から1300年以上の歴史。奈良の鹿、正倉院宝物、飛鳥時代の仏像など、日本文化の原点です。",
+    descriptionEn: "UNESCO World Heritage Ancient Nara. Japan's oldest cultural properties including Todaiji Great Buddha, Horyuji Temple, Kasuga Shrine. Over 1,300 years since 710 Heijo-kyo capital establishment. Nara deer, Shosoin treasures, Asuka-period Buddha statues – origin of Japanese culture.",
+    highlightsJa: ["東大寺大仏", "法隆寺", "春日大社", "奈良公園の鹿"],
+    highlightsEn: ["Todaiji Great Buddha", "Horyuji Temple", "Kasuga Shrine", "Nara Park Deer"],
+    experiencesJa: "大仏見学、鹿せんべい、法隆寺参拝、柿の葉寿司、奈良漬",
+    experiencesEn: "Great Buddha viewing, deer crackers, Horyuji visits, persimmon leaf sushi, narazuke pickles"
+  },
+  {
+    id: 64,
+    region: "kinki",
+    wideArea: false,
+    jaTitle: "法隆寺地域の仏教建造物",
+    enTitle: "Buddhist Monuments in the Horyu-ji Area",
+    jaLocation: "奈良県（斑鳩町）",
+    enLocation: "Nara (Ikaruga)",
+    descriptionJa: "世界最古の木造建築群。聖徳太子が創建した法隆寺は、飛鳥時代（7世紀）の建築技術の粋。五重塔、金堂、夢殿など国宝建築が立ち並び、1400年の時を超えて日本建築の原点を今に伝えます。",
+    descriptionEn: "World's oldest wooden architecture complex. Horyuji Temple founded by Prince Shotoku represents pinnacle of Asuka-period (7th century) architectural technology. National Treasure buildings including five-story pagoda, main hall, Yumedono convey origin of Japanese architecture across 1,400 years.",
+    highlightsJa: ["法隆寺五重塔", "金堂", "夢殿", "百済観音"],
+    highlightsEn: ["Horyuji Five-Story Pagoda", "Main Hall", "Yumedono", "Kudara Kannon"],
+    experiencesJa: "法隆寺参拝、斑鳩の里散策、柿の葉寿司、三輪そうめん",
+    experiencesEn: "Horyuji visits, Ikaruga village walks, persimmon leaf sushi, Miwa somen"
+  },
+  {
+    id: 65,
+    region: "kinki",
+    wideArea: false,
+    jaTitle: "紀伊山地の霊場と参詣道",
+    enTitle: "Sacred Sites and Pilgrimage Routes in the Kii Mountain Range",
+    jaLocation: "和歌山県、奈良県、三重県",
+    enLocation: "Wakayama, Nara, Mie",
+    descriptionJa: "世界遺産・熊野古道と高野山。熊野三山、高野山金剛峯寺、吉野・大峯への参詣道。日本の山岳信仰の中心地で、千年以上続く巡礼の道。石畳の古道を歩けば、日本人の精神性の源流に触れられます。",
+    descriptionEn: "UNESCO World Heritage Kumano Kodo and Koyasan. Pilgrimage routes to Kumano Sanzan, Koyasan Kongobuji, Yoshino-Omine. Center of Japanese mountain worship, millennium-old pilgrimage paths. Walking stone-paved ancient roads touches source of Japanese spirituality.",
+    highlightsJa: ["熊野本宮大社", "高野山金剛峯寺", "那智の滝", "吉野山"],
+    highlightsEn: ["Kumano Hongu Taisha", "Koyasan Kongobuji", "Nachi Falls", "Mt. Yoshino"],
+    experiencesJa: "熊野古道ハイキング、高野山宿坊、精進料理、温泉、めはり寿司",
+    experiencesEn: "Kumano Kodo hiking, Koyasan temple lodging, vegetarian cuisine, hot springs, mehari sushi"
+  },
+  {
+    id: 66,
+    region: "kinki",
+    wideArea: false,
+    jaTitle: "姫路城",
+    enTitle: "Himeji Castle",
+    jaLocation: "兵庫県（姫路市）",
+    enLocation: "Hyogo (Himeji)",
+    descriptionJa: "世界遺産・国宝姫路城。別名「白鷺城」と呼ばれる日本を代表する名城。白漆喰の美しい外観、複雑な防御構造、そして戦火を逃れた現存天守。400年以上の歴史を持つ日本建築の最高傑作です。",
+    descriptionEn: "UNESCO World Heritage and National Treasure Himeji Castle. Japan's representative castle nicknamed 'White Heron Castle.' Beautiful white plaster exterior, complex defensive structure, and existing tower that escaped war fires. Masterpiece of Japanese architecture with over 400 years of history.",
+    highlightsJa: ["姫路城天守閣", "西の丸", "好古園", "千姫ゆかりの地"],
+    highlightsEn: ["Himeji Castle Tower", "Nishi-no-Maru", "Koko-en Garden", "Princess Sen sites"],
+    experiencesJa: "姫路城見学、好古園散策、姫路おでん、アナゴ料理、明石焼き",
+    experiencesEn: "Castle tours, Koko-en walks, Himeji oden, conger eel, akashiyaki"
+  },
+  {
+    id: 67,
+    region: "kinki",
+    wideArea: false,
+    jaTitle: "日本第一の廻船問屋 北前船の時代",
+    enTitle: "Japan's Premier Shipping Merchant – Kitamae-bune Era",
+    jaLocation: "兵庫県（神戸市、西宮市）",
+    enLocation: "Hyogo (Kobe, Nishinomiya)",
+    descriptionJa: "北前船の寄港地として栄えた神戸・西宮。開港後は日本の玄関口として発展。異人館、中華街、酒造地帯など多文化が融合した独特の港町文化。神戸ビーフ、灘の酒など、食文化も豊かです。",
+    descriptionEn: "Kobe and Nishinomiya prospered as Kitamae-bune ports. After opening, developed as Japan's gateway. Unique port town culture fusing multiple cultures including foreign residences, Chinatown, sake brewing districts. Rich food culture including Kobe beef and Nada sake.",
+    highlightsJa: ["神戸港", "北野異人館", "灘の酒蔵", "南京町"],
+    highlightsEn: ["Kobe Port", "Kitano Ijinkan", "Nada Sake Breweries", "Nankin-machi"],
+    experiencesJa: "異人館巡り、酒蔵見学、神戸ビーフ、中華料理、六甲山夜景",
+    experiencesEn: "Foreign residence tours, brewery visits, Kobe beef, Chinese cuisine, Mt. Rokko night views"
+  },
+  {
+    id: 68,
+    region: "kinki",
+    wideArea: false,
+    jaTitle: "「銀の馬車道」鉱石の道～姫路・生野～",
+    enTitle: "Silver Carriage Road and Ore Road – Himeji and Ikuno",
+    jaLocation: "兵庫県（姫路市、朝来市、福崎町、市川町、神河町）",
+    enLocation: "Hyogo (Himeji, Asago, Fukusaki, Ichikawa, Kamikawa)",
+    descriptionJa: "明治時代、生野銀山から姫路港を結んだ日本初の高速産業道路「銀の馬車道」。馬車が銀鉱石を運んだ道は、日本の近代化を支えたインフラ。沿道には当時の面影を残す宿場町や鉱山跡が点在します。",
+    descriptionEn: "Meiji-era 'Silver Carriage Road,' Japan's first high-speed industrial road connecting Ikuno Silver Mine to Himeji Port. Road where horse carriages transported silver ore was infrastructure supporting Japan's modernization. Post towns and mine ruins retaining period atmosphere dot the route.",
+    highlightsJa: ["生野銀山", "銀の馬車道", "明延鉱山", "朝来市埋蔵文化財センター"],
+    highlightsEn: ["Ikuno Silver Mine", "Silver Carriage Road", "Akenobe Mine", "Asago Buried Cultural Properties Center"],
+    experiencesJa: "銀山坑道見学、馬車道サイクリング、鉱山資料館、但馬牛、出石そば",
+    experiencesEn: "Mine tunnel tours, carriage road cycling, mining museum, Tajima beef, Izushi soba"
+  },
+  {
+    id: 69,
+    region: "kinki",
+    wideArea: false,
+    jaTitle: "丹波篠山 デカンショ節に乗せて歌い継ぐふるさとの記憶",
+    enTitle: "Tanba-Sasayama – Hometown Memories Sung to Dekansho Bushi",
+    jaLocation: "兵庫県（丹波篠山市）",
+    enLocation: "Hyogo (Tanba-Sasayama)",
+    descriptionJa: "デカンショ節で知られる城下町。篠山城跡、武家屋敷、妻入商家群など江戸時代の面影。丹波黒豆、丹波栗、猪肉など山の幸が豊富。秋の収穫祭では「デカンショ祭り」が盛大に開催されます。",
+    descriptionEn: "Castle town known for Dekansho Bushi folk song. Edo-period traces including Sasayama Castle ruins, samurai residences, merchant house groups. Abundant mountain bounty like Tanba black beans, chestnuts, wild boar. Grand 'Dekansho Festival' held at autumn harvest.",
+    highlightsJa: ["篠山城跡", "武家屋敷群", "河原町妻入商家群", "デカンショ祭り"],
+    highlightsEn: ["Sasayama Castle Ruins", "Samurai Residences", "Kawaramachi Merchant Houses", "Dekansho Festival"],
+    experiencesJa: "城下町散策、武家屋敷見学、丹波黒豆、猪鍋、丹波栗スイーツ",
+    experiencesEn: "Castle town walks, samurai residence tours, Tanba black beans, wild boar hotpot, chestnut sweets"
+  },
+  {
+    id: 70,
+    region: "kinki",
+    wideArea: false,
+    jaTitle: "「日本茶800年の歴史散歩」～宇治茶の文化的景観～",
+    enTitle: "800-Year History Walk of Japanese Tea – Uji Tea Cultural Landscape",
+    jaLocation: "京都府（宇治市）",
+    enLocation: "Kyoto (Uji)",
+    descriptionJa: "日本茶発祥の地・宇治。800年の歴史を持つ宇治茶は、茶道文化を育みました。平等院鳳凰堂、宇治川、茶畑が織りなす景観は日本の原風景。抹茶スイーツから本格茶道体験まで、お茶文化を満喫できます。",
+    descriptionEn: "Uji, birthplace of Japanese tea. 800-year-old Uji tea nurtured tea ceremony culture. Landscape woven by Byodoin Phoenix Hall, Uji River, and tea fields is quintessential Japanese scenery. Enjoy tea culture from matcha sweets to authentic tea ceremony experiences.",
+    highlightsJa: ["平等院鳳凰堂", "宇治上神社", "宇治茶畑", "茶室"],
+    highlightsEn: ["Byodoin Phoenix Hall", "Ujigami Shrine", "Uji Tea Fields", "Tea Rooms"],
+    experiencesJa: "平等院参拝、茶道体験、抹茶スイーツ、宇治川散策、源氏物語ミュージアム",
+    experiencesEn: "Byodoin visits, tea ceremony experiences, matcha sweets, Uji River walks, Tale of Genji Museum"
+  },
+  {
+    id: 71,
+    region: "kinki",
+    wideArea: false,
+    jaTitle: "「竹取物語」の舞台～かぐや姫伝説の里～",
+    enTitle: "Stage of Tale of the Bamboo Cutter – Kaguya-hime Legend Village",
+    jaLocation: "京都府（京田辺市、向日市）",
+    enLocation: "Kyoto (Kyotanabe, Muko)",
+    descriptionJa: "日本最古の物語「竹取物語」の舞台とされる地域。かぐや姫伝説ゆかりの神社や竹林が点在。京都の竹の産地として知られ、美しい竹林の風景、竹工芸品、タケノコ料理が魅力です。",
+    descriptionEn: "Region considered stage of Japan's oldest tale 'Tale of the Bamboo Cutter.' Shrines and bamboo groves related to Kaguya-hime legend scattered about. Known as Kyoto's bamboo production area, attractive for beautiful bamboo grove landscapes, bamboo crafts, and bamboo shoot cuisine.",
+    highlightsJa: ["竹取公園", "甘南備山", "竹林", "竹工芸"],
+    highlightsEn: ["Taketori Park", "Mt. Kanabizan", "Bamboo Groves", "Bamboo Crafts"],
+    experiencesJa: "竹林散策、かぐや姫伝説巡り、竹工芸体験、タケノコ料理、竹炭製品",
+    experiencesEn: "Bamboo grove walks, Kaguya legend tours, bamboo craft experiences, bamboo shoot cuisine, bamboo charcoal products"
+  },
+  {
+    id: 72,
+    region: "kinki",
+    wideArea: false,
+    jaTitle: "天橋立～日本三景の絶景～",
+    enTitle: "Amanohashidate – Spectacular View of Three Scenic Views of Japan",
+    jaLocation: "京都府（宮津市）",
+    enLocation: "Kyoto (Miyazu)",
+    descriptionJa: "日本三景の一つ。全長3.6kmの砂州に約8,000本の松が生い茂る奇跡の景観。「股のぞき」で天地が逆転したように見える独特の風景。智恩寺、傘松公園、元伊勢籠神社など見どころも豊富です。",
+    descriptionEn: "One of Japan's Three Scenic Views. Miraculous landscape with 8,000 pine trees on 3.6km sandbar. Unique scenery appearing upside-down through 'matanozoki' (viewing between legs). Abundant attractions including Chionji Temple, Kasamatsu Park, Motoise Kono Shrine.",
+    highlightsJa: ["天橋立", "股のぞき", "智恩寺", "傘松公園"],
+    highlightsEn: ["Amanohashidate", "Matanozoki", "Chionji Temple", "Kasamatsu Park"],
+    experiencesJa: "天橋立散策、股のぞき、遊覧船、ケーブルカー、海鮮料理、日本酒",
+    experiencesEn: "Amanohashidate walks, matanozoki viewing, sightseeing boats, cable car, seafood, sake"
+  },
+  {
+    id: 73,
+    region: "kinki",
+    wideArea: false,
+    jaTitle: "「ちりめん街道」～丹後ちりめんの産地～",
+    enTitle: "Chirimen Road – Tango Chirimen Silk Production Area",
+    jaLocation: "京都府（与謝野町）",
+    enLocation: "Kyoto (Yosano)",
+    descriptionJa: "江戸時代から続く絹織物・丹後ちりめんの産地。ちりめん街道には織物工場や商家が立ち並び、機織りの音が響きます。伝統的な技法で作られる丹後ちりめんは、着物や帯に欠かせない高級素材です。",
+    descriptionEn: "Production area of Tango chirimen silk fabric continuing from Edo period. Textile factories and merchant houses line Chirimen Road, echoing with loom sounds. Tango chirimen made with traditional techniques is premium material essential for kimono and obi.",
+    highlightsJa: ["ちりめん街道", "丹後織物工房", "丹後ちりめん歴史館", "天橋立"],
+    highlightsEn: ["Chirimen Road", "Tango Textile Workshops", "Tango Chirimen History Museum", "Amanohashidate"],
+    experiencesJa: "織物工房見学、機織り体験、ちりめん製品ショッピング、海鮮料理、温泉",
+    experiencesEn: "Workshop tours, weaving experiences, chirimen product shopping, seafood, hot springs"
+  },
+  {
+    id: 74,
+    region: "kinki",
+    wideArea: false,
+    jaTitle: "琵琶湖疏水～京都の近代化を支えた水路～",
+    enTitle: "Lake Biwa Canal – Waterway Supporting Kyoto's Modernization",
+    jaLocation: "京都府（京都市）、滋賀県（大津市）",
+    enLocation: "Kyoto (Kyoto City), Shiga (Otsu)",
+    descriptionJa: "明治時代、京都の発展のために琵琶湖から引いた疏水。日本初の水力発電、工業用水、飲料水として京都の近代化を支えました。疏水沿いの桜並木、インクライン跡、南禅寺水路閣など、土木遺産と美しい景観が魅力です。",
+    descriptionEn: "Meiji-era canal from Lake Biwa for Kyoto's development. Supported Kyoto's modernization as Japan's first hydroelectric power, industrial water, and drinking water. Civil engineering heritage and beautiful scenery including cherry trees along canal, Incline ruins, Nanzenji aqueduct attractive.",
+    highlightsJa: ["南禅寺水路閣", "インクライン", "琵琶湖疏水記念館", "哲学の道"],
+    highlightsEn: ["Nanzenji Aqueduct", "Incline", "Lake Biwa Canal Museum", "Philosopher's Path"],
+    experiencesJa: "疏水沿い散策、桜並木、南禅寺参拝、湯豆腐、哲学の道",
+    experiencesEn: "Canal-side walks, cherry trees, Nanzenji visits, yudofu, Philosopher's Path"
+  },
+  {
+    id: 75,
+    region: "kinki",
+    wideArea: false,
+    jaTitle: "大阪の近代建築と商いの文化",
+    enTitle: "Osaka's Modern Architecture and Commercial Culture",
+    jaLocation: "大阪府（大阪市）",
+    enLocation: "Osaka (Osaka City)",
+    descriptionJa: "「天下の台所」大阪の商業文化。道頓堀、通天閣、大阪城など、独特の文化を持つ街。近代建築の中之島、レトロな船場、活気ある商店街。「食い倒れの街」として、たこ焼き、お好み焼き、串カツなど庶民的なグルメが魅力です。",
+    descriptionEn: "Commercial culture of Osaka, 'Nation's Kitchen.' City with unique culture including Dotonbori, Tsutenkaku, Osaka Castle. Modern architecture of Nakanoshima, retro Semba, lively shopping streets. As 'City of Eating Until Broke,' attractive for common gourmet like takoyaki, okonomiyaki, kushikatsu.",
+    highlightsJa: ["大阪城", "道頓堀", "通天閣", "中之島"],
+    highlightsEn: ["Osaka Castle", "Dotonbori", "Tsutenkaku", "Nakanoshima"],
+    experiencesJa: "大阪城見学、道頓堀散策、たこ焼き、お好み焼き、串カツ、USJ",
+    experiencesEn: "Castle tours, Dotonbori walks, takoyaki, okonomiyaki, kushikatsu, USJ"
+  },
+  {
+    id: 76,
+    region: "kinki",
+    wideArea: false,
+    jaTitle: "「堺の刃物」匠の技が生み出す切れ味",
+    enTitle: "Sakai Cutlery – Sharpness Created by Artisan Skills",
+    jaLocation: "大阪府（堺市）",
+    enLocation: "Osaka (Sakai)",
+    descriptionJa: "600年の伝統を持つ堺の刃物。プロの料理人の90%が使用する包丁は、一本一本手作りされる逸品。千利休の生誕地でもあり、茶の湯文化、古墳群、寺社など歴史文化遺産も豊富です。",
+    descriptionEn: "Sakai cutlery with 600 years of tradition. Knives used by 90% of professional chefs are masterpieces handcrafted one by one. Also birthplace of Sen no Rikyu, abundant historical and cultural heritage including tea ceremony culture, ancient burial mounds, temples and shrines.",
+    highlightsJa: ["堺伝統産業会館", "仁徳天皇陵古墳", "千利休屋敷跡", "刃物工房"],
+    highlightsEn: ["Sakai Traditional Crafts Museum", "Nintoku Emperor Mausoleum", "Sen no Rikyu Residence Site", "Cutlery Workshops"],
+    experiencesJa: "刃物工房見学、包丁研ぎ体験、古墳見学、和菓子、穴子料理",
+    experiencesEn: "Workshop tours, knife sharpening experiences, ancient mound viewing, wagashi, conger eel"
+  },
+  {
+    id: 77,
+    region: "kinki",
+    wideArea: false,
+    jaTitle: "「高野山・熊野」神仏習合の聖地",
+    enTitle: "Koyasan and Kumano – Sacred Sites of Syncretism",
+    jaLocation: "和歌山県（高野町、田辺市、新宮市）",
+    enLocation: "Wakayama (Koya, Tanabe, Shingu)",
+    descriptionJa: "弘法大師空海が開いた高野山金剛峯寺。117の寺院が立ち並ぶ宗教都市で、宿坊に泊まり精進料理と瞑想を体験できます。熊野三山との参詣道は、神仏習合の歴史を物語る世界遺産です。",
+    descriptionEn: "Koyasan Kongobuji opened by Kobo Daishi Kukai. Religious city with 117 temples where can stay at temple lodging experiencing vegetarian cuisine and meditation. Pilgrimage route to Kumano Sanzan is UNESCO World Heritage telling syncretism history.",
+    highlightsJa: ["高野山金剛峯寺", "奥之院", "壇上伽藍", "熊野本宮大社"],
+    highlightsEn: ["Koyasan Kongobuji", "Okunoin", "Danjo Garan", "Kumano Hongu Taisha"],
+    experiencesJa: "宿坊宿泊、精進料理、阿字観瞑想、奥之院参拝、熊野古道ハイキング",
+    experiencesEn: "Temple lodging, vegetarian meals, Ajikan meditation, Okunoin visits, Kumano Kodo hiking"
+  },
+  {
+    id: 78,
+    region: "kinki",
+    wideArea: false,
+    jaTitle: "「紀州備長炭」炭焼きの伝統技術",
+    enTitle: "Kishu Bincho Charcoal – Traditional Charcoal-Making Techniques",
+    jaLocation: "和歌山県（田辺市、みなべ町）",
+    enLocation: "Wakayama (Tanabe, Minabe)",
+    descriptionJa: "最高級の炭・紀州備長炭。ウバメガシを1000度以上で焼き上げる伝統技法で作られ、火持ちの良さと遠赤外線効果で料亭や焼き鳥店で重宝されます。炭焼き小屋見学で職人技を間近で見られます。",
+    descriptionEn: "Premium Kishu bincho charcoal. Made with traditional technique firing ubamegashi oak over 1,000°C, prized by restaurants and yakitori shops for long burning and far-infrared effects. Charcoal kiln tours show artisan techniques up close.",
+    highlightsJa: ["備長炭記念館", "炭焼き小屋", "南部梅林", "熊野本宮大社"],
+    highlightsEn: ["Bincho Charcoal Museum", "Charcoal Kilns", "Minabe Plum Grove", "Kumano Hongu Taisha"],
+    experiencesJa: "炭焼き見学、備長炭製品、梅干し、南高梅、海鮮料理、温泉",
+    experiencesEn: "Charcoal-making observation, bincho products, umeboshi, Nanko plums, seafood, hot springs"
+  },
+  {
+    id: 79,
+    region: "kinki",
+    wideArea: false,
+    jaTitle: "「南紀白浜」温泉と景勝地",
+    enTitle: "Nanki-Shirahama – Hot Springs and Scenic Beauty",
+    jaLocation: "和歌山県（白浜町）",
+    enLocation: "Wakayama (Shirahama)",
+    descriptionJa: "日本三古湯の一つ、白浜温泉。白良浜の白い砂浜、円月島、千畳敷、三段壁など絶景スポットが点在。パンダで有名なアドベンチャーワールド、海鮮料理、太平洋の夕日が魅力のリゾート地です。",
+    descriptionEn: "Shirahama Onsen, one of Japan's Three Ancient Hot Springs. Spectacular spots scattered including Shirarahama white beach, Engetsuto Island, Senjojiki, Sandanbeki. Resort area attractive for Adventure World famous for pandas, seafood cuisine, Pacific sunsets.",
+    highlightsJa: ["白良浜", "円月島", "三段壁", "アドベンチャーワールド"],
+    highlightsEn: ["Shirarahama Beach", "Engetsuto Island", "Sandanbeki", "Adventure World"],
+    experiencesJa: "温泉、海水浴、パンダ見学、洞窟探検、海鮮料理、クエ鍋",
+    experiencesEn: "Hot springs, swimming, panda viewing, cave exploration, seafood, longtooth grouper hotpot"
+  },
+  {
+    id: 80,
+    region: "kinki",
+    wideArea: false,
+    jaTitle: "「吉野山」千本桜と修験道の聖地",
+    enTitle: "Mt. Yoshino – Thousand Cherry Trees and Ascetic Practice Sacred Site",
+    jaLocation: "奈良県（吉野町）",
+    enLocation: "Nara (Yoshino)",
+    descriptionJa: "世界遺産・吉野山。約3万本の桜が山を覆う日本一の桜の名所。金峯山寺、吉水神社など歴史的建造物も豊富。修験道の聖地として1300年の歴史を持ち、南朝の史跡、源義経伝説など歴史ロマンに溢れています。",
+    descriptionEn: "UNESCO World Heritage Mt. Yoshino. Japan's premier cherry blossom spot with 30,000 trees covering mountain. Abundant historical buildings including Kinpusenji Temple, Yoshimizu Shrine. As ascetic practice sacred site with 1,300-year history, overflowing with historical romance including Southern Court historic sites and Minamoto no Yoshitsune legends.",
+    highlightsJa: ["吉野千本桜", "金峯山寺", "吉水神社", "吉野葛"],
+    highlightsEn: ["Yoshino Thousand Cherry Trees", "Kinpusenji Temple", "Yoshimizu Shrine", "Yoshino Kuzu"],
+    experiencesJa: "桜見物、寺社巡り、吉野葛料理、柿の葉寿司、ロープウェイ",
+    experiencesEn: "Cherry viewing, temple tours, yoshino kuzu cuisine, persimmon leaf sushi, ropeway"
+  },
+
+  // 中国 (81-92)
+  {
+    id: 81,
+    region: "chugoku",
+    wideArea: false,
+    jaTitle: "出雲大社と出雲神話",
+    enTitle: "Izumo Taisha and Izumo Mythology",
+    jaLocation: "島根県（出雲市）",
+    enLocation: "Shimane (Izumo)",
+    descriptionJa: "縁結びの神様で知られる出雲大社。古代最大級の神殿があったとされ、神話の時代から続く日本最古級の神社。旧暦10月には全国の神々が出雲に集まる「神在月」。出雲そば、しじみ、日本酒も魅力です。",
+    descriptionEn: "Izumo Taisha known as deity of matchmaking. Considered to have had ancient Japan's largest shrine building, one of oldest shrines continuing from mythological age. In lunar October, all deities gather in Izumo for 'Kamiarizuki.' Izumo soba, clams, sake also attractive.",
+    highlightsJa: ["出雲大社", "神楽殿の大しめ縄", "稲佐の浜", "古代出雲歴史博物館"],
+    highlightsEn: ["Izumo Taisha", "Kaguraden Great Shimenawa", "Inasa Beach", "Ancient Izumo History Museum"],
+    experiencesJa: "出雲大社参拝、大しめ縄、出雲そば、宍道湖夕日、玉造温泉",
+    experiencesEn: "Izumo Taisha visits, great shimenawa, Izumo soba, Lake Shinji sunset, Tamatsukuri Onsen"
+  },
+  {
+    id: 82,
+    region: "chugoku",
+    wideArea: false,
+    jaTitle: "石見銀山～世界を動かした銀～",
+    enTitle: "Iwami Ginzan Silver Mine – Silver That Moved the World",
+    jaLocation: "島根県（大田市）",
+    enLocation: "Shimane (Ota)",
+    descriptionJa: "世界遺産・石見銀山。16-17世紀、世界の銀産出量の約3分の1を占めた鉱山。龍源寺間歩など坑道見学、武家屋敷や商家が残る大森の町並みは江戸時代の面影を色濃く残します。",
+    descriptionEn: "UNESCO World Heritage Iwami Ginzan Silver Mine. In 16th-17th centuries, mine accounted for about one-third of world's silver output. Ryugenji Mabu tunnel tours, Omori townscape preserving samurai residences and merchant houses strongly retains Edo-period atmosphere.",
+    highlightsJa: ["龍源寺間歩", "大森の町並み", "熊谷家住宅", "石見銀山資料館"],
+    highlightsEn: ["Ryugenji Mabu", "Omori Townscape", "Kumagai Family Residence", "Iwami Ginzan Museum"],
+    experiencesJa: "坑道見学、町並み散策、古民家カフェ、海鮮料理、温泉津温泉",
+    experiencesEn: "Tunnel tours, townscape walks, old house cafes, seafood, Yunotsu Onsen"
+  },
+  {
+    id: 83,
+    region: "chugoku",
+    wideArea: false,
+    jaTitle: "松江城と松江の町並み",
+    enTitle: "Matsue Castle and Townscape",
+    jaLocation: "島根県（松江市）",
+    enLocation: "Shimane (Matsue)",
+    descriptionJa: "現存12天守の一つ、国宝松江城。黒い下見板張りの外観から「千鳥城」と呼ばれます。堀川めぐり、武家屋敷、松江の和菓子文化。小泉八雲ゆかりの地として、怪談の世界も楽しめます。",
+    descriptionEn: "Matsue Castle, one of 12 existing castle towers and National Treasure. Called 'Chidori Castle' for black wooden board exterior. Canal tours, samurai residences, Matsue wagashi culture. As site related to Lafcadio Hearn, can enjoy ghost story world.",
+    highlightsJa: ["松江城天守", "堀川めぐり", "武家屋敷", "小泉八雲記念館"],
+    highlightsEn: ["Matsue Castle Tower", "Canal Cruises", "Samurai Residences", "Lafcadio Hearn Memorial"],
+    experiencesJa: "松江城見学、堀川遊覧船、和菓子、宍道湖しじみ、出雲そば",
+    experiencesEn: "Castle tours, canal boats, wagashi, Lake Shinji clams, Izumo soba"
+  },
+  {
+    id: 84,
+    region: "chugoku",
+    wideArea: false,
+    jaTitle: "足立美術館の庭園と横山大観",
+    enTitle: "Adachi Museum Garden and Yokoyama Taikan",
+    jaLocation: "島根県（安来市）",
+    enLocation: "Shimane (Yasugi)",
+    descriptionJa: "アメリカの日本庭園専門誌で19年連続日本一に選ばれた足立美術館の庭園。借景の山々と一体化した5万坪の日本庭園は、まさに生きた日本画。横山大観コレクションも見事です。",
+    descriptionEn: "Adachi Museum garden selected as Japan's best for 19 consecutive years by American Japanese garden magazine. 50,000-tsubo Japanese garden integrated with borrowed mountain scenery is truly living Japanese painting. Yokoyama Taikan collection also magnificent.",
+    highlightsJa: ["足立美術館庭園", "横山大観作品", "枯山水庭園", "苔庭"],
+    highlightsEn: ["Adachi Museum Garden", "Yokoyama Taikan Works", "Dry Landscape Garden", "Moss Garden"],
+    experiencesJa: "庭園鑑賞、日本画鑑賞、茶室、どじょうすくい、安来節",
+    experiencesEn: "Garden appreciation, Japanese painting viewing, tea room, dojo-sukui dance, Yasugi-bushi"
+  },
+  {
+    id: 85,
+    region: "chugoku",
+    wideArea: false,
+    jaTitle: "備前焼～千年の伝統を誇る炎の芸術～",
+    enTitle: "Bizen-yaki – Fire Art Boasting Millennium Tradition",
+    jaLocation: "岡山県（備前市）",
+    enLocation: "Okayama (Bizen)",
+    descriptionJa: "日本六古窯の一つ、備前焼。釉薬を使わず1200度以上で焼き締める伝統技法。土と炎が生み出す独特の焼け色、窯変は一つとして同じものがありません。使うほど味わいが増す茶陶として茶人に愛されています。",
+    descriptionEn: "Bizen-yaki, one of Japan's Six Ancient Kilns. Traditional technique firing over 1,200°C without glaze. Unique firing colors and kiln changes created by clay and fire are all unique. Loved by tea practitioners as tea ceramics gaining character with use.",
+    highlightsJa: ["備前焼伝統産業会館", "備前陶芸美術館", "窯元めぐり", "伊部の町並み"],
+    highlightsEn: ["Bizen Traditional Crafts Museum", "Bizen Ceramic Art Museum", "Kiln Tours", "Imbe Townscape"],
+    experiencesJa: "備前焼制作体験、窯元見学、ギャラリー巡り、カキオコ、日本酒",
+    experiencesEn: "Bizen-yaki making experiences, kiln tours, gallery visits, kaki-oko, sake"
+  },
+  {
+    id: 86,
+    region: "chugoku",
+    wideArea: false,
+    jaTitle: "岡山後楽園と岡山城",
+    enTitle: "Okayama Korakuen Garden and Castle",
+    jaLocation: "岡山県（岡山市）",
+    enLocation: "Okayama (Okayama)",
+    descriptionJa: "日本三名園の一つ、岡山後楽園。旭川を挟んで黒い岡山城(烏城)と向かい合う絶景。池田家の大名庭園は、芝生の広がる開放的な景観が特徴。桃太郎伝説、きびだんご、白桃、マスカットなど岡山の魅力も豊富です。",
+    descriptionEn: "Okayama Korakuen, one of Japan's Three Great Gardens. Spectacular view facing black Okayama Castle (Ujo) across Asahi River. Ikeda family daimyo garden characterized by open landscape with spreading lawns. Abundant Okayama attractions including Momotaro legend, kibidango, white peaches, muscat grapes.",
+    highlightsJa: ["岡山後楽園", "岡山城", "桃太郎伝説", "吉備津神社"],
+    highlightsEn: ["Okayama Korakuen", "Okayama Castle", "Momotaro Legend", "Kibitsu Shrine"],
+    experiencesJa: "後楽園散策、岡山城見学、きびだんご、デミカツ丼、白桃、マスカット",
+    experiencesEn: "Garden walks, castle tours, kibidango, demi-katsudon, white peaches, muscat"
+  },
+  {
+    id: 87,
+    region: "chugoku",
+    wideArea: false,
+    jaTitle: "倉敷美観地区～白壁の町並み～",
+    enTitle: "Kurashiki Bikan Historical Quarter – White-walled Townscape",
+    jaLocation: "岡山県（倉敷市）",
+    enLocation: "Okayama (Kurashiki)",
+    descriptionJa: "江戸時代の商家が立ち並ぶ美観地区。白壁と黒瓦、柳並木と倉敷川が織りなす美しい景観。大原美術館、倉敷民藝館、アイビースクエアなど、文化施設も充実。デニムの産地としても有名です。",
+    descriptionEn: "Bikan Quarter with Edo-period merchant houses. Beautiful landscape woven by white walls and black tiles, willow trees, and Kurashiki River. Abundant cultural facilities including Ohara Museum, Kurashiki Folkcraft Museum, Ivy Square. Also famous as denim production area.",
+    highlightsJa: ["倉敷美観地区", "大原美術館", "倉敷川舟流し", "倉敷デニム"],
+    highlightsEn: ["Kurashiki Bikan Quarter", "Ohara Museum", "Kurashiki River Boats", "Kurashiki Denim"],
+    experiencesJa: "美観地区散策、川舟、美術館、デニムショッピング、ままかり、えびめし",
+    experiencesEn: "Quarter walks, river boats, museums, denim shopping, mamakari, ebi-meshi"
+  },
+  {
+    id: 88,
+    region: "chugoku",
+    wideArea: false,
+    jaTitle: "尾道～坂の町と文学の香り～",
+    enTitle: "Onomichi – Town of Slopes and Literary Fragrance",
+    jaLocation: "広島県（尾道市）",
+    enLocation: "Hiroshima (Onomichi)",
+    descriptionJa: "坂と猫と文学の町・尾道。千光寺からの眺望、古寺めぐり、レトロな商店街。林芙美子、志賀直哉など多くの文人が愛した町。しまなみ海道の起点として、サイクリストの聖地でもあります。",
+    descriptionEn: "Onomichi, town of slopes, cats, and literature. Views from Senkoji Temple, ancient temple tours, retro shopping streets. Town loved by many literati including Hayashi Fumiko and Shiga Naoya. As starting point of Shimanami Kaido, also sanctuary for cyclists.",
+    highlightsJa: ["千光寺", "猫の細道", "尾道商店街", "しまなみ海道"],
+    highlightsEn: ["Senkoji Temple", "Cat Alley", "Onomichi Shopping Street", "Shimanami Kaido"],
+    experiencesJa: "千光寺参拝、坂道散策、文学館、尾道ラーメン、レモンスイーツ、サイクリング",
+    experiencesEn: "Temple visits, slope walks, literature museum, Onomichi ramen, lemon sweets, cycling"
+  },
+  {
+    id: 89,
+    region: "chugoku",
+    wideArea: false,
+    jaTitle: "広島平和記念公園と原爆ドーム",
+    enTitle: "Hiroshima Peace Memorial Park and Atomic Bomb Dome",
+    jaLocation: "広島県（広島市）",
+    enLocation: "Hiroshima (Hiroshima)",
+    descriptionJa: "世界遺産・原爆ドーム。1945年8月6日の記憶を今に伝える平和の象徴。平和記念公園、平和記念資料館で戦争の悲惨さと平和の尊さを学べます。広島城、宮島とセットで訪れる人が多い街です。",
+    descriptionEn: "UNESCO World Heritage Atomic Bomb Dome. Peace symbol conveying August 6, 1945 memory to today. Can learn war's tragedy and peace's preciousness at Peace Memorial Park and Museum. City many visit with Hiroshima Castle and Miyajima.",
+    highlightsJa: ["原爆ドーム", "平和記念公園", "平和記念資料館", "広島城"],
+    highlightsEn: ["A-Bomb Dome", "Peace Memorial Park", "Peace Museum", "Hiroshima Castle"],
+    experiencesJa: "平和記念公園見学、資料館、お好み焼き、牡蠣料理、もみじ饅頭",
+    experiencesEn: "Park tours, museum, okonomiyaki, oyster cuisine, momiji manju"
+  },
+  {
+    id: 90,
+    region: "chugoku",
+    wideArea: false,
+    jaTitle: "厳島神社と宮島～海に浮かぶ朱の鳥居～",
+    enTitle: "Itsukushima Shrine and Miyajima – Vermillion Torii Floating on Sea",
+    jaLocation: "広島県（廿日市市）",
+    enLocation: "Hiroshima (Hatsukaichi)",
+    descriptionJa: "世界遺産・厳島神社。海に浮かぶ朱色の大鳥居は日本を代表する絶景。平安時代の寝殿造りの社殿、弥山の原始林、野生の鹿。宮島の牡蠣、あなご飯、もみじ饅頭も名物です。",
+    descriptionEn: "UNESCO World Heritage Itsukushima Shrine. Vermillion great torii floating on sea is Japan's iconic spectacular view. Heian-period shinden-style shrine buildings, Mt. Misen primeval forest, wild deer. Miyajima oysters, conger eel rice, momiji manju also specialties.",
+    highlightsJa: ["厳島神社", "大鳥居", "弥山", "もみじ饅頭"],
+    highlightsEn: ["Itsukushima Shrine", "Great Torii", "Mt. Misen", "Momiji Manju"],
+    experiencesJa: "厳島神社参拝、弥山登山、ロープウェイ、牡蠣、あなご飯、もみじ饅頭",
+    experiencesEn: "Shrine visits, Mt. Misen climbing, ropeway, oysters, conger rice, momiji manju"
+  },
+  {
+    id: 91,
+    region: "chugoku",
+    wideArea: false,
+    jaTitle: "山口～西の京の歴史と文化～",
+    enTitle: "Yamaguchi – History and Culture of Western Capital",
+    jaLocation: "山口県（山口市）",
+    enLocation: "Yamaguchi (Yamaguchi)",
+    descriptionJa: "室町時代、大内氏が「西の京」として栄えた山口。五重塔で有名な瑠璃光寺、ザビエル記念聖堂、湯田温泉。萩や下関とセットで訪れる山口の文化の中心地です。",
+    descriptionEn: "Yamaguchi prospered as 'Western Capital' under Ouchi clan in Muromachi period. Rurikoji Temple famous for five-story pagoda, Xavier Memorial Chapel, Yuda Onsen. Cultural center of Yamaguchi visited with Hagi and Shimonoseki.",
+    highlightsJa: ["瑠璃光寺五重塔", "ザビエル記念聖堂", "湯田温泉", "SLやまぐち号"],
+    highlightsEn: ["Rurikoji Five-Story Pagoda", "Xavier Chapel", "Yuda Onsen", "SL Yamaguchi"],
+    experiencesJa: "瑠璃光寺参拝、温泉、SL乗車、ふぐ料理、瓦そば",
+    experiencesEn: "Temple visits, hot springs, steam train rides, fugu cuisine, kawara soba"
+  },
+  {
+    id: 92,
+    region: "chugoku",
+    wideArea: false,
+    jaTitle: "萩～幕末維新の志士たちの故郷～",
+    enTitle: "Hagi – Hometown of Bakumatsu Restoration Patriots",
+    jaLocation: "山口県（萩市）",
+    enLocation: "Yamaguchi (Hagi)",
+    descriptionJa: "世界遺産「明治日本の産業革命遺産」の構成資産がある萩。吉田松陰、高杉晋作、伊藤博文など明治維新の志士を輩出。萩城下町、松下村塾、萩焼。歴史と伝統工芸の町です。",
+    descriptionEn: "Hagi with UNESCO World Heritage 'Sites of Japan's Meiji Industrial Revolution' components. Produced Meiji Restoration patriots including Yoshida Shoin, Takasugi Shinsaku, Ito Hirobumi. Hagi castle town, Shoka Sonjuku academy, Hagi-yaki pottery. Town of history and traditional crafts.",
+    highlightsJa: ["松下村塾", "萩城下町", "萩焼窯元", "明倫館"],
+    highlightsEn: ["Shoka Sonjuku", "Hagi Castle Town", "Hagi-yaki Kilns", "Meirinkan"],
+    experiencesJa: "城下町散策、松下村塾見学、萩焼体験、萩の夏みかん、見蘭牛",
+    experiencesEn: "Castle town walks, Shoka Sonjuku tours, Hagi-yaki experiences, natsumikan, miran beef"
+  },
+
+  // 四国 (93-100)
+  {
+    id: 93,
+    region: "shikoku",
+    wideArea: false,
+    jaTitle: "四国遍路～88ヶ所霊場巡礼の旅～",
+    enTitle: "Shikoku Pilgrimage – Journey Through 88 Sacred Sites",
+    jaLocation: "徳島県、香川県、愛媛県、高知県",
+    enLocation: "Tokushima, Kagawa, Ehime, Kochi",
+    descriptionJa: "弘法大師空海ゆかりの88ヶ所霊場を巡る四国遍路。全長約1,400kmの巡礼路は、四国の自然、文化、人々の温かさに触れる心の旅。白装束のお遍路さん、「お接待」の文化、御朱印集めなど、日本の巡礼文化の真髄です。",
+    descriptionEn: "Shikoku pilgrimage visiting 88 sacred sites related to Kobo Daishi Kukai. 1,400km pilgrimage route is spiritual journey touching Shikoku's nature, culture, and people's warmth. White-robed pilgrims, 'osettai' hospitality culture, goshuin collecting – essence of Japanese pilgrimage culture.",
+    highlightsJa: ["88ヶ所霊場", "第1番札所霊山寺", "第88番札所大窪寺", "お接待文化"],
+    highlightsEn: ["88 Sacred Sites", "Temple 1 Ryozenji", "Temple 88 Okubo-ji", "Osettai Culture"],
+    experiencesJa: "お遍路巡礼、御朱印集め、宿坊、讃岐うどん、鰹のたたき",
+    experiencesEn: "Pilgrimage, goshuin collecting, temple lodging, Sanuki udon, katsuo tataki"
+  },
+  {
+    id: 94,
+    region: "shikoku",
+    wideArea: false,
+    jaTitle: "鳴門の渦潮～世界最大級の渦～",
+    enTitle: "Naruto Whirlpools – World's Largest Whirlpools",
+    jaLocation: "徳島県（鳴門市）",
+    enLocation: "Tokushima (Naruto)",
+    descriptionJa: "世界最大級の渦潮で知られる鳴門海峡。潮の干満差により発生する直径20mもの渦は圧巻。大鳴門橋の遊歩道「渦の道」から、また観潮船から間近で見られます。鳴門金時、鳴門わかめも特産品です。",
+    descriptionEn: "Naruto Strait known for world's largest whirlpools. 20m diameter whirlpools occurring from tidal differences are spectacular. Viewable up close from Onaruto Bridge walkway 'Uzunomichi' or sightseeing boats. Naruto kintoki sweet potatoes and Naruto wakame also specialties.",
+    highlightsJa: ["鳴門の渦潮", "渦の道", "大鳴門橋", "大塚国際美術館"],
+    highlightsEn: ["Naruto Whirlpools", "Uzunomichi", "Onaruto Bridge", "Otsuka Museum of Art"],
+    experiencesJa: "渦潮観潮、渦の道、大塚国際美術館、鳴門金時、わかめ料理",
+    experiencesEn: "Whirlpool viewing, Uzunomichi, art museum, Naruto kintoki, wakame cuisine"
+  },
+  {
+    id: 95,
+    region: "shikoku",
+    wideArea: false,
+    jaTitle: "阿波踊り～徳島の夏を彩る伝統芸能～",
+    enTitle: "Awa Odori – Traditional Performing Art Coloring Tokushima Summer",
+    jaLocation: "徳島県（徳島市）",
+    enLocation: "Tokushima (Tokushima)",
+    descriptionJa: "400年以上の歴史を持つ阿波踊り。毎年8月12-15日に開催され、130万人以上が訪れる日本最大級の盆踊り。「踊る阿呆に見る阿呆、同じ阿呆なら踊らにゃ損々」のリズムに乗って、街全体が熱狂します。",
+    descriptionEn: "Awa Odori with over 400 years of history. Held August 12-15 annually, Japan's largest bon dance attracting over 1.3 million visitors. Entire city enthuses to rhythm of 'It's a fool who dances and a fool who watches; if both are fools, you might as well dance.'",
+    highlightsJa: ["阿波踊り", "阿波おどり会館", "眉山", "徳島城跡"],
+    highlightsEn: ["Awa Odori", "Awa Odori Kaikan", "Mt. Bizan", "Tokushima Castle Ruins"],
+    experiencesJa: "阿波踊り鑑賞・参加、阿波おどり会館、徳島ラーメン、すだち、鳴門鯛",
+    experiencesEn: "Awa Odori viewing/participation, Awa Odori Kaikan, Tokushima ramen, sudachi, Naruto sea bream"
+  },
+  {
+    id: 96,
+    region: "shikoku",
+    wideArea: false,
+    jaTitle: "祖谷のかずら橋～秘境の吊り橋～",
+    enTitle: "Iya Kazurabashi – Suspension Bridge in Hidden Valley",
+    jaLocation: "徳島県（三好市）",
+    enLocation: "Tokushima (Miyoshi)",
+    descriptionJa: "平家の落人伝説が残る祖谷渓。シラクチカズラで作られた吊り橋は、日本三奇橋の一つ。渓谷の深さ、エメラルドグリーンの川、山々の紅葉。秘境ムード満点で、祖谷そば、でこまわしなど郷土料理も魅力です。",
+    descriptionEn: "Iya Valley with Heike fugitive legends. Suspension bridge made from shirakuchi vines is one of Japan's Three Strange Bridges. Valley depth, emerald green river, mountain autumn colors. Full of hidden valley atmosphere, local cuisine like Iya soba and dekoyaki also attractive.",
+    highlightsJa: ["祖谷のかずら橋", "大歩危・小歩危", "奥祖谷二重かずら橋", "琵琶の滝"],
+    highlightsEn: ["Iya Kazurabashi", "Oboke-Koboke Gorges", "Oku-Iya Double Vine Bridges", "Biwa Falls"],
+    experiencesJa: "かずら橋渡り、渓谷クルーズ、祖谷そば、でこまわし、温泉",
+    experiencesEn: "Bridge crossing, gorge cruises, Iya soba, dekoyaki, hot springs"
+  },
+  {
+    id: 97,
+    region: "shikoku",
+    wideArea: false,
+    jaTitle: "讃岐うどん～香川のソウルフード～",
+    enTitle: "Sanuki Udon – Kagawa's Soul Food",
+    jaLocation: "香川県（全域）",
+    enLocation: "Kagawa (Entire Prefecture)",
+    descriptionJa: "讃岐うどん県・香川。人口あたりのうどん店数日本一。コシの強い麺と出汁の旨み、セルフ式の独特のスタイル。「うどん県」を自称するほどうどん愛に溢れた県で、はしごうどんが定番の楽しみ方です。",
+    descriptionEn: "Sanuki Udon Prefecture Kagawa. Japan's most udon shops per capita. Firm chewy noodles and flavorful dashi, unique self-service style. Prefecture overflowing with udon love to self-proclaim 'Udon Prefecture,' udon hopping is standard way to enjoy.",
+    highlightsJa: ["讃岐うどん", "金刀比羅宮", "栗林公園", "小豆島"],
+    highlightsEn: ["Sanuki Udon", "Kotohira-gu Shrine", "Ritsurin Garden", "Shodoshima"],
+    experiencesJa: "うどん巡り、金刀比羅宮参拝、栗林公園、骨付鳥、小豆島オリーブ",
+    experiencesEn: "Udon touring, Kotohira-gu visits, Ritsurin Garden, hone-tsuki-dori, Shodoshima olives"
+  },
+  {
+    id: 98,
+    region: "shikoku",
+    wideArea: false,
+    jaTitle: "小豆島～オリーブとエンジェルロード～",
+    enTitle: "Shodoshima – Olives and Angel Road",
+    jaLocation: "香川県（小豆島町、土庄町）",
+    enLocation: "Kagawa (Shodoshima, Tonosho)",
+    descriptionJa: "瀬戸内海に浮かぶオリーブの島。日本のオリーブ栽培発祥地で、地中海のような温暖な気候。エンジェルロード、寒霞渓、二十四の瞳映画村など見どころ満載。醤油、佃煮、そうめんも特産品です。",
+    descriptionEn: "Olive island floating in Seto Inland Sea. Birthplace of Japan's olive cultivation with Mediterranean-like mild climate. Attractions abound including Angel Road, Kankakei Gorge, Twenty-Four Eyes Movie Village. Soy sauce, tsukudani, somen also specialties.",
+    highlightsJa: ["エンジェルロード", "寒霞渓", "オリーブ園", "二十四の瞳映画村"],
+    highlightsEn: ["Angel Road", "Kankakei Gorge", "Olive Park", "Twenty-Four Eyes Movie Village"],
+    experiencesJa: "エンジェルロード散策、ロープウェイ、オリーブ収穫体験、醤油蔵、そうめん",
+    experiencesEn: "Angel Road walks, ropeway, olive harvest experiences, soy sauce breweries, somen"
+  },
+  {
+    id: 99,
+    region: "shikoku",
+    wideArea: false,
+    jaTitle: "道後温泉～日本最古の温泉～",
+    enTitle: "Dogo Onsen – Japan's Oldest Hot Spring",
+    jaLocation: "愛媛県（松山市）",
+    enLocation: "Ehime (Matsuyama)",
+    descriptionJa: "3,000年の歴史を持つ道後温泉。夏目漱石『坊っちゃん』の舞台、皇室も訪れた格式ある温泉。道後温泉本館は重要文化財で、その建築美は圧巻。松山城、坊っちゃん列車、みかんも魅力です。",
+    descriptionEn: "Dogo Onsen with 3,000-year history. Stage of Natsume Soseki's 'Botchan,' prestigious hot spring visited by Imperial Family. Dogo Onsen Honkan is Important Cultural Property with overwhelming architectural beauty. Matsuyama Castle, Botchan train, mikan also attractive.",
+    highlightsJa: ["道後温泉本館", "松山城", "坊っちゃん列車", "石手寺"],
+    highlightsEn: ["Dogo Onsen Honkan", "Matsuyama Castle", "Botchan Train", "Ishiteji Temple"],
+    experiencesJa: "道後温泉、松山城見学、坊っちゃん列車、鯛めし、みかんジュース",
+    experiencesEn: "Dogo Onsen, castle tours, Botchan train, tai-meshi, mikan juice"
+  },
+  {
+    id: 100,
+    region: "shikoku",
+    wideArea: false,
+    jaTitle: "しまなみ海道～サイクリストの聖地～",
+    enTitle: "Shimanami Kaido – Cyclist's Sanctuary",
+    jaLocation: "愛媛県（今治市）、広島県（尾道市）",
+    enLocation: "Ehime (Imabari), Hiroshima (Onomichi)",
+    descriptionJa: "瀬戸内海の島々を結ぶ全長70kmのサイクリングロード。世界中のサイクリストが訪れる絶景ルート。来島海峡大橋、多々羅大橋など美しい橋、柑橘類、海鮮料理。今治タオルも有名です。",
+    descriptionEn: "70km cycling road connecting Seto Inland Sea islands. Spectacular route visited by cyclists worldwide. Beautiful bridges including Kurushima Kaikyo Bridge and Tatara Bridge, citrus fruits, seafood. Imabari towels also famous.",
+    highlightsJa: ["しまなみ海道", "来島海峡大橋", "大山祇神社", "今治タオル"],
+    highlightsEn: ["Shimanami Kaido", "Kurushima Kaikyo Bridge", "Oyamazumi Shrine", "Imabari Towels"],
+    experiencesJa: "サイクリング、島巡り、海鮮料理、柑橘類、今治タオル、海賊焼き",
+    experiencesEn: "Cycling, island hopping, seafood, citrus fruits, Imabari towels, kaizoku-yaki"
+  },
+
+  // 九州・沖縄 (101-118)
+  {
+    id: 101,
+    region: "kyushu-okinawa",
+    wideArea: false,
+    jaTitle: "太宰府天満宮～学問の神様～",
+    enTitle: "Dazaifu Tenmangu – Deity of Learning",
+    jaLocation: "福岡県（太宰府市）",
+    enLocation: "Fukuoka (Dazaifu)",
+    descriptionJa: "菅原道真公を祀る学問の神様。全国1万2千社の天満宮の総本宮。受験シーズンには多くの学生が合格祈願に訪れます。参道の梅ヶ枝餅、九州国立博物館、太宰府政庁跡など見どころ満載です。",
+    descriptionEn: "Deity of learning enshrining Sugawara no Michizane. Head shrine of 12,000 Tenmangu shrines nationwide. Many students visit for exam success prayers during exam season. Attractions abound including umegae mochi on approach, Kyushu National Museum, Dazaifu Government Office ruins.",
+    highlightsJa: ["太宰府天満宮", "九州国立博物館", "竈門神社", "太宰府政庁跡"],
+    highlightsEn: ["Dazaifu Tenmangu", "Kyushu National Museum", "Kamado Shrine", "Dazaifu Government Ruins"],
+    experiencesJa: "太宰府天満宮参拝、梅ヶ枝餅、博物館、明太子、もつ鍋",
+    experiencesEn: "Tenmangu visits, umegae mochi, museum, mentaiko, motsunabe"
+  },
+  {
+    id: 102,
+    region: "kyushu-okinawa",
+    wideArea: false,
+    jaTitle: "博多～食の都と祭りの街～",
+    enTitle: "Hakata – Culinary Capital and Festival City",
+    jaLocation: "福岡県（福岡市）",
+    enLocation: "Fukuoka (Fukuoka)",
+    descriptionJa: "博多ラーメン、もつ鍋、明太子、水炊きなど九州グルメの中心地。博多祇園山笠、博多どんたくなど勇壮な祭り。中洲の屋台街、キャナルシティ、福岡城跡。アジアに近い国際都市です。",
+    descriptionEn: "Center of Kyushu gourmet including Hakata ramen, motsunabe, mentaiko, mizutaki. Brave festivals like Hakata Gion Yamakasa and Hakata Dontaku. Nakasu yatai street, Canal City, Fukuoka Castle ruins. International city close to Asia.",
+    highlightsJa: ["博多ラーメン", "博多祇園山笠", "中洲屋台", "福岡城跡"],
+    highlightsEn: ["Hakata Ramen", "Hakata Gion Yamakasa", "Nakasu Yatai", "Fukuoka Castle Ruins"],
+    experiencesJa: "ラーメン、もつ鍋、屋台、明太子、水炊き、祭り見学",
+    experiencesEn: "Ramen, motsunabe, yatai, mentaiko, mizutaki, festival viewing"
+  },
+  {
+    id: 103,
+    region: "kyushu-okinawa",
+    wideArea: false,
+    jaTitle: "門司港レトロ～大正ロマンの港町～",
+    enTitle: "Mojiko Retro – Taisho Romantic Port Town",
+    jaLocation: "福岡県（北九州市）",
+    enLocation: "Fukuoka (Kitakyushu)",
+    descriptionJa: "明治から大正にかけて国際貿易港として栄えた門司港。レンガ造りの建物、門司港駅舎、旧大阪商船ビルなど、レトロな街並みが魅力。焼きカレー、ふぐ料理、関門海峡の景色も見どころです。",
+    descriptionEn: "Moji Port prospered as international trade port from Meiji to Taisho. Brick buildings, Moji Port station building, former Osaka Shosen building and other retro townscape attractive. Baked curry, fugu cuisine, Kanmon Strait views also highlights.",
+    highlightsJa: ["門司港駅", "門司港レトロ地区", "関門橋", "焼きカレー"],
+    highlightsEn: ["Moji Port Station", "Mojiko Retro District", "Kanmon Bridge", "Baked Curry"],
+    experiencesJa: "レトロ建築巡り、焼きカレー、ふぐ料理、関門海峡クルーズ",
+    experiencesEn: "Retro architecture tours, baked curry, fugu cuisine, Kanmon Strait cruises"
+  },
+  {
+    id: 104,
+    region: "kyushu-okinawa",
+    wideArea: false,
+    jaTitle: "柳川～水郷の町並みと川下り～",
+    enTitle: "Yanagawa – Water Town Townscape and River Boating",
+    jaLocation: "福岡県（柳川市）",
+    enLocation: "Fukuoka (Yanagawa)",
+    descriptionJa: "堀割が縦横に巡る水郷の町。どんこ舟での川下りは情緒たっぷり。柳川藩主立花家の御花、北原白秋記念館、うなぎのせいろ蒸しが名物。桜の季節には水面に映る桜が美しい。",
+    descriptionEn: "Water town with crisscrossing canals. Donko boat river trips full of atmosphere. Ohana villa of Yanagawa Domain Tachibana family, Kitahara Hakushu Memorial Hall, steamed eel specialty. Beautiful cherry blossoms reflected on water in spring.",
+    highlightsJa: ["川下り", "御花", "北原白秋記念館", "うなぎのせいろ蒸し"],
+    highlightsEn: ["River Boating", "Ohana Villa", "Hakushu Memorial", "Steamed Eel"],
+    experiencesJa: "川下り、うなぎのせいろ蒸し、御花見学、有明海の海苔",
+    experiencesEn: "River boating, steamed eel, Ohana tours, Ariake Sea nori"
+  },
+  {
+    id: 105,
+    region: "kyushu-okinawa",
+    wideArea: false,
+    jaTitle: "佐賀インターナショナルバルーンフェスタ",
+    enTitle: "Saga International Balloon Fiesta",
+    jaLocation: "佐賀県（佐賀市）",
+    enLocation: "Saga (Saga)",
+    descriptionJa: "毎年11月、100機以上の熱気球が佐賀の空を彩るアジア最大級の熱気球大会。早朝の一斉離陸は圧巻。吉野ヶ里遺跡、呼子のイカ、有田焼など、佐賀の魅力も満喫できます。",
+    descriptionEn: "Every November, Asia's largest hot air balloon festival with over 100 balloons coloring Saga sky. Mass morning takeoff is spectacular. Can also enjoy Saga attractions like Yoshinogari ruins, Yobuko squid, Arita-yaki pottery.",
+    highlightsJa: ["バルーンフェスタ", "吉野ヶ里遺跡", "呼子のイカ", "有田焼"],
+    highlightsEn: ["Balloon Fiesta", "Yoshinogari Ruins", "Yobuko Squid", "Arita-yaki"],
+    experiencesJa: "バルーン見学、吉野ヶ里遺跡、呼子イカ、有田焼ショッピング、嬉野温泉",
+    experiencesEn: "Balloon viewing, Yoshinogari ruins, Yobuko squid, Arita-yaki shopping, Ureshino Onsen"
+  },
+  {
+    id: 106,
+    region: "kyushu-okinawa",
+    wideArea: false,
+    jaTitle: "長崎～異国情緒あふれる坂の町～",
+    enTitle: "Nagasaki – Exotic Slope Town",
+    jaLocation: "長崎県（長崎市）",
+    enLocation: "Nagasaki (Nagasaki)",
+    descriptionJa: "江戸時代の鎖国下、唯一西洋に開かれていた出島。グラバー園、大浦天主堂、オランダ坂など異国情緒あふれる街並み。平和公園、原爆資料館で平和の尊さを学び、ちゃんぽん、カステラを楽しめます。",
+    descriptionEn: "Dejima, only place open to West during Edo seclusion. Exotic townscape including Glover Garden, Oura Cathedral, Dutch Slopes. Learn peace's preciousness at Peace Park and Atomic Bomb Museum, enjoy champon and castella.",
+    highlightsJa: ["グラバー園", "大浦天主堂", "平和公園", "出島"],
+    highlightsEn: ["Glover Garden", "Oura Cathedral", "Peace Park", "Dejima"],
+    experiencesJa: "グラバー園、教会巡り、ちゃんぽん、カステラ、稲佐山夜景",
+    experiencesEn: "Glover Garden, church tours, champon, castella, Mt. Inasa night views"
+  },
+  {
+    id: 107,
+    region: "kyushu-okinawa",
+    wideArea: false,
+    jaTitle: "軍艦島～廃墟の島～",
+    enTitle: "Gunkanjima – Ruins Island",
+    jaLocation: "長崎県（長崎市）",
+    enLocation: "Nagasaki (Nagasaki)",
+    descriptionJa: "世界遺産「明治日本の産業革命遺産」の一つ。海底炭鉱の島として栄え、最盛期には5,000人以上が暮らしました。1974年閉山後は無人島となり、廃墟化した高層アパート群が独特の景観を作っています。",
+    descriptionEn: "Part of UNESCO World Heritage 'Sites of Japan's Meiji Industrial Revolution.' Prospered as undersea coal mine island with over 5,000 residents at peak. Became uninhabited after 1974 closure, ruined high-rise apartment complex creates unique landscape.",
+    highlightsJa: ["軍艦島上陸ツアー", "軍艦島デジタルミュージアム", "高層アパート廃墟", "海底炭鉱"],
+    highlightsEn: ["Gunkanjima Landing Tours", "Gunkanjima Digital Museum", "High-rise Ruins", "Undersea Coal Mine"],
+    experiencesJa: "軍艦島上陸ツアー、デジタルミュージアム、長崎港クルーズ、ちゃんぽん",
+    experiencesEn: "Landing tours, digital museum, Nagasaki Port cruises, champon"
+  },
+  {
+    id: 108,
+    region: "kyushu-okinawa",
+    wideArea: false,
+    jaTitle: "ハウステンボス～花と光の王国～",
+    enTitle: "Huis Ten Bosch – Kingdom of Flowers and Lights",
+    jaLocation: "長崎県（佐世保市）",
+    enLocation: "Nagasaki (Sasebo)",
+    descriptionJa: "オランダの街並みを再現したテーマパーク。四季折々の花、世界最大級のイルミネーション、運河クルーズ。ヨーロッパの雰囲気を味わいながら、アトラクション、グルメ、ホテルを楽しめるリゾートです。",
+    descriptionEn: "Theme park recreating Dutch townscape. Seasonal flowers, world's largest illumination, canal cruises. Resort enjoying attractions, gourmet, hotels while savoring European atmosphere.",
+    highlightsJa: ["ハウステンボス", "光の王国", "運河クルーズ", "風車"],
+    highlightsEn: ["Huis Ten Bosch", "Kingdom of Light", "Canal Cruises", "Windmills"],
+    experiencesJa: "イルミネーション、花畑、アトラクション、運河クルーズ、佐世保バーガー",
+    experiencesEn: "Illumination, flower fields, attractions, canal cruises, Sasebo burgers"
+  },
+  {
+    id: 109,
+    region: "kyushu-okinawa",
+    wideArea: false,
+    jaTitle: "阿蘇～世界最大級のカルデラ～",
+    enTitle: "Aso – World's Largest Caldera",
+    jaLocation: "熊本県（阿蘇市）",
+    enLocation: "Kumamoto (Aso)",
+    descriptionJa: "世界最大級のカルデラを持つ阿蘇山。中岳火口では今も噴煙が上がり、地球の鼓動を感じられます。草千里、大観峰からの絶景、黒川温泉、赤牛など、自然とグルメの宝庫です。",
+    descriptionEn: "Mt. Aso with world's largest caldera. Nakadake crater still emitting smoke, feeling Earth's pulse. Treasure trove of nature and gourmet including Kusasenri, spectacular views from Daikanbo, Kurokawa Onsen, akaushi beef.",
+    highlightsJa: ["阿蘇中岳火口", "草千里", "大観峰", "黒川温泉"],
+    highlightsEn: ["Aso Nakadake Crater", "Kusasenri", "Daikanbo", "Kurokawa Onsen"],
+    experiencesJa: "火口見学、草原ドライブ、赤牛料理、黒川温泉、高菜めし",
+    experiencesEn: "Crater viewing, grassland drives, akaushi cuisine, Kurokawa Onsen, takana-meshi"
+  },
+  {
+    id: 110,
+    region: "kyushu-okinawa",
+    wideArea: false,
+    jaTitle: "熊本城～難攻不落の名城～",
+    enTitle: "Kumamoto Castle – Impregnable Castle",
+    jaLocation: "熊本県（熊本市）",
+    enLocation: "Kumamoto (Kumamoto)",
+    descriptionJa: "加藤清正が築いた日本三名城の一つ。「武者返し」と呼ばれる反り返った石垣が特徴。2016年熊本地震で被災しましたが、復旧工事が進み、城の勇姿が戻りつつあります。馬刺し、熊本ラーメンも名物です。",
+    descriptionEn: "One of Japan's Three Great Castles built by Kato Kiyomasa. Characterized by curved stone walls called 'musha-gaeshi.' Damaged in 2016 Kumamoto earthquake but restoration progressing, castle's brave figure returning. Basashi, Kumamoto ramen also specialties.",
+    highlightsJa: ["熊本城天守閣", "武者返しの石垣", "本丸御殿", "水前寺成趣園"],
+    highlightsEn: ["Kumamoto Castle Tower", "Musha-gaeshi Walls", "Honmaru Palace", "Suizenji Garden"],
+    experiencesJa: "熊本城見学、馬刺し、熊本ラーメン、いきなり団子、辛子蓮根",
+    experiencesEn: "Castle tours, basashi, Kumamoto ramen, ikinari dango, karashi renkon"
+  },
+  {
+    id: 111,
+    region: "kyushu-okinawa",
+    wideArea: false,
+    jaTitle: "別府温泉～温泉天国～",
+    enTitle: "Beppu Onsen – Hot Spring Paradise",
+    jaLocation: "大分県（別府市）",
+    enLocation: "Oita (Beppu)",
+    descriptionJa: "源泉数・湧出量ともに日本一の別府温泉。地獄めぐり（海地獄、血の池地獄など）、砂湯、泥湯など多彩な温泉体験。温泉蒸し料理、とり天、別府冷麺など、グルメも充実しています。",
+    descriptionEn: "Beppu Onsen leading Japan in both source count and output volume. Diverse hot spring experiences including hell tours (Umi Jigoku, Blood Pond Hell, etc.), sand baths, mud baths. Abundant gourmet including hot spring steamed cuisine, toriten, Beppu cold noodles.",
+    highlightsJa: ["地獄めぐり", "砂湯", "別府タワー", "血の池地獄"],
+    highlightsEn: ["Hell Tours", "Sand Baths", "Beppu Tower", "Blood Pond Hell"],
+    experiencesJa: "地獄めぐり、砂湯、温泉蒸し料理、とり天、別府冷麺",
+    experiencesEn: "Hell tours, sand baths, hot spring steamed cuisine, toriten, Beppu cold noodles"
+  },
+  {
+    id: 112,
+    region: "kyushu-okinawa",
+    wideArea: false,
+    jaTitle: "由布院温泉～山里の隠れ家～",
+    enTitle: "Yufuin Onsen – Mountain Village Hideaway",
+    jaLocation: "大分県（由布市）",
+    enLocation: "Oita (Yufu)",
+    descriptionJa: "由布岳の麓に広がる静かな温泉郷。金鱗湖、おしゃれなカフェやギャラリー、雑貨店が立ち並ぶ湯の坪街道。女性に人気の洗練された温泉リゾートで、とり天、だんご汁も名物です。",
+    descriptionEn: "Quiet hot spring resort spreading at Mt. Yufu's foot. Kinrinko Lake, Yunotsubo Street lined with stylish cafes, galleries, and general stores. Refined hot spring resort popular with women, toriten and dango soup also specialties.",
+    highlightsJa: ["金鱗湖", "湯の坪街道", "由布岳", "辻馬車"],
+    highlightsEn: ["Kinrinko Lake", "Yunotsubo Street", "Mt. Yufu", "Horse Carriages"],
+    experiencesJa: "温泉、金鱗湖散策、カフェ巡り、とり天、だんご汁、B-speak",
+    experiencesEn: "Hot springs, Kinrinko walks, cafe hopping, toriten, dango soup, B-speak"
+  },
+  {
+    id: 113,
+    region: "kyushu-okinawa",
+    wideArea: false,
+    jaTitle: "高千穂峡～神話の里～",
+    enTitle: "Takachiho Gorge – Village of Mythology",
+    jaLocation: "宮崎県（高千穂町）",
+    enLocation: "Miyazaki (Takachiho)",
+    descriptionJa: "天岩戸伝説が残る神話の里。高千穂峡の真名井の滝、高千穂神社の夜神楽。阿蘇の溶岩が冷えて固まった柱状節理の断崖は圧巻。ボートで滝の近くまで行けます。",
+    descriptionEn: "Mythological village with Amano-Iwato legend. Manai Falls in Takachiho Gorge, Takachiho Shrine night kagura. Columnar joint cliffs from cooled Aso lava are spectacular. Can approach waterfall by boat.",
+    highlightsJa: ["高千穂峡", "真名井の滝", "天岩戸神社", "高千穂神社"],
+    highlightsEn: ["Takachiho Gorge", "Manai Falls", "Amanoiwato Shrine", "Takachiho Shrine"],
+    experiencesJa: "ボート、夜神楽鑑賞、神社巡り、流しそうめん、宮崎地鶏",
+    experiencesEn: "Boating, night kagura viewing, shrine tours, nagashi somen, Miyazaki jidori"
+  },
+  {
+    id: 114,
+    region: "kyushu-okinawa",
+    wideArea: false,
+    jaTitle: "宮崎～南国の太陽と青い海～",
+    enTitle: "Miyazaki – Southern Sun and Blue Sea",
+    jaLocation: "宮崎県（宮崎市）",
+    enLocation: "Miyazaki (Miyazaki)",
+    descriptionJa: "南国情緒あふれる宮崎。青島の鬼の洗濯板、日南海岸のドライブ、フェニックスシーガイア。プロ野球キャンプ地として有名で、マンゴー、チキン南蛮、冷や汁など南国グルメも魅力です。",
+    descriptionEn: "Miyazaki overflowing with southern atmosphere. Devil's Washboard on Aoshima Island, Nichinan Coast drives, Phoenix Seagaia. Famous as professional baseball camp site, southern gourmet like mango, chicken nanban, hiyajiru also attractive.",
+    highlightsJa: ["青島", "日南海岸", "鵜戸神宮", "フェニックス"],
+    highlightsEn: ["Aoshima", "Nichinan Coast", "Udo Shrine", "Phoenix"],
+    experiencesJa: "青島散策、海岸ドライブ、チキン南蛮、マンゴー、冷や汁、サーフィン",
+    experiencesEn: "Aoshima walks, coast drives, chicken nanban, mango, hiyajiru, surfing"
+  },
+  {
+    id: 115,
+    region: "kyushu-okinawa",
+    wideArea: false,
+    jaTitle: "鹿児島～桜島と西郷隆盛の故郷～",
+    enTitle: "Kagoshima – Sakurajima and Saigo Takamori's Hometown",
+    jaLocation: "鹿児島県（鹿児島市）",
+    enLocation: "Kagoshima (Kagoshima)",
+    descriptionJa: "活火山・桜島が見守る街。西郷隆盛、大久保利通など明治維新の志士を輩出。仙巌園、城山展望台から桜島の絶景。黒豚、白熊、さつま揚げ、焼酎など、グルメも豊富です。",
+    descriptionEn: "City watched over by active volcano Sakurajima. Produced Meiji Restoration patriots including Saigo Takamori and Okubo Toshimichi. Spectacular Sakurajima views from Sengan-en Garden and Shiroyama Observatory. Abundant gourmet including kurobuta, shirokuma, satsuma-age, shochu.",
+    highlightsJa: ["桜島", "仙巌園", "城山展望台", "西郷隆盛像"],
+    highlightsEn: ["Sakurajima", "Sengan-en Garden", "Shiroyama Observatory", "Saigo Takamori Statue"],
+    experiencesJa: "桜島フェリー、仙巌園、黒豚しゃぶしゃぶ、白熊、さつま揚げ、焼酎",
+    experiencesEn: "Sakurajima ferry, Sengan-en, kurobuta shabu-shabu, shirokuma, satsuma-age, shochu"
+  },
+  {
+    id: 116,
+    region: "kyushu-okinawa",
+    wideArea: false,
+    jaTitle: "屋久島～神秘の森～",
+    enTitle: "Yakushima – Mystical Forest",
+    jaLocation: "鹿児島県（屋久島町）",
+    enLocation: "Kagoshima (Yakushima)",
+    descriptionJa: "世界遺産・屋久島。樹齢7,200年の縄文杉、白谷雲水峡、宮之浦岳。「月に35日雨が降る」と言われる豊かな雨が育む原生林。もののけ姫の舞台としても知られ、神秘的な自然に包まれます。",
+    descriptionEn: "UNESCO World Heritage Yakushima. 7,200-year-old Jomon Sugi, Shiratani Unsuikyo Ravine, Mt. Miyanoura. Primeval forest nurtured by abundant rain said to fall '35 days a month.' Known as Princess Mononoke stage, enveloped in mystical nature.",
+    highlightsJa: ["縄文杉", "白谷雲水峡", "宮之浦岳", "ウミガメ"],
+    highlightsEn: ["Jomon Sugi", "Shiratani Unsuikyo", "Mt. Miyanoura", "Sea Turtles"],
+    experiencesJa: "縄文杉トレッキング、白谷雲水峡、ウミガメ観察、首折れサバ、とびうお",
+    experiencesEn: "Jomon Sugi trekking, Shiratani Unsuikyo, sea turtle observation, kubiore-saba, flying fish"
+  },
+  {
+    id: 117,
+    region: "kyushu-okinawa",
+    wideArea: false,
+    jaTitle: "首里城と琉球王国の文化",
+    enTitle: "Shuri Castle and Ryukyu Kingdom Culture",
+    jaLocation: "沖縄県（那覇市）",
+    enLocation: "Okinawa (Naha)",
+    descriptionJa: "かつて琉球王国の王城だった首里城。2019年の火災から再建中ですが、琉球の歴史と文化を学べます。国際通り、壺屋やちむん通り、琉球料理、三線、エイサーなど、独特の文化が魅力です。",
+    descriptionEn: "Shuri Castle, once royal castle of Ryukyu Kingdom. Rebuilding from 2019 fire, can learn Ryukyu history and culture. Unique culture attractive including Kokusai Street, Tsuboya Yachimun Street, Ryukyu cuisine, sanshin, eisa.",
+    highlightsJa: ["首里城", "国際通り", "壺屋やちむん通り", "識名園"],
+    highlightsEn: ["Shuri Castle", "Kokusai Street", "Tsuboya Yachimun Street", "Shikinaen Garden"],
+    experiencesJa: "首里城見学、国際通り散策、琉球料理、やちむん、三線、泡盛",
+    experiencesEn: "Shuri Castle tours, Kokusai Street walks, Ryukyu cuisine, yachimun, sanshin, awamori"
+  },
+  {
+    id: 118,
+    region: "kyushu-okinawa",
+    wideArea: false,
+    jaTitle: "沖縄の美しい海とリゾート",
+    enTitle: "Okinawa's Beautiful Seas and Resorts",
+    jaLocation: "沖縄県（全域）",
+    enLocation: "Okinawa (Entire Prefecture)",
+    descriptionJa: "エメラルドグリーンの海、白い砂浜、サンゴ礁。石垣島、宮古島、久米島など離島の美しさは格別。マリンスポーツ、ダイビング、星空観察。ゴーヤチャンプルー、海ぶどう、沖縄そばなど、独特のグルメも魅力です。",
+    descriptionEn: "Emerald green seas, white beaches, coral reefs. Remote islands like Ishigaki, Miyako, Kume exceptionally beautiful. Marine sports, diving, stargazing. Unique gourmet like goya champuru, sea grapes, Okinawa soba also attractive.",
+    highlightsJa: ["美ら海水族館", "石垣島", "宮古島", "竹富島"],
+    highlightsEn: ["Churaumi Aquarium", "Ishigaki Island", "Miyako Island", "Taketomi Island"],
+    experiencesJa: "ダイビング、シュノーケリング、星空観察、ゴーヤチャンプルー、海ぶどう、泡盛",
+    experiencesEn: "Diving, snorkeling, stargazing, goya champuru, sea grapes, awamori"
+  }
 ];
 
 // ローカルストレージ管理
@@ -1162,11 +2737,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function initializeApp() {
   // 言語切り替え
-  document.querySelectorAll('.lang-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const lang = btn.dataset.lang;
-      document.body.className = `lang-${lang}`;
-      document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.lang-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var lang = btn.dataset.lang;
+      document.body.className = 'lang-' + lang;
+      document.querySelectorAll('.lang-btn').forEach(function(b) { b.classList.remove('active'); });
       btn.classList.add('active');
       localStorage.setItem('preferredLang', lang);
       renderAllStories();
@@ -1174,38 +2749,39 @@ function initializeApp() {
   });
 
   // 保存された言語設定を復元
-  const savedLang = localStorage.getItem('preferredLang');
+  var savedLang = localStorage.getItem('preferredLang');
   if (savedLang) {
-    document.body.className = `lang-${savedLang}`;
-    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-    document.querySelector(`[data-lang="${savedLang}"]`)?.classList.add('active');
+    document.body.className = 'lang-' + savedLang;
+    document.querySelectorAll('.lang-btn').forEach(function(b) { b.classList.remove('active'); });
+    var btn = document.querySelector('[data-lang="' + savedLang + '"]');
+    if (btn) btn.classList.add('active');
   }
 
   // タブ切り替え
-  document.querySelectorAll('.filter-tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.filter-tab').forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('.filter-tab').forEach(function(t) { t.classList.remove('active'); });
       tab.classList.add('active');
       
-      const tabType = tab.dataset.tab;
-      document.querySelectorAll('.filter-content').forEach(c => c.classList.remove('active'));
+      var tabType = tab.dataset.tab;
+      document.querySelectorAll('.filter-content').forEach(function(c) { c.classList.remove('active'); });
       document.getElementById(tabType === 'region' ? 'regionFilters' : 'statusFilters').classList.add('active');
     });
   });
 
   // 地域フィルター
-  document.querySelectorAll('#regionFilters .filter-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('#regionFilters .filter-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('#regionFilters .filter-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('#regionFilters .filter-btn').forEach(function(b) { b.classList.remove('active'); });
       btn.classList.add('active');
       filterStories();
     });
   });
 
   // ステータスフィルター
-  document.querySelectorAll('#statusFilters .filter-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('#statusFilters .filter-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('#statusFilters .filter-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('#statusFilters .filter-btn').forEach(function(b) { b.classList.remove('active'); });
       btn.classList.add('active');
       filterStories();
     });
@@ -1228,11 +2804,11 @@ function initializeApp() {
 }
 
 function renderAllStories() {
-  const lang = document.body.classList.contains('lang-en') ? 'en' : 'ja';
-  const mainContent = document.getElementById('mainContent');
+  var lang = document.body.classList.contains('lang-en') ? 'en' : 'ja';
+  var mainContent = document.getElementById('mainContent');
   
   // 地域ごとにグループ化
-  const regions = {
+  var regions = {
     'hokkaido-tohoku': { ja: '🗾 北海道・東北ブロック', en: '🗾 Hokkaido & Tohoku Block', count: 0 },
     'kanto': { ja: '🏯 関東ブロック', en: '🏯 Kanto Block', count: 0 },
     'chubu': { ja: '🗻 中部ブロック', en: '🗻 Chubu Block', count: 0 },
@@ -1243,32 +2819,30 @@ function renderAllStories() {
   };
 
   // カウント
-  STORY_DATA.forEach(story => {
+  STORY_DATA.forEach(function(story) {
     if (regions[story.region]) regions[story.region].count++;
   });
 
-  let html = '';
-  Object.keys(regions).forEach(regionKey => {
-    const region = regions[regionKey];
-    const stories = STORY_DATA.filter(s => s.region === regionKey);
+  var html = '';
+  Object.keys(regions).forEach(function(regionKey) {
+    var region = regions[regionKey];
+    var stories = STORY_DATA.filter(function(s) { return s.region === regionKey; });
     
     if (stories.length === 0) return;
     
-    html += `
-      <section class="region-block" data-region="${regionKey}">
-        <h2 class="region-title">
-          <span class="ja-text">${region.ja}</span>
-          <span class="en-text">${region.en}</span>
-          <span class="region-count">
-            <span class="ja-text">(${region.count}件)</span>
-            <span class="en-text">(${region.count} stories)</span>
-          </span>
-        </h2>
-        <div class="story-grid">
-          ${stories.map(story => createStoryCard(story, lang)).join('')}
-        </div>
-      </section>
-    `;
+    html += '<section class="region-block" data-region="' + regionKey + '">' +
+      '<h2 class="region-title">' +
+      '<span class="ja-text">' + region.ja + '</span>' +
+      '<span class="en-text">' + region.en + '</span>' +
+      '<span class="region-count">' +
+      '<span class="ja-text">(' + region.count + '件)</span>' +
+      '<span class="en-text">(' + region.count + ' stories)</span>' +
+      '</span>' +
+      '</h2>' +
+      '<div class="story-grid">' +
+      stories.map(function(story) { return createStoryCard(story, lang); }).join('') +
+      '</div>' +
+      '</section>';
   });
   
   mainContent.innerHTML = html;
@@ -1278,62 +2852,56 @@ function renderAllStories() {
 }
 
 function createStoryCard(story, lang) {
-  const isFav = StorageManager.isFavorite(story.id);
-  const isVis = StorageManager.isVisited(story.id);
-  const titleKey = lang === 'en' ? 'enTitle' : 'jaTitle';
-  const locKey = lang === 'en' ? 'enLocation' : 'jaLocation';
+  var isFav = StorageManager.isFavorite(story.id);
+  var isVis = StorageManager.isVisited(story.id);
+  var titleKey = lang === 'en' ? 'enTitle' : 'jaTitle';
+  var locKey = lang === 'en' ? 'enLocation' : 'jaLocation';
   
-  return `
-    <article class="story-card" data-story-id="${story.id}" data-region="${story.region}">
-      <div class="card-actions">
-        <button class="card-action-btn favorite ${isFav ? 'active' : ''}" title="お気に入り" data-action="favorite">
-          ❤️
-        </button>
-        <button class="card-action-btn visited ${isVis ? 'active' : ''}" title="訪問済み" data-action="visited">
-          ✓
-        </button>
-      </div>
-      <div class="card-badges">
-        ${isFav ? '<span class="badge favorite">❤️ <span class="ja-text">お気に入り</span><span class="en-text">Favorite</span></span>' : ''}
-        ${isVis ? '<span class="badge visited">✓ <span class="ja-text">訪問済み</span><span class="en-text">Visited</span></span>' : ''}
-      </div>
-      ${story.wideArea ? '<span class="wide-area-badge"></span>' : ''}
-      <h3 class="story-title">${story[titleKey]}</h3>
-      <p class="story-location"><span class="icon">📍</span>${story[locKey]}</p>
-    </article>
-  `;
+  return '<article class="story-card" data-story-id="' + story.id + '" data-region="' + story.region + '">' +
+    '<div class="card-actions">' +
+    '<button class="card-action-btn favorite ' + (isFav ? 'active' : '') + '" title="お気に入り" data-action="favorite">❤️</button>' +
+    '<button class="card-action-btn visited ' + (isVis ? 'active' : '') + '" title="訪問済み" data-action="visited">✓</button>' +
+    '</div>' +
+    '<div class="card-badges">' +
+    (isFav ? '<span class="badge favorite">❤️ <span class="ja-text">お気に入り</span><span class="en-text">Favorite</span></span>' : '') +
+    (isVis ? '<span class="badge visited">✓ <span class="ja-text">訪問済み</span><span class="en-text">Visited</span></span>' : '') +
+    '</div>' +
+    (story.wideArea ? '<span class="wide-area-badge"></span>' : '') +
+    '<h3 class="story-title">' + story[titleKey] + '</h3>' +
+    '<p class="story-location"><span class="icon">📍</span>' + story[locKey] + '</p>' +
+    '</article>';
 }
 
 function attachCardEvents() {
-  document.querySelectorAll('.story-card').forEach(card => {
-    const storyId = parseInt(card.dataset.storyId);
+  document.querySelectorAll('.story-card').forEach(function(card) {
+    var storyId = parseInt(card.dataset.storyId);
     
     // カードクリック
-    card.addEventListener('click', (e) => {
+    card.addEventListener('click', function(e) {
       if (!e.target.closest('.card-action-btn')) {
         showStoryDetails(storyId);
       }
     });
     
     // アクションボタン
-    card.querySelectorAll('.card-action-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
+    card.querySelectorAll('.card-action-btn').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
         e.stopPropagation();
-        const action = btn.dataset.action;
+        var action = btn.dataset.action;
         
         if (action === 'favorite') {
-          const isActive = StorageManager.toggleFavorite(storyId);
+          var isActive = StorageManager.toggleFavorite(storyId);
           btn.classList.toggle('active', isActive);
         } else if (action === 'visited') {
-          const isActive = StorageManager.toggleVisited(storyId);
+          var isActive = StorageManager.toggleVisited(storyId);
           btn.classList.toggle('active', isActive);
         }
         
-        const lang = document.body.classList.contains('lang-en') ? 'en' : 'ja';
+        var lang = document.body.classList.contains('lang-en') ? 'en' : 'ja';
         card.querySelector('.card-badges').innerHTML = getBadgesHTML(storyId, lang);
         updateStats();
         
-        const activeStatusBtn = document.querySelector('#statusFilters .filter-btn.active');
+        var activeStatusBtn = document.querySelector('#statusFilters .filter-btn.active');
         if (activeStatusBtn && activeStatusBtn.dataset.status !== 'all') {
           filterStories();
         }
@@ -1343,9 +2911,9 @@ function attachCardEvents() {
 }
 
 function getBadgesHTML(storyId, lang) {
-  const isFav = StorageManager.isFavorite(storyId);
-  const isVis = StorageManager.isVisited(storyId);
-  let html = '';
+  var isFav = StorageManager.isFavorite(storyId);
+  var isVis = StorageManager.isVisited(storyId);
+  var html = '';
   
   if (isFav) {
     html += lang === 'en' 
@@ -1362,170 +2930,155 @@ function getBadgesHTML(storyId, lang) {
 }
 
 function filterStories() {
-  const searchQuery = document.getElementById('searchInput').value.toLowerCase().trim();
-  const activeRegionBtn = document.querySelector('#regionFilters .filter-btn.active');
-  const activeStatusBtn = document.querySelector('#statusFilters .filter-btn.active');
-  const regionFilter = activeRegionBtn ? activeRegionBtn.dataset.region : 'all';
-  const statusFilter = activeStatusBtn ? activeStatusBtn.dataset.status : 'all';
+  var searchQuery = document.getElementById('searchInput').value.toLowerCase().trim();
+  var activeRegionBtn = document.querySelector('#regionFilters .filter-btn.active');
+  var activeStatusBtn = document.querySelector('#statusFilters .filter-btn.active');
+  var regionFilter = activeRegionBtn ? activeRegionBtn.dataset.region : 'all';
+  var statusFilter = activeStatusBtn ? activeStatusBtn.dataset.status : 'all';
   
-  let visibleCount = 0;
-  let hasResults = false;
+  var visibleCount = 0;
+  var hasResults = false;
   
-  document.querySelectorAll('.region-block').forEach(block => {
-    const blockRegion = block.dataset.region;
-    let blockHasVisible = false;
+  document.querySelectorAll('.region-block').forEach(function(block) {
+    var blockRegion = block.dataset.region;
+    var blockHasVisible = false;
     
     if (regionFilter !== 'all' && blockRegion !== regionFilter) {
       block.classList.add('hidden');
       return;
     }
     
-    block.querySelectorAll('.story-card').forEach(card => {
-      const storyId = parseInt(card.dataset.storyId);
-      const story = STORY_DATA.find(s => s.id === storyId);
-      const title = (story.jaTitle + story.enTitle).toLowerCase();
-      const location = (story.jaLocation + story.enLocation).toLowerCase();
+    block.querySelectorAll('.story-card').forEach(function(card) {
+      var storyId = parseInt(card.dataset.storyId);
+      var story = STORY_DATA.find(function(s) { return s.id === storyId; });
+      var title = (story.jaTitle + story.enTitle).toLowerCase();
+      var location = (story.jaLocation + story.enLocation).toLowerCase();
       
-      const matchesSearch = !searchQuery || title.includes(searchQuery) || location.includes(searchQuery);
+      var matchesSearch = !searchQuery || title.includes(searchQuery) || location.includes(searchQuery);
       
-      let matchesStatus = true;
+      var matchesStatus = true;
       if (statusFilter === 'favorite') {
         matchesStatus = StorageManager.isFavorite(storyId);
       } else if (statusFilter === 'visited') {
         matchesStatus = StorageManager.isVisited(storyId);
-      } else if (statusFilter === 'unvisited') {
-        matchesStatus = !StorageManager.isVisited(storyId);
-      }
+}
       
-      const isVisible = matchesSearch && matchesStatus;
-      card.classList.toggle('hidden', !isVisible);
+      var visible = matchesSearch && matchesStatus;
+      card.classList.toggle('hidden', !visible);
       
-      if (isVisible) {
-        blockHasVisible = true;
+      if (visible) {
         visibleCount++;
-        hasResults = true;
+        blockHasVisible = true;
       }
     });
     
     block.classList.toggle('hidden', !blockHasVisible);
+    if (blockHasVisible) hasResults = true;
   });
   
-  const resultsInfo = document.getElementById('resultsInfo');
-  const noResults = document.getElementById('noResults');
+  document.getElementById('visibleCount').textContent = visibleCount;
   
-  if (searchQuery) {
-    resultsInfo.style.display = 'block';
+  if (searchQuery || statusFilter !== 'all') {
+    document.getElementById('resultsInfo').style.display = 'block';
     document.getElementById('resultsCount').textContent = visibleCount;
   } else {
-    resultsInfo.style.display = 'none';
+    document.getElementById('resultsInfo').style.display = 'none';
   }
   
-  noResults.style.display = hasResults ? 'none' : 'block';
-  document.getElementById('visibleCount').textContent = visibleCount;
-}
-
-function updateStats() {
-  document.getElementById('favoriteCount').textContent = StorageManager.getFavorites().length;
-  document.getElementById('visitedCount').textContent = StorageManager.getVisited().length;
+  document.getElementById('noResults').style.display = hasResults ? 'none' : 'block';
 }
 
 function showStoryDetails(storyId) {
-  const story = STORY_DATA.find(s => s.id === storyId);
+  var story = STORY_DATA.find(function(s) { return s.id === storyId; });
   if (!story) return;
   
-  const modal = document.getElementById('storyModal');
-  const lang = document.body.classList.contains('lang-en') ? 'en' : 'ja';
+  var lang = document.body.classList.contains('lang-en') ? 'en' : 'ja';
   
-  document.getElementById('modalTitle').textContent = story[lang === 'en' ? 'enTitle' : 'jaTitle'];
-  document.getElementById('modalLocation').textContent = story[lang === 'en' ? 'enLocation' : 'jaLocation'];
-  document.getElementById('modalLocationDetail').textContent = story[lang === 'en' ? 'enLocation' : 'jaLocation'];
+  var titleKey = lang === 'en' ? 'enTitle' : 'jaTitle';
+  var locKey = lang === 'en' ? 'enLocation' : 'jaLocation';
+  var descKey = lang === 'en' ? 'descriptionEn' : 'descriptionJa';
+  var hlKey = lang === 'en' ? 'highlightsEn' : 'highlightsJa';
+  var expKey = lang === 'en' ? 'experiencesEn' : 'experiencesJa';
   
-  // 詳細説明
-  const description = story[lang === 'en' ? 'descriptionEn' : 'descriptionJa'];
-  document.getElementById('modalDescription').textContent = description || (lang === 'en' 
-    ? 'This Japan Heritage story represents a unique aspect of Japanese culture and history. Visit to experience authentic traditions and landscapes preserved for generations.'
-    : 'この日本遺産ストーリーは、日本の文化と歴史の独特な側面を表しています。何世代にもわたって保存されてきた本物の伝統と風景を体験するために、ぜひ訪れてください。');
+  document.getElementById('modalTitle').textContent = story[titleKey];
+  document.getElementById('modalLocation').textContent = locKey;
+  document.getElementById('modalDescription').textContent = story[descKey];
+  document.getElementById('modalLocationDetail').textContent = story[locKey];
   
-  // ハイライト
-  const highlights = story[lang === 'en' ? 'highlightsEn' : 'highlightsJa'];
-  const highlightsSection = document.getElementById('highlightsSection');
-  const highlightsList = document.getElementById('modalHighlights');
+  var highlightsList = document.getElementById('modalHighlights');
+  highlightsList.innerHTML = '';
+  story[hlKey].forEach(function(hl) {
+    var li = document.createElement('li');
+    li.textContent = hl;
+    highlightsList.appendChild(li);
+  });
   
-  if (highlights && highlights.length > 0) {
-    highlightsSection.style.display = 'block';
-    highlightsList.innerHTML = highlights.map(h => `<li>${h}</li>`).join('');
-  } else {
-    highlightsSection.style.display = 'none';
-  }
+  document.getElementById('modalExperiences').textContent = story[expKey];
   
-  // 体験
-  const experiences = story[lang === 'en' ? 'experiencesEn' : 'experiencesJa'];
-  const experiencesSection = document.getElementById('experiencesSection');
-  const experiencesText = document.getElementById('modalExperiences');
-  
-  if (experiences) {
-    experiencesSection.style.display = 'block';
-    experiencesText.textContent = experiences;
-  } else {
-    experiencesSection.style.display = 'none';
-  }
-  
-  // アクションボタン
-  const favBtn = document.getElementById('modalFavorite');
-  const visBtn = document.getElementById('modalVisited');
+  var favBtn = document.getElementById('modalFavorite');
+  var visBtn = document.getElementById('modalVisited');
   
   favBtn.classList.toggle('active', StorageManager.isFavorite(storyId));
   visBtn.classList.toggle('active', StorageManager.isVisited(storyId));
   
-  favBtn.onclick = () => {
-    StorageManager.toggleFavorite(storyId);
-    favBtn.classList.toggle('active');
-    const card = document.querySelector(`[data-story-id="${storyId}"]`);
-    if (card) {
-      const lang = document.body.classList.contains('lang-en') ? 'en' : 'ja';
-      card.querySelector('.card-badges').innerHTML = getBadgesHTML(storyId, lang);
-      card.querySelector('.card-action-btn.favorite').classList.toggle('active', StorageManager.isFavorite(storyId));
-    }
+  favBtn.onclick = function() {
+    var isActive = StorageManager.toggleFavorite(storyId);
+    favBtn.classList.toggle('active', isActive);
     updateStats();
+    renderAllStories();
   };
   
-  visBtn.onclick = () => {
-    StorageManager.toggleVisited(storyId);
-    visBtn.classList.toggle('active');
-    const card = document.querySelector(`[data-story-id="${storyId}"]`);
-    if (card) {
-      const lang = document.body.classList.contains('lang-en') ? 'en' : 'ja';
-      card.querySelector('.card-badges').innerHTML = getBadgesHTML(storyId, lang);
-      card.querySelector('.card-action-btn.visited').classList.toggle('active', StorageManager.isVisited(storyId));
-    }
+  visBtn.onclick = function() {
+    var isActive = StorageManager.toggleVisited(storyId);
+    visBtn.classList.toggle('active', isActive);
     updateStats();
+    renderAllStories();
   };
   
-  modal.classList.add('active');
+  document.getElementById('storyModal').classList.add('active');
 }
 
 function setupModal() {
-  const modal = document.getElementById('storyModal');
-  const closeBtn = document.getElementById('modalClose');
+  var modal = document.getElementById('storyModal');
+  var closeBtn = document.getElementById('modalClose');
   
-  closeBtn.addEventListener('click', () => {
+  closeBtn.addEventListener('click', function() {
     modal.classList.remove('active');
   });
   
-  modal.addEventListener('click', (e) => {
+  modal.addEventListener('click', function(e) {
     if (e.target === modal) {
+      modal.classList.remove('active');
+    }
+  });
+  
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && modal.classList.contains('active')) {
       modal.classList.remove('active');
     }
   });
 }
 
+function updateStats() {
+  var favorites = StorageManager.getFavorites();
+  var visited = StorageManager.getVisited();
+  
+  document.getElementById('favoriteCount').textContent = favorites.length;
+  document.getElementById('visitedCount').textContent = visited.length;
+}
+
 function setupBackToTop() {
-  const backToTop = document.getElementById('backToTop');
-  window.addEventListener('scroll', () => {
-    backToTop.classList.toggle('visible', window.scrollY > 300);
+  var btn = document.getElementById('backToTop');
+  
+  window.addEventListener('scroll', function() {
+    if (window.pageYOffset > 300) {
+      btn.classList.add('visible');
+    } else {
+      btn.classList.remove('visible');
+    }
   });
   
-  backToTop.addEventListener('click', () => {
+  btn.addEventListener('click', function() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 }
